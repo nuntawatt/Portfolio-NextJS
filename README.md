@@ -2,7 +2,7 @@
 
 A modern, high-performance portfolio application built with **Next.js 15/16**, **React 19**, and **Tailwind CSS 4**. Designed for speed, aesthetics, and a premium user experience.
 
-![Portfolio Banner](https://raw.githubusercontent.com/shadcn-ui/ui/main/apps/www/public/og.png) *(Note: Replace with your actual portfolio screenshot)*
+<!-- ![Portfolio Banner](https://raw.githubusercontent.com/shadcn-ui/ui/main/apps/www/public/og.png) *(Note: Replace with your actual portfolio screenshot)* -->
 
 ---
 
