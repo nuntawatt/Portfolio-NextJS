@@ -11,7 +11,7 @@ export function Footer() {
           
           <div className="flex-shrink-0">
             <a href="#" className="text-2xl font-bold text-gray-900 dark:text-white tracking-tighter transition-colors">
-              M<span className="text-orange-500">g</span>
+              Mor<span className="text-orange-500">gorn</span>
             </a>
           </div>
           
@@ -34,7 +34,7 @@ export function Footer() {
         
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left transition-colors">
           <p className="text-gray-500 dark:text-gray-500 text-sm">
-            &copy; {currentYear} Mg. All rights reserved.
+            &copy; {currentYear} Morgorn. All rights reserved.
           </p>
           <p className="text-gray-500 dark:text-gray-500 text-sm flex items-center justify-center gap-1">
             Crafted with <span className="text-orange-500">Next.js</span> & Tailwind CSS

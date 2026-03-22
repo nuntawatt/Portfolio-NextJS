@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export function ContactCTA() {
   return (
-    <section id="contact" className="py-16 md:py-20 relative overflow-hidden bg-gray-100 dark:bg-white/[0.01] transition-colors duration-300">
+    <section id="contact" className="scroll-mt-24 py-16 md:py-20 relative overflow-hidden bg-gray-100 dark:bg-white/[0.01] transition-colors duration-300">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-orange-500/10 dark:bg-orange-600/10 blur-[150px] rounded-full -z-10 pointer-events-none"></div>
       
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">

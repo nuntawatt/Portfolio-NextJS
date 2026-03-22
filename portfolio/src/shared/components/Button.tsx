@@ -6,7 +6,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function Button({ variant = 'primary', className = '', children, ...props }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center rounded-xl font-medium transition duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] shadow-sm';
+  const baseStyles = 'inline-flex items-center justify-center rounded-xl font-medium transition duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] shadow-sm cursor-pointer';
   
   const variants = {
     primary: 'bg-orange-500 text-white hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/10',
