@@ -57,10 +57,10 @@ export function SkillsSection() {
                   {skillGroup.title}
                 </h3>
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 {skillGroup.items.map((item, itemIndex) => (
-                  <span 
+                  <span
                     key={itemIndex}
                     className="px-3 py-1.5 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg transition-colors"
                   >

@@ -64,11 +64,22 @@ export function AuthButton() {
   }
 
   return (
-    <Link
-      href="/auth"
-      className="px-5 py-2.5 text-sm font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] active:scale-95 shadow-sm hover:shadow-lg hover:shadow-orange-500/20"
-    >
-      Sign In
-    </Link>
+    <div className="flex items-center gap-3">
+      {/* Sign In Button: Sleek primary gradient (Swapped) */}
+      <Link
+        href="/auth"
+        className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30"
+      >
+        Sign In
+      </Link>
+
+      {/* Sign Up Button: Premium Dark Solid to match theme */}
+      <Link
+        href="/auth?mode=register"
+        className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md shadow-gray-900/20 dark:shadow-white/20"
+      >
+        Sign Up
+      </Link>
+    </div>
   );
 }
