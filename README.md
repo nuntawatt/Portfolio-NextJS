@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Portfolio-NextJS
 
-## Getting Started
+A modern, high-performance portfolio application built with **Next.js 15/16**, **React 19**, and **Tailwind CSS 4**. Designed for speed, aesthetics, and a premium user experience.
 
-First, run the development server:
+![Portfolio Banner](https://raw.githubusercontent.com/shadcn-ui/ui/main/apps/www/public/og.png) *(Note: Replace with your actual portfolio screenshot)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+- **Secure Authentication**: Integrated with [NextAuth.js](https://next-auth.js.org/) for robust user sign-in/up.
+- **Premium UI/UX**: Crafted using [Shadcn UI](https://ui.shadcn.com/) and [Radix UI](https://www.radix-ui.com/) components.
+- **Smooth Animations**: Powered by [Framer Motion](https://www.framer.com/motion/) for delightful transitions.
+- **Fully Responsive**: Optimized for all devices—from mobile to desktop.
+- **High Performance**: Utilizing Next.js App Router and Server Components.
+- **Scalable Architecture**: Organized with a feature-based folder structure.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend & Core
+- **Framework**: [Next.js 16 (Canary)](https://nextjs.org/)
+- **Library**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+### Tools & Libraries
+- **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Components**: Shadcn UI & Radix UI
+- **Authentication**: NextAuth.js
+- **Animations**: Framer Motion
+
+---
+
+## 📁 Project Structure
+
+The project follows a modular, feature-based architecture for better maintainability.
+
+```text
+/portfolio
+├── src/
+│   ├── app/           # Next.js App Router (Pages & Layouts)
+│   ├── features/      # Business logic grouped by feature (e.g., auth)
+│   │   ├── auth/
+│   │   │   ├── components/
+│   │   │   ├── containers/
+│   │   │   └── schemas/
+│   ├── components/    # Reusable UI components (Shared)
+│   ├── lib/           # Utility functions and configurations
+│   └── styles/        # Global CSS and Tailwind configs
+└── public/            # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚦 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- Node.js (v18+)
+- pnpm (Recommended)
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
