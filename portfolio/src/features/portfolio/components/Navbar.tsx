@@ -63,13 +63,21 @@ export function Navbar() {
                     key={link.name}
                     href={link.href}
                     onClick={() => setActiveHash(link.href)}
-                    className={`relative px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 active:scale-95 ${
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${
                       activeHash === link.href 
-                        ? 'bg-gray-100/50 dark:bg-white/10 text-gray-900 dark:text-white' 
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+                        ? 'text-orange-600 dark:text-orange-500' 
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     {link.name}
+                    {/* Animated Underline Effect */}
+                    <span 
+                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${
+                        activeHash === link.href 
+                          ? 'opacity-100 scale-x-100' 
+                          : 'opacity-0 scale-x-0 group-hover:opacity-50 group-hover:scale-x-75'
+                      }`}
+                    ></span>
                   </a>
                 ))}
               </div>

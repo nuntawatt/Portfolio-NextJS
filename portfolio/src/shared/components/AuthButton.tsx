@@ -1,32 +1,20 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import { LogOut, User as UserIcon, Github } from 'lucide-react';
-
-const GoogleIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24">
-    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-  </svg>
-);
+import { useSession, signOut } from 'next-auth/react';
+import { LogOut, User as UserIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export function AuthButton() {
   const { data: session, status } = useSession();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const authRef = useRef<HTMLDivElement>(null);
 
+  // Close profile dropdown if clicked outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
-      }
-      if (authRef.current && !authRef.current.contains(event.target as Node)) {
-        setIsAuthOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -37,10 +25,7 @@ export function AuthButton() {
 
   if (session && session.user) {
     return (
-      <div 
-        className="relative" 
-        ref={profileRef}
-      >
+      <div className="relative" ref={profileRef}>
         <button
           disabled={isLoading}
           onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -67,7 +52,7 @@ export function AuthButton() {
             </div>
             <button
               onClick={() => signOut()}
-              className="w-full flex items-center justify-start gap-3 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors duration-300 ease-out"
+              className="w-full flex items-center justify-start gap-3 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors duration-300 ease-out active:scale-95"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
@@ -79,48 +64,11 @@ export function AuthButton() {
   }
 
   return (
-    <div 
-      className="relative flex items-center" 
-      ref={authRef}
-      onMouseEnter={() => setIsAuthOpen(true)}
-      onMouseLeave={() => setIsAuthOpen(false)}
+    <Link
+      href="/auth"
+      className="px-5 py-2.5 text-sm font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] active:scale-95 shadow-sm hover:shadow-lg hover:shadow-orange-500/20"
     >
-      <button
-        disabled={isLoading}
-        onClick={() => setIsAuthOpen(!isAuthOpen)}
-        className="px-5 py-2.5 text-sm font-semibold text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] shadow-sm hover:shadow-lg hover:shadow-orange-500/10 disabled:opacity-50"
-      >
-        Sign In
-      </button>
-
-      {isAuthOpen && (
-        <div className="absolute right-0 top-full pt-3 z-50">
-          <div className="w-64 bg-white dark:bg-neutral-900 border border-gray-100 dark:border-white/10 rounded-xl shadow-xl p-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="mb-3 text-center">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Welcome</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Continue with your provider</p>
-            </div>
-            
-            <div className="space-y-2">
-              <button
-                onClick={() => signIn('google')}
-                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors duration-300 ease-out"
-              >
-                <GoogleIcon />
-                Continue with Google
-              </button>
-              
-              <button
-                onClick={() => signIn('github')}
-                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors duration-300 ease-out"
-              >
-                <Github className="w-4 h-4" />
-                Continue with GitHub
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      Sign In
+    </Link>
   );
 }
