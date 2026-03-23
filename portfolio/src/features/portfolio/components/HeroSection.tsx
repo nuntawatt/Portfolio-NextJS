@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Facebook, Github, Linkedin, Mail } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { ProfileImage } from './ProfileImage';
 
@@ -26,22 +26,21 @@ export function HeroSection() {
               </h3>
 
               <p className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-gray-800 dark:text-gray-300 text-base md:text-lg lg:text-xl font-medium leading-relaxed transition-colors">
-                I architect highly scalable backend services and responsive frontend applications, focusing on clean code, robust system design, and delivering production-ready software.
+                I architect highly scalable backend services and responsive frontend applications, focusing on clean code, robust system design, and delivering production software.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4 lg:pt-2">
-              <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4">View Projects</Button>
+              <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4">View Project</Button>
               <Button variant="outline" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4">Download CV</Button>
             </div>
 
             <div className="flex items-center justify-center lg:justify-start gap-6 pt-4 lg:pt-8">
               <SocialLink href="https://github.com/nuntawatt?tab=repositories" icon={<Github className="w-5 h-5 lg:w-6 lg:h-6" />} />
-              <SocialLink href="https://linkedin.com" icon={<Linkedin className="w-5 h-5 lg:w-6 lg:h-6" />} />
-              <SocialLink href="mailto:hello@example.com" icon={<Mail className="w-5 h-5 lg:w-6 lg:h-6" />} />
+              <SocialLink href="https://www.linkedin.com/in/nanthawat-seahuam-9375803b9" icon={<Linkedin className="w-5 h-5 lg:w-6 lg:h-6" />} />
+              <SocialLink href="https://www.facebook.com/nuntawat.morgorn" icon={<Facebook className="w-5 h-5 lg:w-6 lg:h-6" />} />
             </div>
           </div>
-
           <ProfileImage />
         </div>
       </div>

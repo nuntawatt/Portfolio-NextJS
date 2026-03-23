@@ -1,6 +1,7 @@
 import { Navbar } from '@/features/portfolio/components/Navbar';
 import { HeroSection } from '@/features/portfolio/components/HeroSection';
-import { AboutSection } from '@/features/portfolio/components/AboutSection';
+// import { AboutSection } from '@/features/portfolio/components/AboutSection';
+import { AboutSection } from '@/features/about/components/about';
 import { SkillsSection } from '@/features/portfolio/components/SkillsSection';
 import { ProjectsSection } from '@/features/portfolio/components/ProjectsSection';
 import { ContactCTA } from '@/features/portfolio/components/ContactCTA';
