@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { Facebook, Github, Linkedin, Mail } from 'lucide-react';
+import { Facebook, Github, Linkedin, Mail, ArrowRight, Download } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { ProfileImage } from './ProfileImage';
 
@@ -31,8 +33,13 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4 lg:pt-2">
-              <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4">View Project</Button>
-              <Button variant="outline" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4">Download CV</Button>
+              <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open("https://nanthawat-github-io.vercel.app", "_blank")}>
+                View Project <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+
+              <Button variant="outline" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open("https://nuntawatt.github.io/my-cv", "_blank")}>
+                Download CV <Download className="w-4 h-4 ml-2" />
+              </Button>
             </div>
 
             <div className="flex items-center justify-center lg:justify-start gap-6 pt-4 lg:pt-8">

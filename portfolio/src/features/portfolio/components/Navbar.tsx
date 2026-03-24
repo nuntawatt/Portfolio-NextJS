@@ -54,7 +54,7 @@ export function Navbar() {
                 Mor<span className="text-orange-500 drop-shadow-sm">gorn</span>
               </a>
             </div>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center ml-10 space-x-8">
               <div className="flex items-baseline space-x-8">
@@ -63,26 +63,24 @@ export function Navbar() {
                     key={link.name}
                     href={link.href}
                     onClick={() => setActiveHash(link.href)}
-                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${
-                      activeHash === link.href 
-                        ? 'text-orange-600 dark:text-orange-500' 
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${activeHash === link.href
+                        ? 'text-orange-600 dark:text-orange-500'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
+                      }`}
                   >
                     {link.name}
                     {/* Animated Underline Effect */}
-                    <span 
-                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${
-                        activeHash === link.href 
-                          ? 'opacity-100 scale-x-100' 
+                    <span
+                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${activeHash === link.href
+                          ? 'opacity-100 scale-x-100'
                           : 'opacity-0 scale-x-0 group-hover:opacity-50 group-hover:scale-x-75'
-                      }`}
+                        }`}
                     ></span>
                   </a>
                 ))}
               </div>
             </div>
-            
+
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
               <ThemeToggle />
@@ -108,20 +106,18 @@ export function Navbar() {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ease-out ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ease-out ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
       />
 
       {/* Mobile Menu Drawer (Slide-in from left) */}
-      <div 
+      <div
         id="mobile-menu-drawer"
-        className={`fixed top-0 left-0 h-full w-[280px] bg-white dark:bg-[#0a0a0a] shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed top-0 left-0 h-full w-[280px] bg-white dark:bg-[#0a0a0a] shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
         role="dialog"
         aria-modal="true"
         aria-label="Mobile Navigation Drawer"
@@ -148,24 +144,23 @@ export function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${
-                  activeHash === link.href
+                className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${activeHash === link.href
                     ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
-                }`}
+                  }`}
                 onClick={() => handleLinkClick(link.href)}
               >
                 {link.name}
               </a>
             ))}
           </div>
-          
+
           <div className="pt-8 mt-8 border-t border-gray-100 dark:border-white/10 flex flex-col gap-6">
             <div className="flex items-center justify-between px-2">
               <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">Theme Preference</span>
               <ThemeToggle />
             </div>
-            
+
             {/* Highlighted Mobile CTA Wrapper */}
             <div className="mt-2" onClick={() => setIsOpen(false)}>
               <AuthButton />
