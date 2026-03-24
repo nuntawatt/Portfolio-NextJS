@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { AuthService } from '../services/auth.service';
-import { SignInData } from '../types/auth.type';
-import { getErrorMessage } from '../utils/auth.util';
+import { AuthService, getErrorMessage } from '../core/lib';
+import { SignInData } from '../core/types';
 import { useAuthStore } from '../store/auth.store';
 
 export const useLogin = () => {

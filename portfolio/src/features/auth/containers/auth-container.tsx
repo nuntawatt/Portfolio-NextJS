@@ -3,13 +3,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signInSchema, signUpSchema } from '../schemas/auth.schema';
-import { SignInData, SignUpData } from '../types/auth.type';
+import { signInSchema, signUpSchema, SignInData, SignUpData } from '../core/types';
 import { useLogin } from '../hooks/use-login';
 import { useRegister } from '../hooks/use-register';
 import { AuthFormLayout } from '../components/auth-form';
-import { SignInForm } from '../components/sign-in-form';
-import { SignUpForm } from '../components/sign-up-form';
+import { SignInForm } from '../components/signin';
+import { SignUpForm } from '../components/signup';
 
 export function AuthContainer() {
   const [isLogin, setIsLogin] = useState(true);

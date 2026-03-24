@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { AuthService } from '../services/auth.service';
-import { SignUpData } from '../types/auth.type';
-import { getErrorMessage } from '../utils/auth.util';
+import { AuthService, getErrorMessage } from '../core/lib';
+import { SignUpData } from '../core/types';
 
 export const useRegister = () => {
   const [isLoading, setIsLoading] = useState(false);

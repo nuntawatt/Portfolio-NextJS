@@ -88,8 +88,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile Menu Trigger */}
-            <div className="-mr-2 flex items-center gap-4 lg:hidden">
-              <ThemeToggle />
+            <div className="-mr-2 flex items-center lg:hidden">
               <button
                 onClick={() => setIsOpen(true)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 focus:outline-none transition-all duration-200 active:scale-95"
