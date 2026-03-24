@@ -17,41 +17,23 @@ export function StatCard({ stat }: StatCardProps) {
 
     return (
         <TiltCard
-            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden"
-            style={{
-                background: 'rgba(255,255,255,0.032)',
-                border: '1px solid rgba(249,115,22,0.18)',
-                backdropFilter: 'blur(16px)',
-            }}
+            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-white/60 dark:bg-white/[0.032] border border-orange-200/60 dark:border-orange-500/[0.18] backdrop-blur-xl transition-colors duration-300"
         >
             {/* icon badge */}
             {Icon && (
-                <div
-                    className="p-2.5 rounded-xl"
-                    style={{ background: 'rgba(249,115,22,0.12)', color: '#f97316' }}
-                >
+                <div className="p-2.5 rounded-xl bg-orange-100 dark:bg-orange-500/[0.12] text-orange-500 transition-colors">
                     <Icon />
                 </div>
             )}
 
             {/* animated number */}
             <div ref={ref} className="text-center">
-                <p
-                    className="font-black leading-none"
-                    style={{
-                        fontSize: '2.25rem',
-                        fontFamily: "'Playfair Display', Georgia, serif",
-                        background: 'linear-gradient(135deg, #fb923c, #ea580c)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                    }}
-                >
+                <p className="font-black leading-none text-4xl text-gradient">
                     {count}
                     {stat.suffix}
                 </p>
-                <p
-                    className="text-xs font-semibold uppercase tracking-widest mt-1"
-                    style={{ color: '#6b7280', letterSpacing: '0.12em' }}
+                <p className="text-xs font-semibold uppercase tracking-widest mt-1 text-gray-500 dark:text-gray-500 transition-colors"
+                    style={{ letterSpacing: '0.12em' }}
                 >
                     {stat.label}
                 </p>

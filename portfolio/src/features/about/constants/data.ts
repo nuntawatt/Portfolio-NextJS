@@ -8,21 +8,33 @@ export const STATS: StatItem[] = [
 ];
 
 export const SKILLS: SkillItem[] = [
+    // Frontend
+    { label: 'HTML5', level: 5 },
+    { label: 'CSS3', level: 5 },
     { label: 'JavaScript', level: 5 },
     { label: 'TypeScript', level: 4 },
-    { label: 'Python', level: 4 },
-    { label: 'PHP', level: 3 },
-    { label: 'C#', level: 3 },
-    { label: 'C++', level: 3 },
     { label: 'React', level: 5 },
     { label: 'Next.js', level: 5 },
-    { label: 'Node.js', level: 4 },
+    { label: 'Vite', level: 4 },
     { label: 'Tailwind CSS', level: 5 },
-    { label: 'MySQL', level: 4 },
+    { label: 'Bootstrap', level: 4 },
+    // Backend
+    { label: 'Node.js', level: 4 },
+    { label: 'Express', level: 4 },
+    { label: 'RESTful API', level: 4 },
+    { label: 'WebSocket', level: 3 },
+    { label: 'gRPC', level: 3 },
+    // Database & Cloud
     { label: 'MongoDB', level: 3 },
+    { label: 'PostgreSQL', level: 3 },
+    { label: 'MySQL', level: 4 },
     { label: 'Firebase', level: 3 },
-    { label: 'YOLOv5', level: 3 },
-    { label: 'HTML / CSS', level: 5 },
+    { label: 'Google Cloud', level: 3 },
+    // Tools
+    { label: 'GitHub', level: 5 },
+    { label: 'Visual Studio Code', level: 5 },
+    { label: 'Figma', level: 4 },
+    { label: 'Postman', level: 4 },
 ];
 
 export const EXPERIENCES: ExperienceItem[] = [

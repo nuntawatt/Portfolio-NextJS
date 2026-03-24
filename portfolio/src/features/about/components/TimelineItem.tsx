@@ -39,48 +39,36 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
             </div>
 
             <TiltCard
-                className="relative rounded-2xl p-5 overflow-hidden"
-                style={{
-                    background: hovered ? 'rgba(249,115,22,0.05)' : 'rgba(255,255,255,0.025)',
-                    border: `1px solid ${hovered ? 'rgba(249,115,22,0.3)' : 'rgba(255,255,255,0.07)'}`,
-                    backdropFilter: 'blur(12px)',
-                    transition: 'background 0.3s ease, border-color 0.3s ease',
-                }}
+                className={`relative rounded-2xl p-5 overflow-hidden backdrop-blur-xl transition-all duration-300 ${
+                    hovered
+                        ? 'bg-orange-50/80 dark:bg-orange-500/[0.05] border border-orange-300/60 dark:border-orange-500/30'
+                        : 'bg-white/60 dark:bg-white/[0.025] border border-gray-200/60 dark:border-white/[0.07]'
+                }`}
                 onMouseMove={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
                 {/* header row */}
                 <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
                     <div className="flex items-center gap-3">
-                        <div
-                            className="p-2 rounded-lg flex-shrink-0"
-                            style={{ background: 'rgba(249,115,22,0.1)', color: '#f97316' }}
-                        >
+                        <div className="p-2 rounded-lg flex-shrink-0 bg-orange-100 dark:bg-orange-500/10 text-orange-500 transition-colors">
                             <Icon />
                         </div>
                         <div>
-                            <h4 className="font-bold text-white text-sm leading-snug">{experience.title}</h4>
-                            <p className="text-xs mt-0.5" style={{ color: '#9ca3af' }}>{experience.company}</p>
+                            <h4 className="font-bold text-gray-900 dark:text-white text-sm leading-snug transition-colors">{experience.title}</h4>
+                            <p className="text-xs mt-0.5 text-gray-500 dark:text-gray-400 transition-colors">{experience.company}</p>
                         </div>
                     </div>
 
-                    <span
-                        className="text-xs font-bold px-3 py-1 rounded-full flex-shrink-0"
-                        style={{
-                            background: 'rgba(249,115,22,0.12)',
-                            border: '1px solid rgba(249,115,22,0.25)',
-                            color: '#fb923c',
-                            letterSpacing: '0.05em',
-                        }}
+                    <span className="text-xs font-bold px-3 py-1 rounded-full flex-shrink-0 bg-orange-100 dark:bg-orange-500/[0.12] border border-orange-300/50 dark:border-orange-500/25 text-orange-600 dark:text-orange-400 transition-colors"
+                        style={{ letterSpacing: '0.05em' }}
                     >
                         {experience.period}
                     </span>
                 </div>
 
                 {/* description */}
-                <p
-                    className="text-sm leading-relaxed mb-3"
-                    style={{ color: '#9ca3af', paddingLeft: '2.75rem' }}
+                <p className="text-sm leading-relaxed mb-3 text-gray-600 dark:text-gray-400 transition-colors"
+                    style={{ paddingLeft: '2.75rem' }}
                 >
                     {experience.desc}
                 </p>
@@ -90,12 +78,7 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
                     {experience.tags.map((tag) => (
                         <span
                             key={tag}
-                            className="text-xs font-medium px-2 py-0.5 rounded-md"
-                            style={{
-                                color: '#fb923c',
-                                background: 'rgba(249,115,22,0.08)',
-                                border: '1px solid rgba(249,115,22,0.18)',
-                            }}
+                            className="text-xs font-medium px-2 py-0.5 rounded-md text-orange-600 dark:text-orange-400 bg-orange-100/80 dark:bg-orange-500/[0.08] border border-orange-200/60 dark:border-orange-500/[0.18] transition-colors"
                         >
                             {tag}
                         </span>

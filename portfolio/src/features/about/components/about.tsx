@@ -24,44 +24,39 @@ export function AboutSection() {
     return (
         <>
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Figtree:wght@300;400;500;600;700;800&display=swap');
-
-        #about * { font-family: 'Figtree', sans-serif; }
-
         @keyframes orb-drift {
-          0%   { transform: translate(0, 0) scale(1);          opacity: .15; }
-          50%  { transform: translate(20px, -30px) scale(1.08); opacity: .22; }
-          100% { transform: translate(-10px, 15px) scale(.95);  opacity: .12; }
+            0%   { transform: translate(0, 0) scale(1);          opacity: .15; }
+            50%  { transform: translate(20px, -30px) scale(1.08); opacity: .22; }
+            100% { transform: translate(-10px, 15px) scale(.95);  opacity: .12; }
         }
         @keyframes slide-up {
-          from { opacity: 0; transform: translateY(32px); }
-          to   { opacity: 1; transform: translateY(0);    }
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0);    }
         }
         @keyframes dot-breathe {
-          0%, 100% { box-shadow: 0 0 0 0   rgba(249,115,22,0.5); }
-          50%      { box-shadow: 0 0 0 6px rgba(249,115,22,0);   }
+            0%, 100% { box-shadow: 0 0 0 0   rgba(249,115,22,0.5); }
+            50%      { box-shadow: 0 0 0 6px rgba(249,115,22,0);   }
         }
 
         .about-orb {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(60px);
-          pointer-events: none;
-          opacity: 0.15;
-          animation: orb-drift ease-in-out infinite alternate;
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+            opacity: 0.15;
+            animation: orb-drift ease-in-out infinite alternate;
         }
         .about-slide-up {
-          animation: slide-up 0.75s cubic-bezier(0.22,1,0.36,1) both;
+            animation: slide-up 0.75s cubic-bezier(0.22,1,0.36,1) both;
         }
         .about-status-dot {
-          animation: dot-breathe 2s ease-in-out infinite;
+            animation: dot-breathe 2s ease-in-out infinite;
         }
-      `}</style>
+        `}</style>
 
             <section
                 id="about"
-                className="relative scroll-mt-24 py-28 overflow-hidden"
-                style={{ background: '#080808' }}
+                className="relative scroll-mt-24 py-28 overflow-hidden bg-gray-50 dark:bg-[#080808] transition-colors duration-300"
             >
                 {/* ── Background ── */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -86,6 +81,17 @@ export function AboutSection() {
                         className="absolute inset-0"
                         style={{
                             backgroundImage: [
+                                'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px)',
+                                'linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)',
+                            ].join(', '),
+                            backgroundSize: '60px 60px',
+                        }}
+                    />
+                    {/* dark mode overlay for grid */}
+                    <div
+                        className="absolute inset-0 hidden dark:block"
+                        style={{
+                            backgroundImage: [
                                 'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px)',
                                 'linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
                             ].join(', '),
@@ -100,32 +106,21 @@ export function AboutSection() {
                     {/* Section header */}
                     <div ref={headerRef} className="mb-20">
                         <div className="about-slide-up" style={{ opacity: headerInView ? undefined : 0 }}>
-                            <p
-                                className="text-xs font-bold uppercase tracking-widest mb-5 flex items-center gap-3"
-                                style={{ color: '#f97316', letterSpacing: '0.2em' }}
+                            <p className="text-xs font-bold uppercase tracking-widest mb-5 flex items-center gap-3 text-orange-500"
+                                style={{ letterSpacing: '0.2em' }}
                             >
                                 <span className="block w-8 h-px bg-orange-500" />
                                 Who I Am
                             </p>
                             <h2
+                                className="font-black leading-none tracking-tight text-gray-900 dark:text-gray-50"
                                 style={{
-                                    fontFamily: "'Playfair Display', Georgia, serif",
                                     fontSize: 'clamp(3rem, 7vw, 5.5rem)',
-                                    fontWeight: 900,
-                                    lineHeight: 1,
                                     letterSpacing: '-0.03em',
-                                    color: '#f9fafb',
                                 }}
                             >
                                 About{' '}
-                                <em
-                                    style={{
-                                        fontStyle: 'normal',
-                                        background: 'linear-gradient(110deg, #fb923c 0%, #f97316 45%, #ea580c 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                    }}
-                                >
+                                <em className="not-italic text-gradient">
                                     Me.
                                 </em>
                             </h2>

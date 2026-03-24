@@ -1,37 +1,37 @@
 import React from 'react';
 import { Card } from '@/shared/components/Card';
-import { Database, Layers, Network, Server, ShieldCheck, TerminalSquare } from 'lucide-react';
+import { Code2, Database, Layers, Server, TerminalSquare, Heart } from 'lucide-react';
 
 const skills = [
   {
-    title: 'System Architecture',
-    icon: <Network className="w-6 h-6 text-orange-500" />,
-    items: ['Microservices', 'REST APIs', 'System Design', 'Event-Driven Arch', 'Caching']
-  },
-  {
-    title: 'Core Backend',
-    icon: <Server className="w-6 h-6 text-orange-500" />,
-    items: ['Node.js', 'NestJS', 'Express', 'TypeScript', 'WebSockets']
-  },
-  {
-    title: 'Data & State',
-    icon: <Database className="w-6 h-6 text-orange-500" />,
-    items: ['PostgreSQL', 'Redis', 'MongoDB', 'Prisma', 'TypeORM']
-  },
-  {
-    title: 'Frontend Ecosystem',
+    title: 'Frontend',
     icon: <Layers className="w-6 h-6 text-orange-500" />,
-    items: ['React', 'Next.js', 'Tailwind CSS', 'Redux', 'Zustand']
+    items: ['HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Vite', 'Tailwind CSS', 'Bootstrap']
   },
   {
-    title: 'Security & Quality',
-    icon: <ShieldCheck className="w-6 h-6 text-orange-500" />,
-    items: ['OAuth 2.0', 'RBAC', 'Jest', 'Clean Code', 'SOLID Principles']
+    title: 'UX/UI Design',
+    icon: <Code2 className="w-6 h-6 text-orange-500" />,
+    items: ['UX/UI Basics', 'Wireframe', 'Figma (Prototype / Component)']
   },
   {
-    title: 'Infrastructure',
+    title: 'Backend',
+    icon: <Server className="w-6 h-6 text-orange-500" />,
+    items: ['Node.js', 'Express', 'Next.js', 'RESTful API', 'JSON', 'Auth (JWT / Session)', 'WebSocket', 'gRPC (Realtime)']
+  },
+  {
+    title: 'Database & Cloud',
+    icon: <Database className="w-6 h-6 text-orange-500" />,
+    items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Firebase', 'Google Cloud']
+  },
+  {
+    title: 'Tools & Workflow',
     icon: <TerminalSquare className="w-6 h-6 text-orange-500" />,
-    items: ['Docker', 'AWS', 'CI/CD Pipelines', 'Git', 'Linux']
+    items: ['GitHub', 'Visual Studio Code', 'Figma', 'Postman']
+  },
+  {
+    title: 'Soft Skills',
+    icon: <Heart className="w-6 h-6 text-orange-500" />,
+    items: ['ปรับตัวเข้ากับคนอื่นได้ดี', 'ชอบเรียนรู้สิ่งใหม่ ๆ']
   }
 ];
 

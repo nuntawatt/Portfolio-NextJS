@@ -30,31 +30,29 @@ export function SkillPill({ skill, index }: SkillPillProps) {
         >
             <div
                 role="listitem"
-                className="relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl cursor-default select-none overflow-hidden"
+                className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl cursor-default select-none overflow-hidden transition-all duration-300 ${
+                    hovered
+                        ? 'bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/50 shadow-lg shadow-orange-500/25 scale-[1.04]'
+                        : 'bg-white/60 dark:bg-white/[0.04] border border-gray-200/60 dark:border-white/[0.08]'
+                }`}
                 style={{
-                    background: hovered
-                        ? 'linear-gradient(135deg, rgba(249,115,22,0.2), rgba(234,88,12,0.12))'
-                        : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${hovered ? 'rgba(249,115,22,0.5)' : 'rgba(255,255,255,0.08)'}`,
                     transform: hovered
                         ? 'perspective(300px) translateZ(10px) scale(1.04)'
                         : 'perspective(300px) translateZ(0px) scale(1)',
-                    boxShadow: hovered ? '0 8px 24px rgba(249,115,22,0.25)' : 'none',
                     transition: 'all 0.28s cubic-bezier(0.34,1.56,0.64,1)',
                 }}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
                 {/* tech icon or generic fallback */}
-                <span style={{ color: hovered ? '#fb923c' : '#9ca3af', transition: 'color 0.25s ease' }}>
+                <span className={`transition-colors duration-250 ${hovered ? 'text-orange-500' : 'text-gray-400 dark:text-gray-500'}`}>
                     {TechIcon ? <TechIcon /> : <Code2 size={14} />}
                 </span>
 
                 {/* label */}
-                <span
-                    className="text-sm font-semibold"
-                    style={{ color: hovered ? '#fff' : '#d1d5db', transition: 'color 0.25s ease' }}
-                >
+                <span className={`text-sm font-semibold transition-colors duration-250 ${
+                    hovered ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'
+                }`}>
                     {skill.label}
                 </span>
 
@@ -63,13 +61,11 @@ export function SkillPill({ skill, index }: SkillPillProps) {
                     {Array.from({ length: DOT_COUNT }, (_, i) => (
                         <span
                             key={i}
-                            className="block w-1 h-1 rounded-full"
-                            style={{
-                                background: i < skill.level
-                                    ? hovered ? '#f97316' : 'rgba(249,115,22,0.7)'
-                                    : 'rgba(255,255,255,0.12)',
-                                transition: 'background 0.25s ease',
-                            }}
+                            className={`block w-1 h-1 rounded-full transition-colors duration-250 ${
+                                i < skill.level
+                                    ? hovered ? 'bg-orange-500' : 'bg-orange-500/70'
+                                    : 'bg-gray-300/40 dark:bg-white/[0.12]'
+                            }`}
                         />
                     ))}
                 </span>
