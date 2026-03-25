@@ -80,12 +80,12 @@ export function BioCard() {
             <p className="leading-loose mb-4 text-[0.9375rem] text-gray-700 dark:text-gray-300 transition-colors">
                 Computer and Information Science student at{' '}
                 <span className="text-orange-500 font-bold">Khon Kaen University</span>{' '}
-                (Expected May 2026, GPAX 3.21), focused on architecting scalable backend systems,
+                (Expected May 2026, GPAX 3.23), focused on architecting scalable backend systems,
                 full-stack web applications, and machine learning–driven solutions.
             </p>
             <p className="leading-loose mb-7 text-sm text-gray-600 dark:text-gray-400 transition-colors">
                 From building real-time CCTV detection pipelines with{' '}
-                <span className="text-orange-500">YOLOv5</span> to shipping e-commerce platforms—I
+                <span className="text-orange-500">YOLOv8</span> to shipping e-commerce platforms—I
                 obsess over clean architecture, performance, and code that is maintainable long after
                 handoff. Fluent in Thai, conversational in English.
             </p>

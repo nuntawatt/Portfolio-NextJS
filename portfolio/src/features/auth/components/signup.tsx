@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Loader2, Eye } from 'lucide-react';
 import { SignUpData } from '../core/types';
-import { AuthInput, CustomEyeOff } from './auth-form';
+import { AuthInput, CustomEyeOff } from '@/shared/components/AuthInput';
 
 interface SignUpFormProps {
     form: UseFormReturn<SignUpData>;

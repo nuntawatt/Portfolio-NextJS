@@ -1,36 +1,36 @@
 import React from 'react';
 import { Card } from '@/shared/components/Card';
-import { Code2, Database, Layers, Server, TerminalSquare, Heart } from 'lucide-react';
+import { Monitor, Database, Palette, Cpu, Wrench, Users } from 'lucide-react';
 
 const skills = [
   {
     title: 'Frontend',
-    icon: <Layers className="w-6 h-6 text-orange-500" />,
-    items: ['HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Vite', 'Tailwind CSS', 'Bootstrap']
+    icon: <Monitor className="w-6 h-6 text-orange-500" />,
+    items: ['NextJs', 'TypeScript', 'React', 'HTML5', 'CSS3', 'JavaScript', 'Vite', 'Tailwind CSS']
   },
   {
     title: 'UX/UI Design',
-    icon: <Code2 className="w-6 h-6 text-orange-500" />,
-    items: ['UX/UI Basics', 'Wireframe', 'Figma (Prototype / Component)']
+    icon: <Palette className="w-6 h-6 text-orange-500" />,
+    items: ['UX/UI Basics', 'Wireframe', 'Figma']
   },
   {
     title: 'Backend',
-    icon: <Server className="w-6 h-6 text-orange-500" />,
-    items: ['Node.js', 'Express', 'Next.js', 'RESTful API', 'JSON', 'Auth (JWT / Session)', 'WebSocket', 'gRPC (Realtime)']
+    icon: <Cpu className="w-6 h-6 text-orange-500" />,
+    items: ['NestJS', 'Node.js', 'RESTful API', 'Auth (JWT / Session)', 'WebSocket', 'gRPC', 'RabbitMQ', 'Docker']
   },
   {
     title: 'Database & Cloud',
     icon: <Database className="w-6 h-6 text-orange-500" />,
-    items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Firebase', 'Google Cloud']
+    items: ['PostgreSQL', 'MongoDB', 'Firebase', 'Google Cloud']
   },
   {
     title: 'Tools & Workflow',
-    icon: <TerminalSquare className="w-6 h-6 text-orange-500" />,
-    items: ['GitHub', 'Visual Studio Code', 'Figma', 'Postman']
+    icon: <Wrench className="w-6 h-6 text-orange-500" />,
+    items: ['GitHub', 'Visual Studio Code', 'Postman']
   },
   {
     title: 'Soft Skills',
-    icon: <Heart className="w-6 h-6 text-orange-500" />,
+    icon: <Users className="w-6 h-6 text-orange-500" />,
     items: ['ปรับตัวเข้ากับคนอื่นได้ดี', 'ชอบเรียนรู้สิ่งใหม่ ๆ']
   }
 ];

@@ -1,5 +1,4 @@
 // Re-export everything for encapsulated structured architecture
-export * from './components/auth-form';
 export * from './components/signin';
 export * from './components/signup';
 

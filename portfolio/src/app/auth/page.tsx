@@ -52,12 +52,11 @@ export default function AuthPage() {
           {/* Feature highlights */}
           <div className="space-y-4 text-left">
             {[
-              { icon: '🚀', text: 'Explore real-world projects and case studies' },
-              { icon: '💡', text: 'Connect and collaborate on exciting ideas' },
-              { icon: '📊', text: 'Track your favorite projects and updates' },
+              { text: 'Explore real-world projects and case studies' },
+              { text: 'Connect and collaborate on exciting ideas' },
+              { text: 'Track your favorite projects and updates' },
             ].map((feature) => (
               <div key={feature.text} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                <span className="text-lg">{feature.icon}</span>
                 <span className="text-sm text-gray-300">{feature.text}</span>
               </div>
             ))}
@@ -68,7 +67,7 @@ export default function AuthPage() {
             <p className="text-sm text-gray-500 italic">
               &ldquo;Clean architecture, performance, and code that is maintainable long after handoff.&rdquo;
             </p>
-            <p className="text-xs text-orange-500/70 mt-2 font-semibold">— Nuntawat Sae-Huam</p>
+            <p className="text-xs text-orange-500/70 mt-2 font-semibold">Nuntawat Sae-Huam</p>
           </div>
         </div>
       </div>

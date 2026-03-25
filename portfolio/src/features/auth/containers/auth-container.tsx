@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signInSchema, signUpSchema, SignInData, SignUpData } from '../core/types';
 import { useLogin } from '../hooks/use-login';
 import { useRegister } from '../hooks/use-register';
-import { AuthFormLayout } from '../components/auth-form';
+import { AuthFormLayout } from '@/shared/components/AuthLayout';
 import { SignInForm } from '../components/signin';
 import { SignUpForm } from '../components/signup';
 
