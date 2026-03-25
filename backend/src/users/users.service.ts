@@ -8,13 +8,13 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async findOne(email: string): Promise<User | undefined> {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  async create(user: Omit<User, 'id'>): Promise<User> {
+  async create(user: Omit<User, 'userId'>): Promise<User> {
     return this.usersRepository.save(user);
   }
 }
