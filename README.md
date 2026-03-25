@@ -1,75 +1,92 @@
-# 🚀 Portfolio-NextJS
+# Portfolio
 
-A modern, high-performance portfolio application built with **Next.js 15/16**, **React 19**, and **Tailwind CSS 4**. Designed for speed, aesthetics, and a premium user experience.
+A modern, high-performance portfolio ecosystem featuring a **Next.js 16** frontend and a dedicated **NestJS** monolithic backend. Designed for speed, secure authentication, and a premium developer experience.
 
-<!-- ![Portfolio Banner](https://raw.githubusercontent.com/shadcn-ui/ui/main/apps/www/public/og.png) *(Note: Replace with your actual portfolio screenshot)* -->
+---
+
+## 🏗️ Project Architecture
+
+This repository contains two main components working together to provide a seamless experience:
+- **`portfolio/`**: A cutting-edge frontend built with Next.js App Router and React 19.
+- **`backend/`**: A robust, monolithic NestJS server handling authentication and business logic.
 
 ---
 
 ## ✨ Features
 
-- **Secure Authentication**: Integrated with [NextAuth.js](https://next-auth.js.org/) for robust user sign-in/up.
-- **Premium UI/UX**: Crafted using [Shadcn UI](https://ui.shadcn.com/) and [Radix UI](https://www.radix-ui.com/) components.
-- **Smooth Animations**: Powered by [Framer Motion](https://www.framer.com/motion/) for delightful transitions.
-- **Fully Responsive**: Optimized for all devices—from mobile to desktop.
-- **High Performance**: Utilizing Next.js App Router and Server Components.
-- **Scalable Architecture**: Organized with a feature-based folder structure.
+### Frontend (Next.js)
+- **Secure Auth UI**: Refactored, high-performance Sign In/Sign Up components with glassmorphism design.
+- **Premium UX**: Fluid animations with Framer Motion and modern typography using the Geist font.
+- **Responsive Design**: Fully optimized for mobile, tablet, and desktop using Tailwind CSS 4.
+- **Branded Icons**: Custom-mapped tech icons for NestJS, Docker, RabbitMQ, and more.
+
+### Backend (NestJS)
+- **JWT Authentication**: Full login/registration cycle using Passport and JWT strategies.
+- **Security**: Password hashing with Bcrypt and strict data validation using `class-validator`.
+- **Organized Structure**: Clear separation between DTOs, Entities, Strategies, and Guards.
+- **Global Validation**: Automated request sanitization and error reporting.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend & Core
-- **Framework**: [Next.js 16 (Canary)](https://nextjs.org/)
-- **Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-
-### Tools & Libraries
-- **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
-- **Components**: Shadcn UI & Radix UI
-- **Authentication**: NextAuth.js
-- **Animations**: Framer Motion
+| Component | technologies |
+| :--- | :--- |
+| **Frontend** | Next.js 16, React 19, Tailwind CSS 4, Framer Motion, Lucide |
+| **Backend** | NestJS 11+, Passport, JWT, Bcrypt, Class Validator |
+| **Common** | TypeScript, pnpm |
 
 ---
 
 ## 📁 Project Structure
 
-The project follows a modular, feature-based architecture for better maintainability.
-
 ```text
-/portfolio
-├── src/
-│   ├── app/           # Next.js App Router (Pages & Layouts)
-│   ├── features/      # Business logic grouped by feature (e.g., auth)
-│   │   ├── auth/
-│   │   │   ├── components/
-│   │   │   ├── containers/
-│   │   │   └── schemas/
-│   ├── components/    # Reusable UI components (Shared)
-│   ├── lib/           # Utility functions and configurations
-│   └── styles/        # Global CSS and Tailwind configs
-└── public/            # Static assets
+/
+├── portfolio/             # Next.js Frontend
+│   ├── src/
+│   │   ├── features/      # Feature-based logic (auth, portfolio, etc.)
+│   │   ├── shared/        # Shared components (AuthLayout, AuthInput)
+│   │   └── app/           # App Router Pages
+│   └── public/            # Static Assets
+│
+├── backend/               # NestJS Backend
+│   ├── src/
+│   │   ├── auth/          # Auth Module (Login/Register, JWT, Guards)
+│   │   │   ├── dto/       # Data Transfer Objects
+│   │   │   ├── strategies/# Passport Strategies (JWT)
+│   │   │   └── guards/    # Auth Guards
+│   │   ├── users/         # Users Module (Entities, Services)
+│   │   └── main.ts        # Application Entry & Global Pipes
+│   └── nest-cli.json
+│
+└── README.md              # Unified Documentation
 ```
 
 ---
 
 ## 🚦 Getting Started
 
-### Prerequisites
+### 1. Prerequisites
+- Node.js (v20+)
+- [pnpm](https://pnpm.io/) (Highly Recommended)
 
-- Node.js (v18+)
-- pnpm (Recommended)
-
-### Installation
-
+### 2. Frontend Setup
 ```bash
+cd portfolio
 pnpm install
-```
-
-```bash
 pnpm dev
 ```
+*Running on: http://localhost:3000*
+
+### 3. Backend Setup
+```bash
+cd backend
+pnpm install
+pnpm run start:dev
+```
+*Running on: http://localhost:3001*
 
 ---
+
+## 📄 License
+This project is for educational and portfolio purposes. Feel free to use it as a reference!
