@@ -9,6 +9,8 @@ import { SectionLabel } from './SectionLabel';
 import { TimelineItem } from './TimelineItem';
 import { useInView } from '../hooks/useInView';
 import { STATS, SKILLS, EXPERIENCES } from '../constants/data';
+import { motion } from 'motion/react';
+import { TypingTerminal } from '@/components/ui/TypingTerminal';
 
 // ─── Background: floating blurred orbs ───────────────────────────────────────
 const ORBS = [
@@ -104,7 +106,7 @@ export function AboutSection() {
                 <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 lg:px-10">
 
                     {/* Section header */}
-                    <div ref={headerRef} className="mb-20">
+                    <div ref={headerRef} className="mb-12">
                         <div className="about-slide-up" style={{ opacity: headerInView ? undefined : 0 }}>
                             <p className="text-xs font-bold uppercase tracking-widest mb-5 flex items-center gap-3 text-orange-500"
                                 style={{ letterSpacing: '0.2em' }}
@@ -113,7 +115,7 @@ export function AboutSection() {
                                 Who I Am
                             </p>
                             <h2
-                                className="font-black leading-none tracking-tight text-gray-900 dark:text-gray-50"
+                                className="font-black leading-none tracking-tight text-gray-900 dark:text-gray-50 mb-8"
                                 style={{
                                     fontSize: 'clamp(3rem, 7vw, 5.5rem)',
                                     letterSpacing: '-0.03em',
@@ -124,6 +126,21 @@ export function AboutSection() {
                                     Me.
                                 </em>
                             </h2>
+
+                            {/* Terminal Animation Integrated Here */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                                viewport={{ once: true }}
+                                className="w-full max-w-2xl mb-12"
+                            >
+                                <TypingTerminal className="text-center" lines={[
+                                    "print('ยินดีต้อนรับเข้าสู่เว็บไซต์ morgorn')",
+                                    "const role = 'Fullstack Developer';",
+                                    "initPortfolio();"
+                                ]} />
+                            </motion.div>
                         </div>
                     </div>
 
