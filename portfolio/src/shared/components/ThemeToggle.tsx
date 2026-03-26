@@ -1,14 +1,13 @@
 'use client';
 
-import React from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { Switch } from '@/animation/components/switch';
 import { Moon, Sun } from 'lucide-react';
 
+// Fix the theme toggle
 export function ThemeToggle() {
   const { theme, toggleTheme, mounted } = useTheme();
 
-  // Ensures we always render the container to prevent DOM layout shift or disappearing buttons
   const isDark = mounted ? theme === 'dark' : false;
 
   return (
