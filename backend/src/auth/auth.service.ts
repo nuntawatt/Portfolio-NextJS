@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
@@ -13,45 +9,58 @@ import { AppException } from '../common/error';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
   ) { }
 
-  async validateUser(
+  async validateUserCredentials(
     email: string,
     pass: string,
   ): Promise<Omit<User, 'password'> | null> {
-    const user = await this.usersService.findOne(email);
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password, ...result } = user;
-      return result;
+    const existingUser = await this.usersService.findByEmail(email);
+
+    if (!existingUser) {
+      return null;
     }
-    return null;
+
+    const isMatch = await bcrypt.compare(pass, existingUser.password);
+    if (!isMatch) return null;
+
+    const { password, ...result } = existingUser;
+    return result;
   }
 
   async login(loginData: LoginDto) {
-    const user = await this.validateUser(
-      loginData.email,
-      loginData.password
-    );
+    const email = loginData.email.toLowerCase().trim();
+
+    const user = await this.validateUserCredentials(email, loginData.password);
 
     if (!user) {
+      this.logger.warn(`Failed login attempt for email: ${email}`);
       throw new AppException('AUTH_INVALID_CREDENTIALS');
     }
 
-    const payload = { email: user.email, sub: user.userId };
+    const payload = {
+      sub: user.userId,
+      email: user.email,
+    };
 
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload, { expiresIn: '1h' }),
       user,
     };
   }
 
   async register(userData: RegisterDto) {
-    const existingUser = await this.usersService.findOne(userData.email);
+    const email = userData.email.toLowerCase().trim();
+
+    const existingUser = await this.usersService.findByEmail(email);
 
     if (existingUser) {
+      this.logger.warn(`Duplicate user registration attempt for email: ${email}`);
       throw new AppException('AUTH_USER_ALREADY_EXISTS');
     }
 
@@ -60,11 +69,9 @@ export class AuthService {
     const newUser = await this.usersService.create({
       firstName: userData.firstName,
       lastName: userData.lastName,
-      email: userData.email,
+      email,
       password: hashedPassword,
     });
-
-    // console.log('New user created:', newUser);
 
     const { password, ...result } = newUser;
     return result;
