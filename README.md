@@ -59,7 +59,7 @@ This repository contains two main components working together to provide a seaml
 │   │   └── main.ts        # Application Entry & Global Pipes
 │   └── nest-cli.json
 │
-└── README.md              # Unified Documentation
+└── README.md              # Documentation
 ```
 
 ---
