@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Facebook, Github, Linkedin, Mail, ArrowRight, Download } from 'lucide-react';
+import { Facebook, Github, Linkedin, ArrowRight, Download } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { ProfileImage } from './ProfileImage';
 import { siteConfig } from '@/config/site';

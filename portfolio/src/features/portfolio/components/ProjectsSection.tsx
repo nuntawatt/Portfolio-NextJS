@@ -1,6 +1,5 @@
-import React from 'react';
 import { Card } from '@/shared/components/Card';
-import { ExternalLink, Github } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 const projects = [
   {

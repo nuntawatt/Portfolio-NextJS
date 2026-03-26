@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/shared/components/Card';
 import { Monitor, Database, Palette, Cpu, Wrench, Users } from 'lucide-react';
 
