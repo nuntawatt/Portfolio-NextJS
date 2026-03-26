@@ -46,6 +46,7 @@ function Switch({
     onChange: onCheckedChange,
   });
 
+  // ส่งค่าไปยัง context
   return (
     <SwitchProvider
       value={{ isChecked, setIsChecked, isPressed, setIsPressed }}
@@ -77,6 +78,7 @@ function Switch({
   );
 }
 
+// เปลี่ยน switch thumb component ให้รองรับ motion
 type SwitchThumbProps = Omit<
   React.ComponentProps<typeof SwitchPrimitives.Thumb>,
   'render'
@@ -118,6 +120,7 @@ type SwitchIconProps = HTMLMotionProps<'div'> & {
   position: SwitchIconPosition;
 };
 
+// เปลี่ยน switch icon component ให้รองรับ motion
 function SwitchIcon({
   position,
   transition = { type: 'spring', bounce: 0 },
@@ -142,6 +145,7 @@ function SwitchIcon({
   );
 }
 
+// ส่งค่าไปยัง context
 export {
   Switch,
   SwitchThumb,
