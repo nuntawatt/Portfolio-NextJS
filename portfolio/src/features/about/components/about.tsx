@@ -103,7 +103,7 @@ export function AboutSection() {
                 </div>
 
                 {/* ── Content ── */}
-                <div 
+                <div
                     className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 about-slide-up"
                     style={{ opacity: headerInView ? undefined : 0 }}
                 >
@@ -133,18 +133,18 @@ export function AboutSection() {
                         <motion.div
                             initial={{ opacity: 0, x: 40, scale: 0.95 }}
                             whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                            transition={{ 
-                                delay: 0.4, 
-                                duration: 0.8, 
-                                ease: [0.16, 1, 0.3, 1] 
+                            transition={{
+                                delay: 0.4,
+                                duration: 0.8,
+                                ease: [0.16, 1, 0.3, 1]
                             }}
                             viewport={{ once: true }}
                             className="w-full relative group"
                         >
                             <div className="absolute -inset-4 bg-orange-500/10 dark:bg-orange-500/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10" />
-                            
-                            <TypingTerminal 
-                                key={6} 
+
+                            <TypingTerminal
+                                key={6}
                                 lines={[
                                     "Fetching technical_stack.json... [OK]",
                                     "import { Creativity, Logic } from 'morgorn-dev';",
@@ -152,7 +152,7 @@ export function AboutSection() {
                                     "const role = 'Fullstack Developer';",
                                     "console.log('Welcome to my portfolio!');",
                                     "console.log('Ready to build something amazing?');",
-                                ]} 
+                                ]}
                             />
                         </motion.div>
                     </div>

@@ -99,8 +99,8 @@ export function BioCard() {
                         target={href.startsWith('http') ? '_blank' : undefined}
                         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                         className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-105 ${variant === 'primary'
-                                ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50'
-                                : 'bg-orange-500/[0.08] border border-orange-500/30 text-orange-500 hover:bg-orange-500/[0.15]'
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50'
+                            : 'bg-orange-500/[0.08] border border-orange-500/30 text-orange-500 hover:bg-orange-500/[0.15]'
                             }`}
                     >
                         {icon}

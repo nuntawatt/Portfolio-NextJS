@@ -40,8 +40,8 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
 
             <TiltCard
                 className={`relative rounded-2xl p-5 overflow-hidden backdrop-blur-xl transition-all duration-300 ${hovered
-                        ? 'bg-orange-50/80 dark:bg-orange-500/[0.05] border border-orange-300/60 dark:border-orange-500/30'
-                        : 'bg-white/60 dark:bg-white/[0.025] border border-gray-200/60 dark:border-white/[0.07]'
+                    ? 'bg-orange-50/80 dark:bg-orange-500/[0.05] border border-orange-300/60 dark:border-orange-500/30'
+                    : 'bg-white/60 dark:bg-white/[0.025] border border-gray-200/60 dark:border-white/[0.07]'
                     }`}
                 onMouseMove={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
