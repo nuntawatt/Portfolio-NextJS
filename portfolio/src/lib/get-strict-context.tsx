@@ -3,10 +3,7 @@ import * as React from 'react';
 function getStrictContext<T>(
   name?: string,
 ): readonly [
-  ({
-    value,
-    children,
-  }: {
+  ({ value, children }: {
     value: T;
     children?: React.ReactNode;
   }) => React.JSX.Element,
@@ -14,10 +11,7 @@ function getStrictContext<T>(
 ] {
   const Context = React.createContext<T | undefined>(undefined);
 
-  const Provider = ({
-    value,
-    children,
-  }: {
+  const Provider = ({ value, children }: {
     value: T;
     children?: React.ReactNode;
   }) => <Context.Provider value={value}>{children}</Context.Provider>;

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Facebook, Github, Linkedin, Twitter } from 'lucide-react';
+import { Facebook, Github, Linkedin } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { routes } from '@/config/routes';
 
