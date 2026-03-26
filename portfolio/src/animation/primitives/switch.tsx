@@ -13,6 +13,7 @@ import {
 import { getStrictContext } from '@/lib/get-strict-context';
 import { useControlledState } from '@/hooks/use-controlled-state';
 
+// สร้าง context สำหรับ switch component
 type SwitchContextType = {
   isChecked: boolean;
   setIsChecked: SwitchProps['onCheckedChange'];
@@ -24,6 +25,7 @@ const [SwitchProvider, useSwitch] = getStrictContext<SwitchContextType>('SwitchC
 
 type SwitchProps = Omit<React.ComponentProps<typeof SwitchPrimitives.Root>, 'render'> & HTMLMotionProps<'button'>;
 
+// เปลี่ยน switch component ให้รองรับ motion
 function Switch({
   name,
   defaultChecked,
