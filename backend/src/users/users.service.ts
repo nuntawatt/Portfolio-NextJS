@@ -22,7 +22,7 @@ export class UsersService {
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: { email },
-      select: ['userId', 'firstName', 'lastName', 'email', 'password'],
+      select: ['id', 'firstName', 'lastName', 'email', 'password'],
     });
   }
 
@@ -40,6 +40,5 @@ export class UsersService {
       this.logger.error(`Error creating user with email ${userData.email}: ${error.message}`);
       throw new AppException('AUTH_USER_ALREADY_EXISTS');
     }
-
   }
 }
