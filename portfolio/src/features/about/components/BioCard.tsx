@@ -16,7 +16,7 @@ const PROFILE_META = [
 export function BioCard() {
     return (
         <TiltCard
-            className="relative rounded-3xl p-8 overflow-hidden bg-white/80 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-2xl transition-colors duration-300"
+            className="relative rounded-3xl p-6 sm:p-8 overflow-hidden bg-white/80 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-2xl transition-colors duration-300"
         >
             {/* corner glow */}
             <div
@@ -98,11 +98,10 @@ export function BioCard() {
                         href={href}
                         target={href.startsWith('http') ? '_blank' : undefined}
                         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-105 ${
-                            variant === 'primary'
+                        className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-105 ${variant === 'primary'
                                 ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50'
                                 : 'bg-orange-500/[0.08] border border-orange-500/30 text-orange-500 hover:bg-orange-500/[0.15]'
-                        }`}
+                            }`}
                     >
                         {icon}
                         {label}

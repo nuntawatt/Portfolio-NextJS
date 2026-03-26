@@ -39,11 +39,10 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
             </div>
 
             <TiltCard
-                className={`relative rounded-2xl p-5 overflow-hidden backdrop-blur-xl transition-all duration-300 ${
-                    hovered
+                className={`relative rounded-2xl p-5 overflow-hidden backdrop-blur-xl transition-all duration-300 ${hovered
                         ? 'bg-orange-50/80 dark:bg-orange-500/[0.05] border border-orange-300/60 dark:border-orange-500/30'
                         : 'bg-white/60 dark:bg-white/[0.025] border border-gray-200/60 dark:border-white/[0.07]'
-                }`}
+                    }`}
                 onMouseMove={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
@@ -66,23 +65,22 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
                     </span>
                 </div>
 
-                {/* description */}
-                <p className="text-sm leading-relaxed mb-3 text-gray-600 dark:text-gray-400 transition-colors"
-                    style={{ paddingLeft: '2.75rem' }}
-                >
-                    {experience.desc}
-                </p>
+                {/* description & tags content */}
+                <div className="pl-0 sm:pl-11 transition-all">
+                    <p className="text-sm leading-relaxed mb-4 text-gray-600 dark:text-gray-400 transition-colors">
+                        {experience.desc}
+                    </p>
 
-                {/* tags */}
-                <div className="flex gap-2 flex-wrap" style={{ paddingLeft: '2.75rem' }}>
-                    {experience.tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className="text-xs font-medium px-2 py-0.5 rounded-md text-orange-600 dark:text-orange-400 bg-orange-100/80 dark:bg-orange-500/[0.08] border border-orange-200/60 dark:border-orange-500/[0.18] transition-colors"
-                        >
-                            {tag}
-                        </span>
-                    ))}
+                    <div className="flex gap-2 flex-wrap">
+                        {experience.tags.map((tag) => (
+                            <span
+                                key={tag}
+                                className="text-xs font-medium px-2 py-0.5 rounded-md text-orange-600 dark:text-orange-400 bg-orange-100/80 dark:bg-orange-500/[0.08] border border-orange-200/60 dark:border-orange-500/[0.18] transition-colors"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </TiltCard>
         </div>

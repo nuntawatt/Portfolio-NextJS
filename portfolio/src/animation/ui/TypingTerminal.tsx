@@ -56,26 +56,27 @@ export function TypingTerminal({
       className={`w-full max-w-2xl bg-[#0d0d0d] rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono ${className}`}
     >
       {/* Window Controls */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-white/5 border-b border-white/5">
+      <div className="flex items-center justify-between px-4 py-2 bg-white/[0.03] border-b border-white/5">
         <div className="flex items-center gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-400 opacity-80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-orange-400 opacity-80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-400 opacity-80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
         </div>
-        <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold opacity-60 px-2">terminal</span>
-        <div className="w-10" />
+        <div className="flex-1 text-center pr-10">
+          <span className="text-[10px] font-mono font-medium text-white/20 tracking-widest uppercase">morgorn — about</span>
+        </div>
       </div>
 
       <div 
         ref={terminalRef}
-        className="p-5 sm:p-6 min-h-[160px] max-h-[400px] overflow-y-auto scrollbar-none"
+        className="p-4 sm:p-6 min-h-[140px] max-h-[400px] overflow-y-auto scrollbar-none"
       >
-        <div className="space-y-1 flex flex-col items-start min-h-full">
+        <div className="space-y-1.5 flex flex-col items-start min-h-full">
           {/* Completed Lines History */}
           {completedLines.map((line, idx) => (
-            <div key={idx} className="flex items-start text-xs sm:text-sm font-medium font-mono w-full">
-              <span className="text-gray-600 mr-3 select-none opacity-40 min-w-[1.5rem] text-right">{idx + 1}</span>
-              <span className="text-gray-200 break-all leading-normal">
+            <div key={idx} className="flex items-start text-[11px] sm:text-[13px] font-medium font-mono w-full group/line">
+              <span className="text-gray-600 mr-3 select-none opacity-30 min-w-[1.2rem] text-right group-hover/line:opacity-60 transition-opacity">{idx + 1}</span>
+              <span className="text-gray-200 break-words leading-relaxed flex-1">
                 {formatCode(line)}
               </span>
             </div>
@@ -83,9 +84,9 @@ export function TypingTerminal({
  
           {/* Current Typing Line */}
           {lineIndex < lines.length && (
-            <div className="flex items-start text-xs sm:text-sm font-medium font-mono w-full relative">
-              <span className="text-gray-600 mr-3 select-none opacity-40 min-w-[1.5rem] text-right">{lineIndex + 1}</span>
-              <span className="text-gray-200 break-all leading-normal">
+            <div className="flex items-start text-[11px] sm:text-[13px] font-medium font-mono w-full relative group/line">
+              <span className="text-gray-600 mr-3 select-none opacity-30 min-w-[1.2rem] text-right group-hover/line:opacity-60 transition-opacity">{lineIndex + 1}</span>
+              <span className="text-gray-200 break-words leading-relaxed flex-1">
                 {formatCode(currentText)}
                 <motion.span
                   animate={{ opacity: [1, 0] }}

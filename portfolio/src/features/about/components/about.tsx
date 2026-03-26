@@ -108,18 +108,18 @@ export function AboutSection() {
                     style={{ opacity: headerInView ? undefined : 0 }}
                 >
                     {/* Header Row: Title + Terminal */}
-                    <div ref={headerRef} className="grid lg:grid-cols-[1fr_480px] gap-16 items-center mb-12">
+                    <div ref={headerRef} className="grid lg:grid-cols-[1fr_480px] gap-10 lg:gap-16 items-center mb-12 lg:mb-20">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-widest mb-5 flex items-center gap-3 text-orange-500"
+                            <p className="text-xs font-bold uppercase tracking-widest mb-4 sm:mb-5 flex items-center gap-3 text-orange-500"
                                 style={{ letterSpacing: '0.2em' }}
                             >
-                                <span className="block w-8 h-px bg-orange-500" />
+                                <span className="block w-6 sm:w-8 h-px bg-orange-500" />
                                 Who I Am
                             </p>
                             <h2
-                                className="font-black leading-none tracking-tight text-gray-900 dark:text-gray-50"
+                                className="font-black leading-[1.1] tracking-tight text-gray-900 dark:text-gray-50"
                                 style={{
-                                    fontSize: 'clamp(3rem, 7vw, 5.5rem)',
+                                    fontSize: 'clamp(2.5rem, 8vw, 5.5rem)',
                                     letterSpacing: '-0.03em',
                                 }}
                             >
@@ -158,7 +158,7 @@ export function AboutSection() {
                     </div>
 
                     {/* Content Row: Bio + Stats */}
-                    <div className="grid lg:grid-cols-[1fr_480px] gap-16 items-start mb-24">
+                    <div className="grid lg:grid-cols-[1fr_480px] gap-12 lg:gap-16 items-start mb-16 lg:mb-24">
                         <BioCard />
 
                         <div className="flex flex-col gap-6">
@@ -172,7 +172,7 @@ export function AboutSection() {
                     </div>
 
                     {/* Skills */}
-                    <div className="mt-12">
+                    <div className="mt-16 lg:mt-24">
                         <SectionLabel>Technical Skills</SectionLabel>
                         <div
                             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5"
