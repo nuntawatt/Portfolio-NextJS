@@ -1,6 +1,6 @@
-import React from 'react';
 import { Button } from '@/shared/components/Button';
 import { ArrowRight } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 export function ContactCTA() {
   return (
@@ -21,7 +21,7 @@ export function ContactCTA() {
             Get in touch <ArrowRight className="ml-3 w-5 h-5" />
           </Button>
           <Button variant="outline" className="text-lg px-8 py-4 text-orange-600 dark:text-orange-500 hover:text-orange-700 dark:hover:text-orange-400 transition-colors w-full sm:w-auto">
-            nanthawat.s@kkumail.com
+            {siteConfig.contact.email}
           </Button>
         </div>
       </div>

@@ -10,7 +10,7 @@ import { TimelineItem } from './TimelineItem';
 import { useInView } from '../hooks/useInView';
 import { STATS, SKILLS, EXPERIENCES } from '../constants/data';
 import { motion } from 'motion/react';
-import { TypingTerminal } from '@/components/ui/TypingTerminal';
+import { TypingTerminal } from '@/animation/ui/TypingTerminal';
 
 // ─── Background: floating blurred orbs ───────────────────────────────────────
 const ORBS = [

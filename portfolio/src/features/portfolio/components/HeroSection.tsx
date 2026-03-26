@@ -4,6 +4,7 @@ import React from 'react';
 import { Facebook, Github, Linkedin, Mail, ArrowRight, Download } from 'lucide-react';
 import { Button } from '@/shared/components/Button';
 import { ProfileImage } from './ProfileImage';
+import { siteConfig } from '@/config/site';
 
 export function HeroSection() {
   return (
@@ -33,19 +34,19 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4 lg:pt-2">
-              <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open("https://nanthawat-github-io.vercel.app", "_blank")}>
+              <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open(siteConfig.links.project, "_blank")}>
                 View Project <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
 
-              <Button variant="outline" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open("https://nuntawatt.github.io/my-cv", "_blank")}>
+              <Button variant="outline" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open(siteConfig.links.cv, "_blank")}>
                 Download CV <Download className="w-4 h-4 ml-2" />
               </Button>
             </div>
 
             <div className="flex items-center justify-center lg:justify-start gap-6 pt-4 lg:pt-8">
-              <SocialLink href="https://github.com/nuntawatt?tab=repositories" icon={<Github className="w-5 h-5 lg:w-6 lg:h-6" />} />
-              <SocialLink href="https://www.linkedin.com/in/nanthawat-seahuam-9375803b9" icon={<Linkedin className="w-5 h-5 lg:w-6 lg:h-6" />} />
-              <SocialLink href="https://www.facebook.com/nuntawat.morgorn" icon={<Facebook className="w-5 h-5 lg:w-6 lg:h-6" />} />
+              <SocialLink href={siteConfig.links.github} icon={<Github className="w-5 h-5 lg:w-6 lg:h-6" />} />
+              <SocialLink href={siteConfig.links.linkedin} icon={<Linkedin className="w-5 h-5 lg:w-6 lg:h-6" />} />
+              <SocialLink href={siteConfig.links.facebook} icon={<Facebook className="w-5 h-5 lg:w-6 lg:h-6" />} />
             </div>
           </div>
           <ProfileImage />

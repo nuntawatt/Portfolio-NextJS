@@ -20,14 +20,9 @@ type SwitchContextType = {
   setIsPressed: (isPressed: boolean) => void;
 };
 
-const [SwitchProvider, useSwitch] =
-  getStrictContext<SwitchContextType>('SwitchContext');
+const [SwitchProvider, useSwitch] = getStrictContext<SwitchContextType>('SwitchContext');
 
-type SwitchProps = Omit<
-  React.ComponentProps<typeof SwitchPrimitives.Root>,
-  'render'
-> &
-  HTMLMotionProps<'button'>;
+type SwitchProps = Omit<React.ComponentProps<typeof SwitchPrimitives.Root>, 'render'> & HTMLMotionProps<'button'>;
 
 function Switch({
   name,
@@ -86,10 +81,10 @@ type SwitchThumbProps = Omit<
 > &
   HTMLMotionProps<'div'> & {
     pressedAnimation?:
-      | TargetAndTransition
-      | VariantLabels
-      | boolean
-      | LegacyAnimationControls;
+    | TargetAndTransition
+    | VariantLabels
+    | boolean
+    | LegacyAnimationControls;
   };
 
 function SwitchThumb({

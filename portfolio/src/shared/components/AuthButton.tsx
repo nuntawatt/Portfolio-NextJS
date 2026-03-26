@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
+import { routes } from '@/config/routes';
 
 export function AuthButton() {
   const { data: session, status } = useSession();
@@ -67,7 +68,7 @@ export function AuthButton() {
     <div className="flex items-center gap-3">
       {/* Sign In Button: Sleek primary gradient (Swapped) */}
       <Link
-        href="/auth"
+        href={routes.auth}
         className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30"
       >
         Sign In
@@ -75,7 +76,7 @@ export function AuthButton() {
 
       {/* Sign Up Button: Premium Dark Solid to match theme */}
       <Link
-        href="/auth?mode=register"
+        href={`${routes.auth}?mode=register`}
         className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md shadow-gray-900/20 dark:shadow-white/20"
       >
         Sign Up

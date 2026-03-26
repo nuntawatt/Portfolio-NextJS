@@ -1,7 +1,7 @@
 import { AuthContainer } from '@/features/auth';
 
 export const metadata = {
-  title: 'Authentication — Morgorn Portfolio',
+  title: 'Authentication',
   description: 'Sign in or create an account to access the full portfolio experience.',
 };
 

@@ -4,17 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/shared/components/ThemeToggle';
 import { AuthButton } from '@/shared/components/AuthButton';
+import { routes } from '@/config/routes';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeHash, setActiveHash] = useState('#home');
+  const [activeHash, setActiveHash] = useState<string>(routes.home);
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: routes.home },
+    { name: 'About', href: routes.about },
+    { name: 'Skills', href: routes.skills },
+    { name: 'Projects', href: routes.projects },
+    { name: 'Contact', href: routes.contact },
   ];
 
   // Prevent background scrolling when mobile menu is open
@@ -50,7 +51,7 @@ export function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <a href="#home" className="text-2xl font-bold text-gray-900 dark:text-white tracking-tighter transition-colors">
+              <a href={routes.home} className="text-2xl font-bold text-gray-900 dark:text-white tracking-tighter transition-colors">
                 Mor<span className="text-orange-500 drop-shadow-sm">gorn</span>
               </a>
             </div>

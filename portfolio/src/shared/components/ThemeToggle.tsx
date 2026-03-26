@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
-import { Switch } from '@/components/animate-ui/components/base/switch';
+import { Switch } from '@/animation/components/switch';
 import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
@@ -12,13 +12,13 @@ export function ThemeToggle() {
   const isDark = mounted ? theme === 'dark' : false;
 
   return (
-    <div 
+    <div
       className={`flex items-center gap-x-2 bg-gray-100 dark:bg-neutral-900 px-3 py-2 rounded-full border border-gray-200 dark:border-white/10 transition-opacity duration-300 ${!mounted ? 'opacity-50' : 'opacity-100'}`}
       suppressHydrationWarning
     >
       <Sun className={`w-4 h-4 transition-colors duration-300 ease-out ${!isDark ? 'text-orange-500' : 'text-gray-400'}`} />
-      <Switch 
-        checked={isDark} 
+      <Switch
+        checked={isDark}
         onCheckedChange={() => toggleTheme()}
         aria-label="Toggle theme"
         nativeButton={true}

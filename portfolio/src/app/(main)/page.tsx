@@ -1,5 +1,4 @@
 import { HeroSection } from "@/features/portfolio/components/HeroSection";
-// import { AboutSection } from "@/features/portfolio/components/AboutSection";
 import { SkillsSection } from "@/features/portfolio/components/SkillsSection";
 import { ProjectsSection } from "@/features/portfolio/components/ProjectsSection";
 import { ContactCTA } from "@/features/portfolio/components/ContactCTA";
@@ -10,7 +9,6 @@ export default function HomePage() {
     <div className="flex flex-1 flex-col bg-transparent">
       <main className="flex-1">
         <HeroSection />
-        {/* <AboutSection /> */}
         <TiltCard>
           <SkillsSection />
         </TiltCard>

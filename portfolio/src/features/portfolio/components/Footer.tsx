@@ -1,5 +1,7 @@
 import React from 'react';
 import { Facebook, Github, Linkedin, Twitter } from 'lucide-react';
+import { siteConfig } from '@/config/site';
+import { routes } from '@/config/routes';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,21 +12,21 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
 
           <div className="flex-shrink-0">
-            <a href="#" className="text-2xl font-bold text-gray-900 dark:text-white tracking-tighter transition-colors">
+            <a href={routes.home} className="text-2xl font-bold text-gray-900 dark:text-white tracking-tighter transition-colors">
               Mor<span className="text-orange-500">gorn</span>
             </a>
           </div>
 
           <div className="flex items-center gap-6">
-            <a href="https://github.com/nuntawatt?tab=repositories" target="_blank" rel="noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors p-2 bg-gray-100 dark:bg-white/5 rounded-full border border-gray-200 dark:border-white/10 hover:border-orange-200 dark:hover:border-transparent">
+            <a href={siteConfig.links.github} target="_blank" rel="noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors p-2 bg-gray-100 dark:bg-white/5 rounded-full border border-gray-200 dark:border-white/10 hover:border-orange-200 dark:hover:border-transparent">
               <span className="sr-only">GitHub</span>
               <Github className="w-4 h-4" />
             </a>
-            <a href="https://www.linkedin.com/in/nanthawat-seahuam-9375803b9" target="_blank" rel="noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors p-2 bg-gray-100 dark:bg-white/5 rounded-full border border-gray-200 dark:border-white/10 hover:border-orange-200 dark:hover:border-transparent">
+            <a href={siteConfig.links.linkedin} target="_blank" rel="noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors p-2 bg-gray-100 dark:bg-white/5 rounded-full border border-gray-200 dark:border-white/10 hover:border-orange-200 dark:hover:border-transparent">
               <span className="sr-only">LinkedIn</span>
               <Linkedin className="w-4 h-4" />
             </a>
-            <a href="https://www.facebook.com/nuntawat.morgorn" target="_blank" rel="noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors p-2 bg-gray-100 dark:bg-white/5 rounded-full border border-gray-200 dark:border-white/10 hover:border-orange-200 dark:hover:border-transparent">
+            <a href={siteConfig.links.facebook} target="_blank" rel="noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-500 transition-colors p-2 bg-gray-100 dark:bg-white/5 rounded-full border border-gray-200 dark:border-white/10 hover:border-orange-200 dark:hover:border-transparent">
               <span className="sr-only">Facebook</span>
               <Facebook className="w-4 h-4" />
             </a>

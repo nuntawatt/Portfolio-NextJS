@@ -7,7 +7,7 @@ import { ContactCTA } from '@/features/portfolio/components/ContactCTA';
 import { Footer } from '@/features/portfolio/components/Footer';
 
 export default async function Home() {
-  // ลด delay เพื่อให้เห็นหน้า Loading Skeleton (เอาออกได้เมื่อมี API จริง)
+  // ลด delay เพื่อให้เห็นหน้า Loading Skeleton (เอาออกได้เมื่อไม่มี API จริง)
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   return (
