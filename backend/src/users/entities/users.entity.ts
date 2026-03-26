@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { OauthAccount } from './oauth_accounts.entity';
 
 @Entity()
 export class User {
@@ -38,4 +40,7 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @OneToMany(() => OauthAccount, (oauth) => oauth.user)
+  oauthAccounts: OauthAccount[];
 }

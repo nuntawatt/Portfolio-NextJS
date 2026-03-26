@@ -18,6 +18,12 @@ export const ERROR_CODES = {
         message: 'User not found',
     },
 
+    // OAUTH
+    OAUTH_ACCOUNT_ALREADY_EXISTS: {
+        status: 409,
+        message: 'OAuth account already exists',
+    },
+
     // DEFAULT
     INTERNAL_SERVER_ERROR: {
         status: 500,

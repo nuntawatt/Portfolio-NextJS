@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dto/register.dto';
-import { User } from '../users/entities/user.entity';
+import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { AppException } from '../common/error';
 
@@ -75,5 +75,46 @@ export class AuthService {
 
     const { password, ...result } = newUser;
     return result;
+  }
+
+  async oauthLogin(oauthUser: any) {
+    // 1. หา oauth account ก่อน
+    let oauthAccount = await this.usersService.findByOAuth(
+      oauthUser.provider,
+      oauthUser.providerId,
+    );
+
+    let user;
+
+    if (oauthAccount) {
+      user = oauthAccount.user;
+    } else {
+      // 2. หา user ด้วย email
+      user = await this.usersService.findByEmail(oauthUser.email);
+
+      // 3. ถ้าไม่มี → create user
+      if (!user) {
+        user = await this.usersService.create({
+          email: oauthUser.email,
+          firstName: oauthUser.firstName || '',
+          lastName: oauthUser.lastName || '',
+          password: '', // oauth ไม่ใช้ password
+        });
+      }
+
+      // 4. create oauth account
+      await this.usersService.createOAuthAccount(
+        user,
+        oauthUser.provider,
+        oauthUser.providerId,
+      );
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+    };
+
+    return this.jwtService.sign(payload);
   }
 }

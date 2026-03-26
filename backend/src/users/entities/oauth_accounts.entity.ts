@@ -1,0 +1,40 @@
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    Unique,
+    CreateDateColumn,
+    DeleteDateColumn,
+    UpdateDateColumn,
+    JoinColumn,
+} from 'typeorm';
+import { User } from './users.entity';
+
+@Entity('oauth_accounts')
+@Unique(['provider', 'providerId'])
+export class OauthAccount {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    provider: string;
+
+    @Column()
+    providerId: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date;
+
+    @ManyToOne(() => User, (user) => user.oauthAccounts, {
+        onDelete: 'CASCADE',
+    })
+    @JoinColumn({ name: 'user_id' })
+    user: User;
+}

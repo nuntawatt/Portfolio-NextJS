@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User } from './entities/users.entity';
 import { AppException } from 'src/common/error';
+import { OauthAccount } from './entities/oauth_accounts.entity';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,9 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    
+    @InjectRepository(OauthAccount)
+    private oauthRepository: Repository<OauthAccount>,
   ) { }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -39,6 +43,41 @@ export class UsersService {
     } catch (error) {
       this.logger.error(`Error creating user with email ${userData.email}: ${error.message}`);
       throw new AppException('AUTH_USER_ALREADY_EXISTS');
+    }
+  }
+
+  // =========================
+  // OAUTH SECTION 🔥
+  // =========================
+
+  async findByOAuth(
+    provider: string,
+    providerId: string,
+  ): Promise<OauthAccount | null> {
+    return this.oauthRepository.findOne({
+      where: { provider, providerId },
+      relations: ['user'],
+    });
+  }
+
+  async createOAuthAccount(
+    user: User,
+    provider: string,
+    providerId: string,
+  ): Promise<OauthAccount> {
+    const oauth = this.oauthRepository.create({
+      provider,
+      providerId,
+      user,
+    });
+
+    try {
+      return await this.oauthRepository.save(oauth);
+    } catch (error) {
+      this.logger.error(
+        `Error creating OAuth account (${provider}:${providerId}): ${error.message}`,
+      );
+      throw new AppException('OAUTH_ACCOUNT_ALREADY_EXISTS');
     }
   }
 }
