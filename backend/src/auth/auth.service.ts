@@ -20,7 +20,7 @@ export class AuthService {
     email: string,
     pass: string,
   ): Promise<Omit<User, 'password'> | null> {
-    const existingUser = await this.usersService.findByEmail(email);
+    const existingUser = await this.usersService.findByEmailWithPassword(email);
 
     if (!existingUser) {
       return null;

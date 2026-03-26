@@ -11,11 +11,18 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: { email },
+    });
+  }
+
+  async findByEmailWithPassword(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: { email },
+      select: ['userId', 'firstName', 'lastName', 'email', 'password'],
     });
   }
 
@@ -27,12 +34,12 @@ export class UsersService {
   }): Promise<User> {
     const user = this.usersRepository.create(userData);
 
-    try{
+    try {
       return this.usersRepository.save(user);
     } catch (error) {
       this.logger.error(`Error creating user with email ${userData.email}: ${error.message}`);
       throw new AppException('AUTH_USER_ALREADY_EXISTS');
     }
-    
+
   }
 }
