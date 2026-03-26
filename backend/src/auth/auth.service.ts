@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/entities/user.entity';
+import { LoginDto } from './dto/login.dto';
+import { AppException } from '../common/error';
 
 @Injectable()
 export class AuthService {
@@ -28,30 +30,41 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+  async login(loginData: LoginDto) {
+    const user = await this.validateUser(
+      loginData.email,
+      loginData.password
+    );
+
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new AppException('AUTH_INVALID_CREDENTIALS');
     }
+
+    const payload = { email: user.email, sub: user.userId };
+
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
       user,
     };
   }
 
   async register(userData: RegisterDto) {
     const existingUser = await this.usersService.findOne(userData.email);
+
     if (existingUser) {
-      throw new ConflictException('User already exists');
+      throw new AppException('AUTH_USER_ALREADY_EXISTS');
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
+
     const newUser = await this.usersService.create({
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
       password: hashedPassword,
     });
+
+    // console.log('New user created:', newUser);
 
     const { password, ...result } = newUser;
     return result;
