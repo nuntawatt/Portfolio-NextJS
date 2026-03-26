@@ -12,16 +12,16 @@ import { User } from './users/entities/user.entity';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST || 'db',
-      port: parseInt(process.env.DB_PORT) || 5432,
-      username: process.env.DB_USERNAME || 'postgres',
-      password: process.env.DB_PASSWORD || 'postgres',
-      database: process.env.DB_DATABASE || 'portfolio',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       entities: [User],
-      synchronize: true, // Be careful with this in production
+      synchronize: true,
     }),
     AuthModule,
     UsersModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
