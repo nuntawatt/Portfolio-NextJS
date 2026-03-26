@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 
-/**
- * Animates a number from 0 → `target` over `duration` ms
- * using an ease-out-quart curve. Only starts when `active` is true.
- */
+// Animates a number from 0 → `target` over `duration` ms
+// using an ease-out-quart curve. Only starts when `active` is true.
 export function useCountUp(
   target: number,
   active: boolean,
