@@ -9,11 +9,11 @@ import {
 export class RegisterDto {
   @IsOptional()
   @IsString()
-  firstName?: string;
+  firstName: string;
 
   @IsOptional()
   @IsString()
-  lastName?: string;
+  lastName: string;
 
   @IsEmail({}, { message: 'Please enter a valid email address' })
   @IsNotEmpty({ message: 'Email is required' })
