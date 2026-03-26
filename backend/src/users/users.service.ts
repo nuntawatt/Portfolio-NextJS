@@ -12,7 +12,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    
+
     @InjectRepository(OauthAccount)
     private oauthRepository: Repository<OauthAccount>,
   ) { }
@@ -79,5 +79,18 @@ export class UsersService {
       );
       throw new AppException('OAUTH_ACCOUNT_ALREADY_EXISTS');
     }
+  }
+
+  async softDelete(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new AppException('USER_NOT_FOUND');
+    }
+
+    user.deletedAt = new Date();
+    return this.usersRepository.save(user);
   }
 }

@@ -39,4 +39,5 @@ export class AuthController {
     const token = await this.authService.oauthLogin(req.user);
     return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
   }
+
 }
