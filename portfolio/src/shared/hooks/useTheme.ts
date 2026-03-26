@@ -8,12 +8,12 @@ export function useTheme() {
   const [theme, setTheme] = useState<Theme>('dark');
   const [mounted, setMounted] = useState(false);
 
+  // ตั้งค่าเริ่มต้นของ theme
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem('theme') as Theme | null;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    // Default to dark unless explicit light or system is explicitly light and no storage
     const initialTheme = stored || (systemPrefersDark ? 'dark' : 'light');
     
     setTheme(initialTheme);
