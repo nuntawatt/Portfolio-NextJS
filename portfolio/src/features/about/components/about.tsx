@@ -103,11 +103,13 @@ export function AboutSection() {
                 </div>
 
                 {/* ── Content ── */}
-                <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 lg:px-10">
-
-                    {/* Section header */}
-                    <div ref={headerRef} className="mb-12">
-                        <div className="about-slide-up" style={{ opacity: headerInView ? undefined : 0 }}>
+                <div 
+                    className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 about-slide-up"
+                    style={{ opacity: headerInView ? undefined : 0 }}
+                >
+                    {/* Header Row: Title + Terminal */}
+                    <div ref={headerRef} className="grid lg:grid-cols-[1fr_480px] gap-16 items-center mb-12">
+                        <div>
                             <p className="text-xs font-bold uppercase tracking-widest mb-5 flex items-center gap-3 text-orange-500"
                                 style={{ letterSpacing: '0.2em' }}
                             >
@@ -115,7 +117,7 @@ export function AboutSection() {
                                 Who I Am
                             </p>
                             <h2
-                                className="font-black leading-none tracking-tight text-gray-900 dark:text-gray-50 mb-8"
+                                className="font-black leading-none tracking-tight text-gray-900 dark:text-gray-50"
                                 style={{
                                     fontSize: 'clamp(3rem, 7vw, 5.5rem)',
                                     letterSpacing: '-0.03em',
@@ -126,29 +128,40 @@ export function AboutSection() {
                                     Me.
                                 </em>
                             </h2>
-
-                            {/* Terminal Animation Integrated Here */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                                viewport={{ once: true }}
-                                className="w-full max-w-2xl mb-12"
-                            >
-                                <TypingTerminal className="text-center" lines={[
-                                    "print('ยินดีต้อนรับเข้าสู่เว็บไซต์ morgorn')",
-                                    "const role = 'Fullstack Developer';",
-                                    "initPortfolio();"
-                                ]} />
-                            </motion.div>
                         </div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 40, scale: 0.95 }}
+                            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                            transition={{ 
+                                delay: 0.4, 
+                                duration: 0.8, 
+                                ease: [0.16, 1, 0.3, 1] 
+                            }}
+                            viewport={{ once: true }}
+                            className="w-full relative group"
+                        >
+                            <div className="absolute -inset-4 bg-orange-500/10 dark:bg-orange-500/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10" />
+                            
+                            <TypingTerminal 
+                                key={6} 
+                                lines={[
+                                    "Fetching technical_stack.json... [OK]",
+                                    "import { Creativity, Logic } from 'morgorn-dev';",
+                                    "const name = 'Morgorn';",
+                                    "const role = 'Fullstack Developer';",
+                                    "console.log('Welcome to my portfolio!');",
+                                    "console.log('Ready to build something amazing?');",
+                                ]} 
+                            />
+                        </motion.div>
                     </div>
 
-                    {/* Bio + Stats */}
-                    <div className="grid lg:grid-cols-[1fr_400px] gap-10 items-start mb-24">
+                    {/* Content Row: Bio + Stats */}
+                    <div className="grid lg:grid-cols-[1fr_480px] gap-16 items-start mb-24">
                         <BioCard />
 
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-6">
                             <div className="grid grid-cols-2 gap-4">
                                 {STATS.map((stat) => (
                                     <StatCard key={stat.label} stat={stat} />
@@ -159,7 +172,7 @@ export function AboutSection() {
                     </div>
 
                     {/* Skills */}
-                    <div className="mb-24">
+                    <div className="mt-12">
                         <SectionLabel>Technical Skills</SectionLabel>
                         <div
                             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5"
