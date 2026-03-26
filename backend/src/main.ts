@@ -11,7 +11,10 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.enableCors(); // Enable CORS for the frontend
+  app.enableCors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  });
   await app.listen(process.env.PORT ?? 3001);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

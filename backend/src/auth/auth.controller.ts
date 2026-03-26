@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  UnauthorizedException,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
