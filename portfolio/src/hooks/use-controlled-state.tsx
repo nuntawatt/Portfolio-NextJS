@@ -5,7 +5,7 @@ interface CommonControlledStateProps<T> {
   defaultValue?: T;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// ใช้ค่าจาก props และ state เพื่อควบคุม state
 export function useControlledState<T, Rest extends any[] = []>(
   props: CommonControlledStateProps<T> & {
     onChange?: (value: T, ...args: Rest) => void;

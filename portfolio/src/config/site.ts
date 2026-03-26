@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Portfolio",
   description: "Modern portfolio of Morgorn, Backend and Fullstack Developer",
-  url: "https://morgorn.skllracademy.com", 
+  url: "https://morgorn.skllracademy.com",
   ogImage: "/og.png",
   links: {
     github: "https://github.com/nuntawatt?tab=repositories",
