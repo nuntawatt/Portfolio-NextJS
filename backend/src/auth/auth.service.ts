@@ -84,6 +84,8 @@ export class AuthService {
       oauthUser.providerId,
     );
 
+    // console.log('OAuth User:', oauthUser);
+
     let user;
 
     if (oauthAccount) {
@@ -102,6 +104,8 @@ export class AuthService {
         });
       }
 
+      // console.log('User after email check:', user);
+
       // 4. create oauth account
       await this.usersService.createOAuthAccount(
         user,
@@ -115,6 +119,7 @@ export class AuthService {
       email: user.email,
     };
 
+    // console.log('JWT Payload:', payload);
     return this.jwtService.sign(payload);
   }
 }
