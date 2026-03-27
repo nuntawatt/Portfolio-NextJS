@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { JwtPayload } from '../types/auth-type';
 import { UsersService } from 'src/users/users.service';
 import { AppException } from 'src/common/error';
-import { isEmail } from 'class-validator';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
