@@ -7,6 +7,7 @@ import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { AppException } from '../common/error';
 import { OAuthUser } from './types/auth-type';
+import { hashToken, compareToken } from './utils/hash.util';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,26 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+
   ) { }
+  private generateTokens(user: User) {
+    const payload = {
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+      isEmailVerified: user.isEmailVerified,
+    };
+
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '15m',
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '7d',
+    });
+
+    return { accessToken, refreshToken };
+  }
 
   // =========================
   // VALIDATE LOGIN

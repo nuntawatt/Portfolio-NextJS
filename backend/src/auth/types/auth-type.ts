@@ -7,9 +7,11 @@ export type OAuthUser = {
     providerId: string;
 };
 
-export type JwtPayload = {
+export type AccessTokenPayload = {
     userId: number;
     email: string;
-    role?: string;
-    isEmailVerified?: boolean;
+    role: string;
+    isEmailVerified: boolean;
 };
+
+export type JwtPayload = AccessTokenPayload;

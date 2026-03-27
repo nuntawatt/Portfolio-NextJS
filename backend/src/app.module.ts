@@ -23,7 +23,7 @@ import { OauthAccount } from './users/entities/oauth_accounts.entity';
       
       entities: [User, OauthAccount],
 
-      synchronize: false,
+      synchronize: true,
     }),
     AuthModule,
     UsersModule,

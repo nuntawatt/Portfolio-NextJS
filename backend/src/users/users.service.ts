@@ -19,10 +19,7 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
-      where: {
-        email,
-        deletedAt: null, // กัน soft delete
-      },
+      where: { email },
     });
   }
 
@@ -32,7 +29,7 @@ export class UsersService {
         email,
         deletedAt: null,
       },
-      select: ['id', 'firstName', 'lastName', 'email', 'password', 'deletedAt', 'role', 'isEmailVerified'],
+      select: ['id', 'firstName', 'lastName', 'email', 'password', 'role', 'isEmailVerified', 'deletedAt'],
     });
   }
 
@@ -43,34 +40,63 @@ export class UsersService {
         id,
         deletedAt: null,
       },
-      select: ['id', 'email', 'deletedAt', 'role', 'isEmailVerified'],
+      select: ['id', 'email', 'role', 'isEmailVerified', 'deletedAt'],
+    });
+  }
+
+  async findByIdWithRefreshToken(id: number): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: { id },
+      select: ['id', 'email', 'role', 'isEmailVerified', 'refreshTokenHash'],
+    });
+  }
+
+  async updateRefreshToken(userId: number, tokenHash: string | null) {
+    return this.usersRepository.update(userId, {
+      refreshTokenHash: tokenHash,
+    });
+  }
+
+  async updateEmailVerificationToken(userId: number, tokenHash: string | null, expiresAt: Date | null) {
+    return this.usersRepository.update(userId, {
+      emailVerificationTokenHash: tokenHash,
+      emailVerificationExpires: expiresAt,
+    });
+  }
+
+  async updatePasswordResetToken(userId: number, tokenHash: string | null, expiresAt: Date | null) {
+    return this.usersRepository.update(userId, {
+      passwordResetTokenHash: tokenHash,
+      passwordResetExpires: expiresAt,
     });
   }
 
   async create(userData: {
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
     email: string;
     password: string;
   }): Promise<User> {
-    const user = this.usersRepository.create(userData);
+    const user = this.usersRepository.create({
+      firstName: userData.firstName ?? null,
+      lastName: userData.lastName ?? null,
+      email: userData.email,
+      password: userData.password,
+    });
 
     try {
-      return this.usersRepository.save(user);
+      return await this.usersRepository.save(user);
     } catch (error) {
       this.logger.error(`Error creating user with email ${userData.email}: ${error.message}`);
       throw new AppException('AUTH_USER_ALREADY_EXISTS');
     }
   }
 
-  // =========================
-  // OAUTH SECTION 🔥
-  // =========================
+  async save(user: User): Promise<User> {
+    return this.usersRepository.save(user);
+  }
 
-  async findByOAuth(
-    provider: string,
-    providerId: string,
-  ): Promise<OauthAccount | null> {
+  async findByOAuth(provider: string, providerId: string): Promise<OauthAccount | null> {
     return this.oauthRepository.findOne({
       where: { provider, providerId },
       relations: ['user'],

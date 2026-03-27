@@ -23,14 +23,29 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
-  password?: string;
+  @Column({ select: false, nullable: true })
+  password: string | null;
 
   @Column({ default: 'user' })
   role: string;
 
   @Column({ default: false })
   isEmailVerified: boolean;
+
+  @Column({ nullable: true, select: false })
+  refreshTokenHash: string | null;
+
+  @Column({ nullable: true })
+  emailVerificationToken: string | null;
+
+  @Column({ nullable: true })
+  emailVerificationExpires: Date | null;
+
+  @Column({ nullable: true })
+  passwordResetToken: string | null;
+
+  @Column({ nullable: true })
+  passwordResetExpires: Date | null;
 
   @CreateDateColumn()
   createdAt: Date;
