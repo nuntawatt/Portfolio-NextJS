@@ -44,7 +44,7 @@ export class AuthService {
     }
 
     const payload = {
-      sub: user.id,
+      userId: user.id,
       email: user.email,
     };
 
@@ -83,8 +83,6 @@ export class AuthService {
       oauthUser.provider,
       oauthUser.providerId,
     );
-
-    // console.log('OAuth User:', oauthUser);
 
     let user;
 

@@ -8,6 +8,7 @@ import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) { }
 
+  // auth by email/password
   @Post('register')
   async register(@Body() userData: RegisterDto) {
     return this.authService.register(userData);
@@ -18,6 +19,9 @@ export class AuthController {
     return this.authService.login(loginData);
   }
 
+  
+
+  // auth by google
   @Get('google')
   @UseGuards(AuthGuard('google'))
   async googleAuth() { }
@@ -29,6 +33,7 @@ export class AuthController {
     return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
   }
 
+  // auth by github
   @Get('github')
   @UseGuards(AuthGuard('github'))
   async githubAuth() { }

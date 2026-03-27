@@ -8,6 +8,6 @@ export type OAuthUser = {
 };
 
 export type JwtPayload = {
-    sub: string;
+    userId: number;
     email: string;
 };
