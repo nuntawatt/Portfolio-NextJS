@@ -17,9 +17,11 @@ import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
-  // auth by email/password
+  // =============================
+  // REGISTER, LOGIN, VERIFY EMAIL
+  // =============================
   @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
   @Post('register')
   async register(@Body() userData: RegisterDto) {
@@ -32,6 +34,15 @@ export class AuthController {
     return this.authService.login(loginData);
   }
 
+  @Get('verify-email')
+  async verifyEmail(@Query('token') token: string) {
+    return this.authService.verifyEmail(token);
+  }
+
+
+  // ======================================================
+  // REFRESH TOKEN, LOGOUT, FORGOT PASSWORD, RESET PASSWORD
+  // ======================================================
   @Post('refresh')
   async refresh(@Body('refreshToken') refreshToken: string) {
     return this.authService.refreshToken(refreshToken);
@@ -43,10 +54,6 @@ export class AuthController {
     return this.authService.logout(req.user.userId);
   }
 
-  @Get('verify-email')
-  async verifyEmail(@Query('token') token: string) {
-    return this.authService.verifyEmail(token);
-  }
 
   @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
   @Post('forgot-password')
@@ -59,10 +66,12 @@ export class AuthController {
     return this.authService.resetPassword(body.token, body.password);
   }
 
-  // auth by google
+  // ====================
+  // OAUTH LOGIN (GOOGLE)
+  // ====================
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {}
+  async googleAuth() { }
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
@@ -71,10 +80,12 @@ export class AuthController {
     return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
   }
 
-  // auth by github
+  // ====================
+  // OAUTH LOGIN (GITHUB)
+  // ====================
   @Get('github')
   @UseGuards(AuthGuard('github'))
-  async githubAuth() {}
+  async githubAuth() { }
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
