@@ -26,6 +26,9 @@ export class User {
   @Column({ select: false, nullable: true })
   password: string | null;
 
+  @Column({ type: 'varchar', nullable: true })
+  avatar: string | null;
+
   @Column({ default: 'user' })
   role: string;
 
