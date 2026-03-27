@@ -22,8 +22,11 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private mailService: MailService,
-  ) {}
+  ) { }
 
+  // =========================
+  // GENERATE ACCESS TOKEN
+  // =========================
   private generateAccessToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
   ) {
@@ -41,6 +44,9 @@ export class AuthService {
     );
   }
 
+  // =========================
+  // GENERATE REFRESH TOKEN
+  // =========================
   private generateRefreshToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
   ) {
@@ -58,6 +64,9 @@ export class AuthService {
     );
   }
 
+  // ===============================
+  // ISSUE TOKENS (ACCESS + REFRESH)
+  // ===============================
   private async issueToken(user: User) {
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
@@ -69,7 +78,7 @@ export class AuthService {
   }
 
   // =========================
-  // VALIDATE LOGIN
+  // VALIDATE USER CREDENTIALS
   // =========================
   async validateUserCredentials(
     email: string,
@@ -232,6 +241,9 @@ export class AuthService {
     return tokens;
   }
 
+  // =========================
+  // REFRESH TOKEN
+  // =========================
   async refreshToken(refreshToken: string) {
     let payload: {
       userId: number;
@@ -267,11 +279,17 @@ export class AuthService {
     return tokens;
   }
 
+  // =========================
+  // LOGOUT
+  // =========================
   async logout(userId: number) {
     await this.usersService.updateRefreshToken(userId, null);
     return { success: true };
   }
 
+  // =========================
+  // VERIFY EMAIL
+  // =========================
   async verifyEmail(token: string) {
     const tokenHash = sha256(token);
 
@@ -298,6 +316,9 @@ export class AuthService {
     return { success: true };
   }
 
+  // =========================
+  // FORGOT PASSWORD
+  // =========================
   async forgotPassword(email: string) {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
@@ -327,6 +348,9 @@ export class AuthService {
     return { success: true };
   }
 
+  // =========================
+  // RESET PASSWORD
+  // =========================
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
 

@@ -14,18 +14,27 @@ export class UsersService {
 
     @InjectRepository(OauthAccount)
     private oauthRepository: Repository<OauthAccount>,
-  ) {}
+  ) { }
 
+  // =====================================================================================
+  // ทำให้ email เป็นรูปแบบมาตรฐาน (lowercase และ trim) เพื่อป้องกันปัญหาการค้นหาและการเปรียบเทียบ
+  // =====================================================================================
   private normalizeEmail(email: string) {
-    return email.toLowerCase().trim();
+    return email.toLowerCase().trim(); // ทำให้ email เป็น lowercase และ trim
   }
 
+  // ===========================================================================
+  // FIND USER BY EMAIL (สำหรับการตรวจสอบข้อมูลจากการลงทะเบียนหรือการแสดงข้อมูลผู้ใช้)
+  // ===========================================================================
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: { email },
     });
   }
 
+  // =====================================================================
+  // FIND USER WITH PASSWORD (สำหรับการตรวจสอบข้อมูลเข้าสู่ระบบ)
+  // =====================================================================
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -46,7 +55,9 @@ export class UsersService {
     });
   }
 
-  // ใช้กับ JWT strategy
+  // =====================================================================
+  // FIND USER BY ID (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
+  // =====================================================================
   async findById(id: number): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -57,6 +68,9 @@ export class UsersService {
     });
   }
 
+  // =====================================================================================
+  // FIND USER BY ID WITH REFRESH TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
+  // =====================================================================================
   async findByIdWithRefreshToken(id: number): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -67,6 +81,9 @@ export class UsersService {
     });
   }
 
+  // ================================================================================================
+  // FIND USER BY ID WITH EMAIL VERIFICATION TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
+  // ================================================================================================
   async findByEmailVerificationTokenHash(
     tokenHash: string,
   ): Promise<User | null> {
@@ -86,6 +103,9 @@ export class UsersService {
     });
   }
 
+  // ================================================================================================
+  // FIND USER BY ID WITH PASSWORD RESET TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
+  // ================================================================================================
   async findByPasswordResetTokenHash(tokenHash: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -102,6 +122,9 @@ export class UsersService {
     });
   }
 
+  // ===========================================================================================================
+  // UPDATE REFRESH TOKEN (สำหรับการบันทึก hash ของ refresh token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการ refresh token)
+  // ===========================================================================================================
   async updateRefreshToken(userId: number, tokenHash: string | null) {
     return this.usersRepository.update(
       { id: userId, deletedAt: null },
@@ -111,6 +134,9 @@ export class UsersService {
     );
   }
 
+  // =============================================================================================================================
+  // UPDATE EMAIL VERIFICATION TOKEN (สำหรับการบันทึก hash ของ email verification token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการยืนยันอีเมล)
+  // =============================================================================================================================
   async updateEmailVerificationToken(
     userId: number,
     tokenHash: string | null,
@@ -125,6 +151,9 @@ export class UsersService {
     );
   }
 
+  // ==================================================================================
+  // MARK EMAIL AS VERIFIED (สำหรับการอัปเดตสถานะการยืนยันอีเมลของผู้ใช้เมื่อมีการยืนยันอีเมลสำเร็จ)
+  // ==================================================================================
   async markEmailVerified(userId: number) {
     return this.usersRepository.update(
       { id: userId, deletedAt: null },
@@ -136,6 +165,9 @@ export class UsersService {
     );
   }
 
+  // ======================================================================================================================
+  // UPDATE PASSWORD RESET TOKEN (สำหรับการบันทึก hash ของ password reset token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการรีเซ็ตรหัสผ่าน)
+  // ======================================================================================================================
   async updatePasswordResetToken(
     userId: number,
     tokenHash: string | null,
@@ -150,6 +182,9 @@ export class UsersService {
     );
   }
 
+  // ==================================================================
+  // RESET PASSWORD (สำหรับการอัปเดตรหัสผ่านของผู้ใช้เมื่อมีการรีเซ็ตรหัสผ่านสำเร็จ)
+  // ==================================================================
   async resetPassword(userId: number, hashedPassword: string) {
     return this.usersRepository.update(
       { id: userId, deletedAt: null },
@@ -161,6 +196,9 @@ export class UsersService {
     );
   }
 
+  // =====================================================================================
+  // CREATE USER (สำหรับการสร้างผู้ใช้ใหม่จากการลงทะเบียนหรือการเข้าสู่ระบบด้วย OAuth)
+  // =====================================================================================
   async create(userData: {
     firstName?: string;
     lastName?: string;
@@ -190,6 +228,9 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
+  // =====================================================================================
+  // FIND USER BY OAUTH (สำหรับการตรวจสอบข้อมูลจากการเข้าสู่ระบบด้วย OAuth)
+  // =====================================================================================
   async findByOAuth(
     provider: string,
     providerId: string,
@@ -200,6 +241,9 @@ export class UsersService {
     });
   }
 
+  // =================================================================================================
+  // CREATE OAUTH ACCOUNT (สำหรับการสร้างบัญชี OAuth ใหม่เมื่อมีการเข้าสู่ระบบด้วย OAuth และยังไม่มีบัญชีที่เชื่อมโยงอยู่)
+  // =================================================================================================
   async createOAuthAccount(
     user: User,
     provider: string,
@@ -221,6 +265,9 @@ export class UsersService {
     }
   }
 
+  // ================================================================================================================================
+  // SOFT DELETE USER (สำหรับการลบผู้ใช้แบบ soft delete โดยการตั้งค่า deletedAt และล้างข้อมูลที่เกี่ยวข้องกับ token เพื่อป้องกันการใช้งานต่อหลังจากถูกลบ)
+  // ================================================================================================================================
   async softDelete(userId: number) {
     const user = await this.usersRepository.findOne({
       where: { id: userId, deletedAt: null },
