@@ -29,7 +29,7 @@ import * as Joi from 'joi';
 
       entities: [User, OauthAccount],
 
-      synchronize: true,
+      synchronize: false,
     }),
     ThrottlerModule.forRoot({
       throttlers: [

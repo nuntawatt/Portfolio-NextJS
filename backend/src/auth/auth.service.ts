@@ -1,11 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
-import { AppException } from '../common/error';
 import { OAuthUser } from './types/auth-type';
 import { compareToken, generateRandomToken, hashToken, sha256 } from './utils/token.util';
 import { MailService } from './mail/mail.service';
@@ -75,7 +74,7 @@ export class AuthService {
 
     // กัน OAuth user login ด้วย password
     if (!existingUser.password) {
-      throw new AppException('USE_OAUTH_LOGIN');
+      throw new UnauthorizedException('Please login with your OAuth provider');
     }
 
     const isMatch = await bcrypt.compare(pass, existingUser.password);
@@ -95,12 +94,12 @@ export class AuthService {
 
     if (!user) {
       this.logger.warn(`Failed login attempt for email: ${email}`);
-      throw new AppException('AUTH_INVALID_CREDENTIALS');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     // verify email
     if (!user.isEmailVerified) {
-      throw new AppException('EMAIL_NOT_VERIFIED');
+      throw new UnauthorizedException('Please verify your email address');
     }
 
     const tokens = await this.issueToken(user as User);
@@ -123,7 +122,7 @@ export class AuthService {
 
     if (existingUser) {
       this.logger.warn(`Duplicate registration: ${email}`);
-      throw new AppException('AUTH_USER_ALREADY_EXISTS');
+      throw new UnauthorizedException('User already exists with this email');
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -170,7 +169,7 @@ export class AuthService {
   async oauthLogin(oauthUser: OAuthUser) {
     // 1. validate email
     if (!oauthUser.email) {
-      throw new AppException('OAUTH_EMAIL_REQUIRED');
+      throw new UnauthorizedException('Email is required from OAuth provider');
     }
 
     const email = oauthUser.email.toLowerCase().trim();
@@ -232,19 +231,19 @@ export class AuthService {
         secret: process.env.JWT_REFRESH_SECRET,
       });
     } catch {
-      throw new AppException('INVALID_REFRESH_TOKEN');
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
     const user = await this.usersService.findByIdWithRefreshToken(payload.userId);
 
     if (!user || !user.refreshTokenHash) {
-      throw new AppException('ACCESS_DENIED');
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
     const isValid = await compareToken(refreshToken, user.refreshTokenHash);
 
     if (!isValid) {
-      throw new AppException('INVALID_REFRESH_TOKEN');
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
     const tokens = await this.issueToken(user as User);
@@ -263,7 +262,7 @@ export class AuthService {
     const userByToken = await this.usersService.findByEmailVerificationTokenHash(tokenHash);
 
     if (!userByToken) {
-      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     if (userByToken.isEmailVerified) {
@@ -274,7 +273,7 @@ export class AuthService {
       !userByToken.emailVerificationExpires ||
       userByToken.emailVerificationExpires < new Date()
     ) {
-      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     await this.usersService.markEmailVerified(userByToken.id);
@@ -313,11 +312,11 @@ export class AuthService {
     const user = await this.usersService.findByPasswordResetTokenHash(tokenHash);
 
     if (!user) {
-      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     if (!user.passwordResetExpires || user.passwordResetExpires < new Date()) {
-      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);

@@ -1,8 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/users.entity';
-import { AppException } from 'src/common/error';
 import { OauthAccount } from './entities/oauth_accounts.entity';
 
 @Injectable()
@@ -167,7 +166,7 @@ export class UsersService {
       return await this.usersRepository.save(user);
     } catch (error) {
       this.logger.error(`Error creating user with email ${userData.email}: ${error.message}`);
-      throw new AppException('AUTH_USER_ALREADY_EXISTS');
+      throw new UnauthorizedException('Email already in use');
     }
   }
 
@@ -199,7 +198,7 @@ export class UsersService {
       this.logger.error(
         `Error creating OAuth account (${provider}:${providerId}): ${error.message}`,
       );
-      throw new AppException('OAUTH_ACCOUNT_ALREADY_EXISTS');
+      throw new UnauthorizedException('Failed to create OAuth account');
     }
   }
 
@@ -209,7 +208,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new AppException('USER_NOT_FOUND');
+      throw new UnauthorizedException('User not found or already deleted');
     }
 
     return this.usersRepository.update(
