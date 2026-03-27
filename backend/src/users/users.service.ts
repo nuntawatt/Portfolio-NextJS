@@ -17,6 +17,10 @@ export class UsersService {
     private oauthRepository: Repository<OauthAccount>,
   ) { }
 
+  private normalizeEmail(email: string) {
+    return email.toLowerCase().trim();
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: { email },
@@ -26,7 +30,7 @@ export class UsersService {
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
-        email,
+        email: this.normalizeEmail(email),
         deletedAt: null,
       },
       select: ['id', 'firstName', 'lastName', 'email', 'password', 'role', 'isEmailVerified', 'deletedAt'],
@@ -46,29 +50,104 @@ export class UsersService {
 
   async findByIdWithRefreshToken(id: number): Promise<User | null> {
     return this.usersRepository.findOne({
-      where: { id },
+      where: {
+        id,
+        deletedAt: null,
+      },
       select: ['id', 'email', 'role', 'isEmailVerified', 'refreshTokenHash'],
     });
   }
 
+  async findByEmailVerificationTokenHash(tokenHash: string): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: {
+        emailVerificationTokenHash: tokenHash,
+        deletedAt: null,
+      },
+      select: [
+        'id',
+        'email',
+        'isEmailVerified',
+        'emailVerificationTokenHash',
+        'emailVerificationExpires',
+        'deletedAt',
+      ],
+    });
+  }
+
+  async findByPasswordResetTokenHash(tokenHash: string): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: {
+        passwordResetTokenHash: tokenHash,
+        deletedAt: null,
+      },
+      select: [
+        'id',
+        'email',
+        'passwordResetTokenHash',
+        'passwordResetExpires',
+        'deletedAt',
+      ],
+    });
+  }
+
   async updateRefreshToken(userId: number, tokenHash: string | null) {
-    return this.usersRepository.update(userId, {
-      refreshTokenHash: tokenHash,
-    });
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        refreshTokenHash: tokenHash,
+      },
+    );
   }
 
-  async updateEmailVerificationToken(userId: number, tokenHash: string | null, expiresAt: Date | null) {
-    return this.usersRepository.update(userId, {
-      emailVerificationTokenHash: tokenHash,
-      emailVerificationExpires: expiresAt,
-    });
+  async updateEmailVerificationToken(
+    userId: number,
+    tokenHash: string | null,
+    expiresAt: Date | null,
+  ) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        emailVerificationTokenHash: tokenHash,
+        emailVerificationExpires: expiresAt,
+      },
+    );
   }
 
-  async updatePasswordResetToken(userId: number, tokenHash: string | null, expiresAt: Date | null) {
-    return this.usersRepository.update(userId, {
-      passwordResetTokenHash: tokenHash,
-      passwordResetExpires: expiresAt,
-    });
+  async markEmailVerified(userId: number) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        isEmailVerified: true,
+        emailVerificationTokenHash: null,
+        emailVerificationExpires: null,
+      },
+    );
+  }
+
+  async updatePasswordResetToken(
+    userId: number,
+    tokenHash: string | null,
+    expiresAt: Date | null,
+  ) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        passwordResetTokenHash: tokenHash,
+        passwordResetExpires: expiresAt,
+      },
+    );
+  }
+
+  async resetPassword(userId: number, hashedPassword: string) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        password: hashedPassword,
+        passwordResetTokenHash: null,
+        passwordResetExpires: null,
+      },
+    );
   }
 
   async create(userData: {
@@ -126,14 +205,23 @@ export class UsersService {
 
   async softDelete(userId: number) {
     const user = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { id: userId, deletedAt: null },
     });
 
     if (!user) {
       throw new AppException('USER_NOT_FOUND');
     }
 
-    user.deletedAt = new Date();
-    return this.usersRepository.save(user);
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        deletedAt: new Date(),
+        refreshTokenHash: null,
+        emailVerificationTokenHash: null,
+        emailVerificationExpires: null,
+        passwordResetTokenHash: null,
+        passwordResetExpires: null,
+      },
+    );
   }
 }

@@ -50,7 +50,7 @@ export class AuthService {
     );
   }
 
-  private async issueTokensAndStoreRefreshToken(user: User) {
+  private async issueToken(user: User) {
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
     const refreshTokenHash = await hashToken(refreshToken);
@@ -69,7 +69,7 @@ export class AuthService {
   ): Promise<Omit<User, 'password'> | null> {
     const existingUser = await this.usersService.findByEmailWithPassword(email);
 
-    if (!existingUser || existingUser.deletedAt) {
+    if (!existingUser) {
       return null;
     }
 
@@ -103,9 +103,9 @@ export class AuthService {
       throw new AppException('EMAIL_NOT_VERIFIED');
     }
 
-    const tokens = await this.issueTokensAndStoreRefreshToken(user as User);
+    const tokens = await this.issueToken(user as User);
 
-    this.logger.log(`User logged in: ${user.email}`);
+    this.logger.log(`User logged in: userId=${user.id}`);
 
     return {
       ...tokens,
@@ -145,11 +145,19 @@ export class AuthService {
 
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
 
-    await this.mailService.sendEmail(
-      email,
-      'Verify your email',
-      `<p>Click here to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
-    );
+    this.mailService
+      .sendEmail(
+        email,
+        'Verify your email',
+        `<p>Click here to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
+      )
+      .catch((error) => {
+        this.logger.error('Failed to send verification email', {
+          email,
+          message: error?.message,
+          stack: error?.stack,
+        });
+      });
 
     this.logger.log(`New user registered: ${email}`);
 
@@ -175,7 +183,7 @@ export class AuthService {
 
     let user: User;
 
-    if (oauthAccount) {
+    if (oauthAccount?.user) {
       user = oauthAccount.user;
     } else {
       // 3. หา user จาก email
@@ -198,17 +206,15 @@ export class AuthService {
       );
     }
 
-    // 5. JWT (consistent)
-    const payload = {
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      isEmailVerified: true, // OAuth users are considered verified
-    };
+    // 5. ถ้า email ยังไม่ verified ให้ mark เป็น verified
+    if (!user.isEmailVerified) {
+      user.isEmailVerified = true;
+      await this.usersService.save(user);
+    }
 
     this.logger.log(`OAuth login: ${oauthUser.provider} - ${user.email}`);
 
-    const tokens = await this.issueTokensAndStoreRefreshToken(user);
+    const tokens = await this.issueToken(user);
 
     return tokens;
   }
@@ -241,7 +247,7 @@ export class AuthService {
       throw new AppException('INVALID_REFRESH_TOKEN');
     }
 
-    const tokens = await this.issueTokensAndStoreRefreshToken(user as User);
+    const tokens = await this.issueToken(user as User);
 
     return tokens;
   }
@@ -254,25 +260,24 @@ export class AuthService {
   async verifyEmail(token: string) {
     const tokenHash = sha256(token);
 
-    const user = await this.usersService.findByEmail(tokenHash);
-    const userByToken = await this.usersService['usersRepository'].findOne({
-      where: { emailVerificationTokenHash: tokenHash },
-      select: ['id', 'email', 'emailVerificationTokenHash', 'emailVerificationExpires', 'isEmailVerified'],
-    });
+    const userByToken = await this.usersService.findByEmailVerificationTokenHash(tokenHash);
 
     if (!userByToken) {
       throw new AppException('INVALID_OR_EXPIRED_TOKEN');
     }
 
-    if (!userByToken.emailVerificationExpires || userByToken.emailVerificationExpires < new Date()) {
+    if (userByToken.isEmailVerified) {
+      return { success: true };
+    }
+
+    if (
+      !userByToken.emailVerificationExpires ||
+      userByToken.emailVerificationExpires < new Date()
+    ) {
       throw new AppException('INVALID_OR_EXPIRED_TOKEN');
     }
 
-    userByToken.isEmailVerified = true;
-    userByToken.emailVerificationTokenHash = null;
-    userByToken.emailVerificationExpires = null;
-
-    await this.usersService.save(userByToken);
+    await this.usersService.markEmailVerified(userByToken.id);
 
     return { success: true };
   }
@@ -305,10 +310,7 @@ export class AuthService {
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
 
-    const user = await this.usersService['usersRepository'].findOne({
-      where: { passwordResetTokenHash: tokenHash },
-      select: ['id', 'passwordResetTokenHash', 'passwordResetExpires'],
-    });
+    const user = await this.usersService.findByPasswordResetTokenHash(tokenHash);
 
     if (!user) {
       throw new AppException('INVALID_OR_EXPIRED_TOKEN');
@@ -320,16 +322,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    const targetUser = await this.usersService.findById(user.id);
-    if (!targetUser) {
-      throw new AppException('USER_NOT_FOUND');
-    }
-
-    targetUser.password = hashedPassword;
-    targetUser.passwordResetTokenHash = null;
-    targetUser.passwordResetExpires = null;
-
-    await this.usersService.save(targetUser);
+    await this.usersService.resetPassword(user.id, hashedPassword);
 
     return { success: true };
   }

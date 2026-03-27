@@ -4,17 +4,20 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
 
   // auth by email/password
+  @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
   @Post('register')
   async register(@Body() userData: RegisterDto) {
     return this.authService.register(userData);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60 } }) // 5 ครั้ง / นาที
   @Post('login')
   async login(@Body() loginData: LoginDto) {
     return this.authService.login(loginData);
@@ -36,6 +39,7 @@ export class AuthController {
     return this.authService.verifyEmail(token);
   }
 
+  @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
     return this.authService.forgotPassword(email);
