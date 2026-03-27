@@ -14,7 +14,7 @@ export class UsersService {
 
     @InjectRepository(OauthAccount)
     private oauthRepository: Repository<OauthAccount>,
-  ) { }
+  ) {}
 
   private normalizeEmail(email: string) {
     return email.toLowerCase().trim();
@@ -32,7 +32,17 @@ export class UsersService {
         email: this.normalizeEmail(email),
         deletedAt: null,
       },
-      select: ['id', 'firstName', 'lastName', 'email', 'password', 'role', 'isEmailVerified', 'deletedAt'],
+      select: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'role',
+        'isEmailVerified',
+        'avatar',
+        'deletedAt',
+      ],
     });
   }
 
@@ -43,7 +53,7 @@ export class UsersService {
         id,
         deletedAt: null,
       },
-      select: ['id', 'email', 'role', 'isEmailVerified', 'deletedAt'],
+      select: ['id', 'email', 'role', 'isEmailVerified', 'avatar', 'deletedAt'],
     });
   }
 
@@ -57,7 +67,9 @@ export class UsersService {
     });
   }
 
-  async findByEmailVerificationTokenHash(tokenHash: string): Promise<User | null> {
+  async findByEmailVerificationTokenHash(
+    tokenHash: string,
+  ): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
         emailVerificationTokenHash: tokenHash,
@@ -153,19 +165,23 @@ export class UsersService {
     firstName?: string;
     lastName?: string;
     email: string;
-    password: string;
+    password: string | null;
+    avatar?: string | null;
   }): Promise<User> {
     const user = this.usersRepository.create({
       firstName: userData.firstName ?? null,
       lastName: userData.lastName ?? null,
       email: userData.email,
       password: userData.password,
+      avatar: userData.avatar ?? null,
     });
 
     try {
       return await this.usersRepository.save(user);
     } catch (error) {
-      this.logger.error(`Error creating user with email ${userData.email}: ${error.message}`);
+      this.logger.error(
+        `Error creating user with email ${userData.email}: ${error.message}`,
+      );
       throw new UnauthorizedException('Email already in use');
     }
   }
@@ -174,7 +190,10 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async findByOAuth(provider: string, providerId: string): Promise<OauthAccount | null> {
+  async findByOAuth(
+    provider: string,
+    providerId: string,
+  ): Promise<OauthAccount | null> {
     return this.oauthRepository.findOne({
       where: { provider, providerId },
       relations: ['user'],

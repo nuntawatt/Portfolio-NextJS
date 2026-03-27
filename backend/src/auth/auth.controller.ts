@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Res, Req, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Res,
+  Req,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -8,7 +17,7 @@ import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   // auth by email/password
   @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
@@ -46,16 +55,14 @@ export class AuthController {
   }
 
   @Post('reset-password')
-  async resetPassword(
-    @Body() body: { token: string; password: string },
-  ) {
+  async resetPassword(@Body() body: { token: string; password: string }) {
     return this.authService.resetPassword(body.token, body.password);
   }
 
   // auth by google
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() { }
+  async googleAuth() {}
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
@@ -67,7 +74,7 @@ export class AuthController {
   // auth by github
   @Get('github')
   @UseGuards(AuthGuard('github'))
-  async githubAuth() { }
+  async githubAuth() {}
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))

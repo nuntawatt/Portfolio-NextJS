@@ -6,7 +6,12 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { OAuthUser } from './types/auth-type';
-import { compareToken, generateRandomToken, hashToken, sha256 } from './utils/token.util';
+import {
+  compareToken,
+  generateRandomToken,
+  hashToken,
+  sha256,
+} from './utils/token.util';
 import { MailService } from './mail/mail.service';
 
 @Injectable()
@@ -17,9 +22,11 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private mailService: MailService,
-  ) { }
+  ) {}
 
-  private generateAccessToken(user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>) {
+  private generateAccessToken(
+    user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
+  ) {
     return this.jwtService.sign(
       {
         userId: user.id,
@@ -34,7 +41,9 @@ export class AuthService {
     );
   }
 
-  private generateRefreshToken(user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>) {
+  private generateRefreshToken(
+    user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
+  ) {
     return this.jwtService.sign(
       {
         userId: user.id,
@@ -140,7 +149,11 @@ export class AuthService {
     const tokenHash = sha256(rawToken);
     const expiresAt = new Date(Date.now() + 1000 * 60 * 60);
 
-    await this.usersService.updateEmailVerificationToken(newUser.id, tokenHash, expiresAt);
+    await this.usersService.updateEmailVerificationToken(
+      newUser.id,
+      tokenHash,
+      expiresAt,
+    );
 
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
 
@@ -175,7 +188,7 @@ export class AuthService {
     const email = oauthUser.email.toLowerCase().trim();
 
     // 2. หา oauth account
-    let oauthAccount = await this.usersService.findByOAuth(
+    const oauthAccount = await this.usersService.findByOAuth(
       oauthUser.provider,
       oauthUser.providerId,
     );
@@ -194,6 +207,7 @@ export class AuthService {
           firstName: oauthUser.firstName || oauthUser.username || '',
           lastName: oauthUser.lastName || '',
           password: null,
+          avatar: oauthUser.avatar || null,
         });
       }
 
@@ -234,7 +248,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const user = await this.usersService.findByIdWithRefreshToken(payload.userId);
+    const user = await this.usersService.findByIdWithRefreshToken(
+      payload.userId,
+    );
 
     if (!user || !user.refreshTokenHash) {
       throw new UnauthorizedException('Invalid refresh token');
@@ -246,7 +262,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const tokens = await this.issueToken(user as User);
+    const tokens = await this.issueToken(user);
 
     return tokens;
   }
@@ -259,7 +275,8 @@ export class AuthService {
   async verifyEmail(token: string) {
     const tokenHash = sha256(token);
 
-    const userByToken = await this.usersService.findByEmailVerificationTokenHash(tokenHash);
+    const userByToken =
+      await this.usersService.findByEmailVerificationTokenHash(tokenHash);
 
     if (!userByToken) {
       throw new UnauthorizedException('Invalid or expired token');
@@ -293,7 +310,11 @@ export class AuthService {
     const tokenHash = sha256(rawToken);
     const expiresAt = new Date(Date.now() + 1000 * 60 * 15);
 
-    await this.usersService.updatePasswordResetToken(user.id, tokenHash, expiresAt);
+    await this.usersService.updatePasswordResetToken(
+      user.id,
+      tokenHash,
+      expiresAt,
+    );
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
 
@@ -309,7 +330,8 @@ export class AuthService {
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
 
-    const user = await this.usersService.findByPasswordResetTokenHash(tokenHash);
+    const user =
+      await this.usersService.findByPasswordResetTokenHash(tokenHash);
 
     if (!user) {
       throw new UnauthorizedException('Invalid or expired token');

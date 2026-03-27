@@ -10,18 +10,8 @@ import { GithubStrategy } from './strategies/github.strategy';
 import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({}),
-    UsersModule,
-    MailModule,
-  ],
-  providers: [
-    AuthService, 
-    JwtStrategy,
-    GoogleStrategy,
-    GithubStrategy
-  ],
+  imports: [PassportModule, JwtModule.register({}), UsersModule, MailModule],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

@@ -13,12 +13,12 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  
+
   app.enableCors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
   });
-  
+
   const port = process.env.PORT ?? 3001;
   await app.listen(port);
 

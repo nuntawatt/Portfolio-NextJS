@@ -43,4 +43,4 @@ import * as Joi from 'joi';
     UsersModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
