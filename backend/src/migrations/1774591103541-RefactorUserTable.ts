@@ -114,7 +114,6 @@ export class ReorderUserColumns1774599999999 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // ⚠️ ไม่แนะนำ rollback เพราะ destructive migration
-        // ถ้าจะทำจริงต้อง recreate schema เดิมทั้งหมด
+        // rollback ไม่ได้ เพราะข้อมูลอาจเสียหายได้ง่ายมากจากการเรียง column ใหม่
     }
 }
