@@ -19,8 +19,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         _refreshToken: string,
         profile: Profile
     ): Promise<OAuthUser> {
-        console.log('Google profile:', profile);
-        console.log('Google tokens:', _accessToken, _refreshToken);
         return {
             email: profile.emails?.[0].value || null,
             firstName: profile.name?.givenName || '',
