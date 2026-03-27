@@ -24,6 +24,23 @@ export const ERROR_CODES = {
         message: 'Email not verified',
     },
 
+    // TOKEN
+    INVALID_OR_EXPIRED_TOKEN: {
+        status: 400,
+        message: 'Invalid or expired token',
+    },
+
+    // ข้อผิดพลาดสำหรับ refresh token
+    INVALID_REFRESH_TOKEN: {
+        status: 401,
+        message: 'Invalid refresh token',
+    },
+
+    ACCESS_DENIED: {
+        status: 403,
+        message: 'Access denied',
+    },
+
     // GENERAL
     USER_NOT_FOUND_OR_DELETED: {
         status: 404,

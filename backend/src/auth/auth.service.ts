@@ -7,7 +7,8 @@ import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { AppException } from '../common/error';
 import { OAuthUser } from './types/auth-type';
-import { hashToken, compareToken } from './utils/hash.util';
+import { compareToken, generateRandomToken, hashToken, sha256 } from './utils/token.util';
+import { MailService } from './mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -16,23 +17,45 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-
+    private mailService: MailService,
   ) { }
-  private generateTokens(user: User) {
-    const payload = {
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      isEmailVerified: user.isEmailVerified,
-    };
 
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
-    });
+  private generateAccessToken(user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>) {
+    return this.jwtService.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+      },
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '15m',
+      },
+    );
+  }
 
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d',
-    });
+  private generateRefreshToken(user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>) {
+    return this.jwtService.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+      },
+      {
+        secret: process.env.JWT_REFRESH_SECRET,
+        expiresIn: '7d',
+      },
+    );
+  }
+
+  private async issueTokensAndStoreRefreshToken(user: User) {
+    const accessToken = this.generateAccessToken(user);
+    const refreshToken = this.generateRefreshToken(user);
+    const refreshTokenHash = await hashToken(refreshToken);
+
+    await this.usersService.updateRefreshToken(user.id, refreshTokenHash);
 
     return { accessToken, refreshToken };
   }
@@ -80,17 +103,12 @@ export class AuthService {
       throw new AppException('EMAIL_NOT_VERIFIED');
     }
 
-    const payload = {
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      isEmailVerified: user.isEmailVerified,
-    };
+    const tokens = await this.issueTokensAndStoreRefreshToken(user as User);
 
     this.logger.log(`User logged in: ${user.email}`);
 
     return {
-      accessToken: this.jwtService.sign(payload, { expiresIn: '1h' }),
+      ...tokens,
       user,
     };
   }
@@ -119,7 +137,22 @@ export class AuthService {
 
     const { password, ...result } = newUser;
 
+    const rawToken = generateRandomToken();
+    const tokenHash = sha256(rawToken);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60);
+
+    await this.usersService.updateEmailVerificationToken(newUser.id, tokenHash, expiresAt);
+
+    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
+
+    await this.mailService.sendEmail(
+      email,
+      'Verify your email',
+      `<p>Click here to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
+    );
+
     this.logger.log(`New user registered: ${email}`);
+
     return result;
   }
 
@@ -175,6 +208,129 @@ export class AuthService {
 
     this.logger.log(`OAuth login: ${oauthUser.provider} - ${user.email}`);
 
-    return this.jwtService.sign(payload, { expiresIn: '1h' });
+    const tokens = await this.issueTokensAndStoreRefreshToken(user);
+
+    return tokens;
+  }
+
+  async refreshToken(refreshToken: string) {
+    let payload: {
+      userId: number;
+      email: string;
+      role: string;
+      isEmailVerified: boolean;
+    };
+
+    try {
+      payload = this.jwtService.verify(refreshToken, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+    } catch {
+      throw new AppException('INVALID_REFRESH_TOKEN');
+    }
+
+    const user = await this.usersService.findByIdWithRefreshToken(payload.userId);
+
+    if (!user || !user.refreshTokenHash) {
+      throw new AppException('ACCESS_DENIED');
+    }
+
+    const isValid = await compareToken(refreshToken, user.refreshTokenHash);
+
+    if (!isValid) {
+      throw new AppException('INVALID_REFRESH_TOKEN');
+    }
+
+    const tokens = await this.issueTokensAndStoreRefreshToken(user as User);
+
+    return tokens;
+  }
+
+  async logout(userId: number) {
+    await this.usersService.updateRefreshToken(userId, null);
+    return { success: true };
+  }
+
+  async verifyEmail(token: string) {
+    const tokenHash = sha256(token);
+
+    const user = await this.usersService.findByEmail(tokenHash);
+    const userByToken = await this.usersService['usersRepository'].findOne({
+      where: { emailVerificationTokenHash: tokenHash },
+      select: ['id', 'email', 'emailVerificationTokenHash', 'emailVerificationExpires', 'isEmailVerified'],
+    });
+
+    if (!userByToken) {
+      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+    }
+
+    if (!userByToken.emailVerificationExpires || userByToken.emailVerificationExpires < new Date()) {
+      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+    }
+
+    userByToken.isEmailVerified = true;
+    userByToken.emailVerificationTokenHash = null;
+    userByToken.emailVerificationExpires = null;
+
+    await this.usersService.save(userByToken);
+
+    return { success: true };
+  }
+
+  async forgotPassword(email: string) {
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await this.usersService.findByEmail(normalizedEmail);
+
+    if (!user) {
+      return { success: true };
+    }
+
+    const rawToken = generateRandomToken();
+    const tokenHash = sha256(rawToken);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 15);
+
+    await this.usersService.updatePasswordResetToken(user.id, tokenHash, expiresAt);
+
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
+
+    await this.mailService.sendEmail(
+      normalizedEmail,
+      'Reset your password',
+      `<p>Click here to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
+    );
+
+    return { success: true };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const tokenHash = sha256(token);
+
+    const user = await this.usersService['usersRepository'].findOne({
+      where: { passwordResetTokenHash: tokenHash },
+      select: ['id', 'passwordResetTokenHash', 'passwordResetExpires'],
+    });
+
+    if (!user) {
+      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+    }
+
+    if (!user.passwordResetExpires || user.passwordResetExpires < new Date()) {
+      throw new AppException('INVALID_OR_EXPIRED_TOKEN');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const targetUser = await this.usersService.findById(user.id);
+    if (!targetUser) {
+      throw new AppException('USER_NOT_FOUND');
+    }
+
+    targetUser.password = hashedPassword;
+    targetUser.passwordResetTokenHash = null;
+    targetUser.passwordResetExpires = null;
+
+    await this.usersService.save(targetUser);
+
+    return { success: true };
   }
 }

@@ -35,14 +35,14 @@ export class User {
   @Column({ nullable: true, select: false })
   refreshTokenHash: string | null;
 
-  @Column({ nullable: true })
-  emailVerificationToken: string | null;
+  @Column({ nullable: true, select: false })
+  emailVerificationTokenHash: string | null;
 
   @Column({ nullable: true })
   emailVerificationExpires: Date | null;
 
-  @Column({ nullable: true })
-  passwordResetToken: string | null;
+  @Column({ nullable: true, select: false })
+  passwordResetTokenHash: string | null;
 
   @Column({ nullable: true })
   passwordResetExpires: Date | null;
