@@ -24,13 +24,13 @@ export class User {
   email: string;
 
   @Column({ select: false })
-  password: string;
+  password?: string;
 
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ default: false })
+  isEmailVerified: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

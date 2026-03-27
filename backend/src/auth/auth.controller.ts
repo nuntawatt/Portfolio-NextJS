@@ -19,7 +19,6 @@ export class AuthController {
     return this.authService.login(loginData);
   }
 
-  
 
   // auth by google
   @Get('google')

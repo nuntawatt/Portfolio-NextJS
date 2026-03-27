@@ -1,5 +1,5 @@
 export type OAuthUser = {
-    email: string | null;
+    email?: string;
     firstName?: string;
     lastName?: string;
     username?: string;
@@ -10,4 +10,6 @@ export type OAuthUser = {
 export type JwtPayload = {
     userId: number;
     email: string;
+    role?: string;
+    isEmailVerified?: boolean;
 };

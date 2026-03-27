@@ -6,6 +6,7 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { AppException } from '../common/error';
+import { OAuthUser } from './types/auth-type';
 
 @Injectable()
 export class AuthService {
@@ -16,14 +17,22 @@ export class AuthService {
     private jwtService: JwtService,
   ) { }
 
+  // =========================
+  // VALIDATE LOGIN
+  // =========================
   async validateUserCredentials(
     email: string,
     pass: string,
   ): Promise<Omit<User, 'password'> | null> {
     const existingUser = await this.usersService.findByEmailWithPassword(email);
 
-    if (!existingUser) {
+    if (!existingUser || existingUser.deletedAt) {
       return null;
+    }
+
+    // กัน OAuth user login ด้วย password
+    if (!existingUser.password) {
+      throw new AppException('USE_OAUTH_LOGIN');
     }
 
     const isMatch = await bcrypt.compare(pass, existingUser.password);
@@ -33,6 +42,9 @@ export class AuthService {
     return result;
   }
 
+  // =========================
+  // LOGIN
+  // =========================
   async login(loginData: LoginDto) {
     const email = loginData.email.toLowerCase().trim();
 
@@ -43,10 +55,19 @@ export class AuthService {
       throw new AppException('AUTH_INVALID_CREDENTIALS');
     }
 
+    // verify email
+    if (!user.isEmailVerified) {
+      throw new AppException('EMAIL_NOT_VERIFIED');
+    }
+
     const payload = {
       userId: user.id,
       email: user.email,
+      role: user.role,
+      isEmailVerified: user.isEmailVerified,
     };
+
+    this.logger.log(`User logged in: ${user.email}`);
 
     return {
       accessToken: this.jwtService.sign(payload, { expiresIn: '1h' }),
@@ -54,13 +75,16 @@ export class AuthService {
     };
   }
 
+  // =========================
+  // REGISTER
+  // =========================
   async register(userData: RegisterDto) {
     const email = userData.email.toLowerCase().trim();
 
     const existingUser = await this.usersService.findByEmail(email);
 
     if (existingUser) {
-      this.logger.warn(`Duplicate user registration attempt for email: ${email}`);
+      this.logger.warn(`Duplicate registration: ${email}`);
       throw new AppException('AUTH_USER_ALREADY_EXISTS');
     }
 
@@ -74,35 +98,44 @@ export class AuthService {
     });
 
     const { password, ...result } = newUser;
+
+    this.logger.log(`New user registered: ${email}`);
     return result;
   }
 
-  async oauthLogin(oauthUser: any) {
-    // 1. หา oauth account ก่อน
+  // =========================
+  // OAUTH LOGIN
+  // =========================
+  async oauthLogin(oauthUser: OAuthUser) {
+    // 1. validate email
+    if (!oauthUser.email) {
+      throw new AppException('OAUTH_EMAIL_REQUIRED');
+    }
+
+    const email = oauthUser.email.toLowerCase().trim();
+
+    // 2. หา oauth account
     let oauthAccount = await this.usersService.findByOAuth(
       oauthUser.provider,
       oauthUser.providerId,
     );
 
-    let user;
+    let user: User;
 
     if (oauthAccount) {
       user = oauthAccount.user;
     } else {
-      // 2. หา user ด้วย email
-      user = await this.usersService.findByEmail(oauthUser.email);
+      // 3. หา user จาก email
+      user = await this.usersService.findByEmail(email);
 
-      // 3. ถ้าไม่มี → create user
       if (!user) {
         user = await this.usersService.create({
-          email: oauthUser.email,
-          firstName: oauthUser.firstName || '',
+          email,
+          firstName: oauthUser.firstName || oauthUser.username || '',
           lastName: oauthUser.lastName || '',
-          password: '', // oauth ไม่ใช้ password
+          password: null,
         });
       }
-
-      // console.log('User after email check:', user);
 
       // 4. create oauth account
       await this.usersService.createOAuthAccount(
@@ -112,12 +145,16 @@ export class AuthService {
       );
     }
 
+    // 5. JWT (consistent)
     const payload = {
-      sub: user.id,
+      userId: user.id,
       email: user.email,
+      role: user.role,
+      isEmailVerified: true, // OAuth users are considered verified
     };
 
-    // console.log('JWT Payload:', payload);
-    return this.jwtService.sign(payload);
+    this.logger.log(`OAuth login: ${oauthUser.provider} - ${user.email}`);
+
+    return this.jwtService.sign(payload, { expiresIn: '1h' });
   }
 }

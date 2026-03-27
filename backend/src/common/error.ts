@@ -7,6 +7,7 @@ export const ERROR_CODES = {
         status: 401,
         message: 'Invalid email or password',
     },
+
     AUTH_USER_ALREADY_EXISTS: {
         status: 409,
         message: 'User already exists',
@@ -16,6 +17,29 @@ export const ERROR_CODES = {
     USER_NOT_FOUND: {
         status: 404,
         message: 'User not found',
+    },
+
+    EMAIL_NOT_VERIFIED: {
+        status: 403,
+        message: 'Email not verified',
+    },
+
+    // GENERAL
+    USER_NOT_FOUND_OR_DELETED: {
+        status: 404,
+        message: 'User not found or has been deleted',
+    },
+
+    // OAUTH
+    OAUTH_EMAIL_REQUIRED: {
+        status: 400,
+        message: 'Email is required for OAuth login',
+    },
+
+    // กัน OAuth user login ด้วย password
+    USE_OAUTH_LOGIN: {
+        status: 400,
+        message: 'This account uses OAuth login. Please log in with your OAuth provider.',
     },
 
     // OAUTH

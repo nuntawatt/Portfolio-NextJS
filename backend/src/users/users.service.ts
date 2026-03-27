@@ -19,14 +19,31 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
-      where: { email },
+      where: {
+        email,
+        deletedAt: null, // กัน soft delete
+      },
     });
   }
 
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
-      where: { email },
-      select: ['id', 'firstName', 'lastName', 'email', 'password'],
+      where: {
+        email,
+        deletedAt: null,
+      },
+      select: ['id', 'firstName', 'lastName', 'email', 'password', 'deletedAt', 'role', 'isEmailVerified'],
+    });
+  }
+
+  // ใช้กับ JWT strategy
+  async findById(id: number): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: {
+        id,
+        deletedAt: null,
+      },
+      select: ['id', 'email', 'deletedAt', 'role', 'isEmailVerified'],
     });
   }
 
