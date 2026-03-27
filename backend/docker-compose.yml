@@ -12,10 +12,10 @@ services:
       - .env
     command: pnpm run start:dev
     depends_on:
-      db:
+      database:
         condition: service_healthy
 
-  db:
+  database:
     image: postgres:15-alpine
     restart: always
     environment:
