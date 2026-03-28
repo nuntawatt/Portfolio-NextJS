@@ -76,8 +76,8 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleCallback(@Req() req, @Res() res) {
-    const token = await this.authService.oauthLogin(req.user);
-    return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+    const data = await this.authService.oauthLogin(req.user);
+    return res.redirect(`${process.env.FRONTEND_URL}?${new URLSearchParams(data)}`);
   }
 
   // ====================
@@ -90,7 +90,7 @@ export class AuthController {
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
   async githubCallback(@Req() req, @Res() res) {
-    const token = await this.authService.oauthLogin(req.user);
-    return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+    const data = await this.authService.oauthLogin(req.user);
+    return res.redirect(`${process.env.FRONTEND_URL}?${new URLSearchParams(data)}`);
   }
 }

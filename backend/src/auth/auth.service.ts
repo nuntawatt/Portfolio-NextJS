@@ -234,11 +234,14 @@ export class AuthService {
       await this.usersService.save(user);
     }
 
-    this.logger.log(`OAuth login: ${oauthUser.provider} - ${user.email}`);
+    // this.logger.log(`OAuth login: ${oauthUser.provider} - ${user.email}`);
 
-    const tokens = await this.issueToken(user);
-
-    return tokens;
+    return {
+      accessToken: oauthUser.accessToken,
+      refreshToken: oauthUser.refreshToken,
+      providerId: oauthUser.providerId,
+      provider: oauthUser.provider,
+    };
   }
 
   // =========================

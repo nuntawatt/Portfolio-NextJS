@@ -6,6 +6,8 @@ export type OAuthUser = {
     provider: 'google' | 'github' | 'facebook';
     providerId: string;
     avatar?: string;
+    accessToken?: string;
+    refreshToken?: string;
 };
 
 export type AccessTokenPayload = {

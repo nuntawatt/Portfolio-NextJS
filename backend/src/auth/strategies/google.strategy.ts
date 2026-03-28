@@ -15,8 +15,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     }
 
     async validate(
-        _accessToken: string,
-        _refreshToken: string,
+        accessToken: string,
+        refreshToken: string,
         profile: Profile,
     ): Promise<OAuthUser> {
         return {
@@ -25,6 +25,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             lastName: profile.name?.familyName || '',
             provider: 'google',
             providerId: profile.id,
+            accessToken,
+            refreshToken,
         };
     }
 }

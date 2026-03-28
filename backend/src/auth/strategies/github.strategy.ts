@@ -15,8 +15,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     }
 
     async validate(
-        _accessToken: string,
-        _refreshToken: string,
+        accessToken: string,
+        refreshToken: string,
         profile: Profile,
     ): Promise<OAuthUser> {
         return {
@@ -24,6 +24,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
             username: profile.username,
             provider: 'github',
             providerId: profile.id,
+            accessToken,
+            refreshToken,
         };
     }
 }
