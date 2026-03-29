@@ -1,4 +1,4 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/users.entity';
@@ -16,25 +16,26 @@ export class UsersService {
     private oauthRepository: Repository<OauthAccount>,
   ) { }
 
-  // =====================================================================================
+  // ─── Helpers ─────────────────────────────────────────────────────────────────
+
   // ทำให้ email เป็นรูปแบบมาตรฐาน (lowercase และ trim) เพื่อป้องกันปัญหาการค้นหาและการเปรียบเทียบ
-  // =====================================================================================
   private normalizeEmail(email: string) {
-    return email.toLowerCase().trim(); // ทำให้ email เป็น lowercase และ trim
+    return email.toLowerCase().trim();
   }
 
-  // ===========================================================================
-  // FIND USER BY EMAIL (สำหรับการตรวจสอบข้อมูลจากการลงทะเบียนหรือการแสดงข้อมูลผู้ใช้)
-  // ===========================================================================
+  // ─── Finders ─────────────────────────────────────────────────────────────────
+
   async findByEmail(email: string): Promise<User | null> {
+    // ใช้ normalize + กัน soft-deleted user (เดิมไม่ทำทั้งคู่)
     return this.usersRepository.findOne({
-      where: { email },
+      where: {
+        email: this.normalizeEmail(email),
+        deletedAt: null,
+      },
     });
   }
 
-  // =====================================================================
   // FIND USER WITH PASSWORD (สำหรับการตรวจสอบข้อมูลเข้าสู่ระบบ)
-  // =====================================================================
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -55,9 +56,7 @@ export class UsersService {
     });
   }
 
-  // =====================================================================
   // FIND USER BY ID (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
-  // =====================================================================
   async findById(id: number): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -68,9 +67,7 @@ export class UsersService {
     });
   }
 
-  // =====================================================================================
   // FIND USER BY ID WITH REFRESH TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
-  // =====================================================================================
   async findByIdWithRefreshToken(id: number): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -81,9 +78,7 @@ export class UsersService {
     });
   }
 
-  // ================================================================================================
   // FIND USER BY ID WITH EMAIL VERIFICATION TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
-  // ================================================================================================
   async findByEmailVerificationTokenHash(
     tokenHash: string,
   ): Promise<User | null> {
@@ -103,9 +98,7 @@ export class UsersService {
     });
   }
 
-  // ================================================================================================
-  // FIND USER BY ID WITH PASSWORD RESET TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้)
-  // ================================================================================================
+  // FIND USER BY ID WITH PASSWORD RESET TOKEN (สำหรับการตรวจสอบข้อมูลจาก token หรือการแสดงข้อมูลผู้ใช้))
   async findByPasswordResetTokenHash(tokenHash: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
@@ -122,83 +115,7 @@ export class UsersService {
     });
   }
 
-  // ===========================================================================================================
-  // UPDATE REFRESH TOKEN (สำหรับการบันทึก hash ของ refresh token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการ refresh token)
-  // ===========================================================================================================
-  async updateRefreshToken(userId: number, tokenHash: string | null) {
-    return this.usersRepository.update(
-      { id: userId, deletedAt: null },
-      {
-        refreshTokenHash: tokenHash,
-      },
-    );
-  }
-
-  // =============================================================================================================================
-  // UPDATE EMAIL VERIFICATION TOKEN (สำหรับการบันทึก hash ของ email verification token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการยืนยันอีเมล)
-  // =============================================================================================================================
-  async updateEmailVerificationToken(
-    userId: number,
-    tokenHash: string | null,
-    expiresAt: Date | null,
-  ) {
-    return this.usersRepository.update(
-      { id: userId, deletedAt: null },
-      {
-        emailVerificationTokenHash: tokenHash,
-        emailVerificationExpires: expiresAt,
-      },
-    );
-  }
-
-  // ==================================================================================
-  // MARK EMAIL AS VERIFIED (สำหรับการอัปเดตสถานะการยืนยันอีเมลของผู้ใช้เมื่อมีการยืนยันอีเมลสำเร็จ)
-  // ==================================================================================
-  async markEmailVerified(userId: number) {
-    return this.usersRepository.update(
-      { id: userId, deletedAt: null },
-      {
-        isEmailVerified: true,
-        emailVerificationTokenHash: null,
-        emailVerificationExpires: null,
-      },
-    );
-  }
-
-  // ======================================================================================================================
-  // UPDATE PASSWORD RESET TOKEN (สำหรับการบันทึก hash ของ password reset token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการรีเซ็ตรหัสผ่าน)
-  // ======================================================================================================================
-  async updatePasswordResetToken(
-    userId: number,
-    tokenHash: string | null,
-    expiresAt: Date | null,
-  ) {
-    return this.usersRepository.update(
-      { id: userId, deletedAt: null },
-      {
-        passwordResetTokenHash: tokenHash,
-        passwordResetExpires: expiresAt,
-      },
-    );
-  }
-
-  // ==================================================================
-  // RESET PASSWORD (สำหรับการอัปเดตรหัสผ่านของผู้ใช้เมื่อมีการรีเซ็ตรหัสผ่านสำเร็จ)
-  // ==================================================================
-  async resetPassword(userId: number, hashedPassword: string) {
-    return this.usersRepository.update(
-      { id: userId, deletedAt: null },
-      {
-        password: hashedPassword,
-        passwordResetTokenHash: null,
-        passwordResetExpires: null,
-      },
-    );
-  }
-
-  // =====================================================================================
-  // CREATE USER (สำหรับการสร้างผู้ใช้ใหม่จากการลงทะเบียนหรือการเข้าสู่ระบบด้วย OAuth)
-  // =====================================================================================
+  // ─── Mutations ────────────────────────────────────────────────────────────────
   async create(userData: {
     firstName?: string;
     lastName?: string;
@@ -217,10 +134,12 @@ export class UsersService {
     try {
       return await this.usersRepository.save(user);
     } catch (error) {
-      this.logger.error(
-        `Error creating user with email ${userData.email}: ${error.message}`,
-      );
-      throw new UnauthorizedException('Email already in use');
+      // FIX: ConflictException แทน UnauthorizedException
+      if (error.code === '23505') {      // PostgreSQL unique violation
+        throw new ConflictException('Email already in use');
+      }
+      this.logger.error(`Error creating user: ${error.message}`);
+      throw new InternalServerErrorException('Failed to create user');
     }
   }
 
@@ -228,53 +147,93 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  // =====================================================================================
-  // FIND USER BY OAUTH (สำหรับการตรวจสอบข้อมูลจากการเข้าสู่ระบบด้วย OAuth)
-  // =====================================================================================
-  async findByOAuth(
-    provider: string,
-    providerId: string,
-  ): Promise<OauthAccount | null> {
+  async updateRefreshToken(userId: number, tokenHash: string | null) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      { refreshTokenHash: tokenHash },
+    );
+  }
+
+  // UPDATE EMAIL VERIFICATION TOKEN (สำหรับการบันทึก hash ของ email verification token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการยืนยันอีเมล)
+  async updateEmailVerificationToken(
+    userId: number,
+    tokenHash: string | null,
+    expiresAt: Date | null,
+  ) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        emailVerificationTokenHash: tokenHash,
+        emailVerificationExpires: expiresAt,
+      },
+    );
+  }
+
+  // MARK EMAIL AS VERIFIED (สำหรับการอัปเดตสถานะการยืนยันอีเมลของผู้ใช้เมื่อมีการยืนยันอีเมลสำเร็จ)
+  async markEmailVerified(userId: number) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        isEmailVerified: true,
+        emailVerificationTokenHash: null,
+        emailVerificationExpires: null,
+      },
+    );
+  }
+  // UPDATE PASSWORD RESET TOKEN (สำหรับการบันทึก hash ของ password reset token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการรีเซ็ตรหัสผ่าน)====================================
+  async updatePasswordResetToken(
+    userId: number,
+    tokenHash: string | null,
+    expiresAt: Date | null,
+  ) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        passwordResetTokenHash: tokenHash,
+        passwordResetExpires: expiresAt,
+      },
+    );
+  }
+
+  // RESET PASSWORD (สำหรับการอัปเดตรหัสผ่านของผู้ใช้เมื่อมีการรีเซ็ตรหัสผ่านสำเร็จ)
+  async resetPassword(userId: number, hashedPassword: string) {
+    return this.usersRepository.update(
+      { id: userId, deletedAt: null },
+      {
+        password: hashedPassword,
+        passwordResetTokenHash: null,
+        passwordResetExpires: null,
+      },
+    );
+  }
+
+  // ─── OAuth ───────────────────────────────────────────────────────────────────
+  async findByOAuth(provider: string, providerId: string): Promise<OauthAccount | null> {
     return this.oauthRepository.findOne({
       where: { provider, providerId },
       relations: ['user'],
     });
   }
 
-  // =================================================================================================
-  // CREATE OAUTH ACCOUNT (สำหรับการสร้างบัญชี OAuth ใหม่เมื่อมีการเข้าสู่ระบบด้วย OAuth และยังไม่มีบัญชีที่เชื่อมโยงอยู่)
-  // =================================================================================================
-  async createOAuthAccount(
-    user: User,
-    provider: string,
-    providerId: string,
-  ): Promise<OauthAccount> {
-    const oauth = this.oauthRepository.create({
-      provider,
-      providerId,
-      user,
-    });
+  async createOAuthAccount(user: User, provider: string, providerId: string): Promise<OauthAccount> {
+    const oauth = this.oauthRepository.create({ provider, providerId, user });
 
     try {
       return await this.oauthRepository.save(oauth);
     } catch (error) {
-      this.logger.error(
-        `Error creating OAuth account (${provider}:${providerId}): ${error.message}`,
-      );
-      throw new UnauthorizedException('Failed to create OAuth account');
+      this.logger.error(`Error creating OAuth account (${provider}:${providerId}): ${error.message}`);
+      throw new InternalServerErrorException('Failed to create OAuth account');
     }
   }
 
-  // ================================================================================================================================
-  // SOFT DELETE USER (สำหรับการลบผู้ใช้แบบ soft delete โดยการตั้งค่า deletedAt และล้างข้อมูลที่เกี่ยวข้องกับ token เพื่อป้องกันการใช้งานต่อหลังจากถูกลบ)
-  // ================================================================================================================================
+  // ─── Soft Delete ──────────────────────────────────────────────────────────────
   async softDelete(userId: number) {
     const user = await this.usersRepository.findOne({
       where: { id: userId, deletedAt: null },
     });
 
     if (!user) {
-      throw new UnauthorizedException('User not found or already deleted');
+      throw new NotFoundException('User not found or already deleted');
     }
 
     return this.usersRepository.update(

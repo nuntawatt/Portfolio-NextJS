@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
@@ -24,9 +29,7 @@ export class AuthService {
     private mailService: MailService,
   ) { }
 
-  // =========================
-  // GENERATE ACCESS TOKEN
-  // =========================
+  // ─── Token Helpers ────────────────────────────────────────────────────────────
   private generateAccessToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
   ) {
@@ -37,16 +40,11 @@ export class AuthService {
         role: user.role,
         isEmailVerified: user.isEmailVerified,
       },
-      {
-        secret: process.env.JWT_SECRET,
-        expiresIn: '15m',
-      },
+      { secret: process.env.JWT_SECRET, expiresIn: '15m' },
     );
   }
 
-  // =========================
-  // GENERATE REFRESH TOKEN
-  // =========================
+  // GENERATE REFRESH TOKEN (สำหรับการสร้าง refresh token ที่มีข้อมูลผู้ใช้และระยะเวลาหมดอายุที่ยาวกว่า access token)
   private generateRefreshToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
   ) {
@@ -57,16 +55,11 @@ export class AuthService {
         role: user.role,
         isEmailVerified: user.isEmailVerified,
       },
-      {
-        secret: process.env.JWT_REFRESH_SECRET,
-        expiresIn: '7d',
-      },
+      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: '7d' },
     );
   }
 
-  // ===============================
   // ISSUE TOKENS (ACCESS + REFRESH)
-  // ===============================
   private async issueToken(user: User) {
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
@@ -77,18 +70,15 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  // =========================
-  // VALIDATE USER CREDENTIALS
-  // =========================
+  // ─── Auth Core ────────────────────────────────────────────────────────────────
+
   async validateUserCredentials(
     email: string,
     pass: string,
   ): Promise<Omit<User, 'password'> | null> {
     const existingUser = await this.usersService.findByEmailWithPassword(email);
 
-    if (!existingUser) {
-      return null;
-    }
+    if (!existingUser) return null;
 
     // กัน OAuth user login ด้วย password
     if (!existingUser.password) {
@@ -102,12 +92,9 @@ export class AuthService {
     return result;
   }
 
-  // =========================
   // LOGIN
-  // =========================
   async login(loginData: LoginDto) {
     const email = loginData.email.toLowerCase().trim();
-
     const user = await this.validateUserCredentials(email, loginData.password);
 
     if (!user) {
@@ -121,26 +108,33 @@ export class AuthService {
     }
 
     const tokens = await this.issueToken(user as User);
-
     this.logger.log(`User logged in: userId=${user.id}`);
 
+    // return เฉพาะ safe fields ไม่ spread user object ทั้งก้อน
     return {
       ...tokens,
-      user,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        avatar: user.avatar,
+      },
     };
   }
 
-  // =========================
   // REGISTER
-  // =========================
   async register(userData: RegisterDto) {
     const email = userData.email.toLowerCase().trim();
 
     const existingUser = await this.usersService.findByEmail(email);
 
+    // กันกรณีที่มี user ที่ถูก soft delete แล้วลงทะเบียนใหม่ด้วย email เดิม (อนุญาตให้ลงทะเบียนใหม่ได้ แต่ต้องแน่ใจว่า user เก่าถูก soft delete จริงๆ)
     if (existingUser) {
       this.logger.warn(`Duplicate registration: ${email}`);
-      throw new UnauthorizedException('User already exists with this email');
+      throw new ConflictException('Email already in use');
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -152,17 +146,11 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const { password, ...result } = newUser;
-
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
     const expiresAt = new Date(Date.now() + 1000 * 60 * 60);
 
-    await this.usersService.updateEmailVerificationToken(
-      newUser.id,
-      tokenHash,
-      expiresAt,
-    );
+    await this.usersService.updateEmailVerificationToken(newUser.id, tokenHash, expiresAt);
 
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
 
@@ -182,12 +170,18 @@ export class AuthService {
 
     this.logger.log(`New user registered: ${email}`);
 
-    return result;
+    return {
+      message: 'Registration successful. Please verify your email.',
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+      },
+    }
   }
 
-  // =========================
   // OAUTH LOGIN
-  // =========================
   async oauthLogin(oauthUser: OAuthUser) {
     // 1. validate email
     if (!oauthUser.email) {
@@ -221,11 +215,7 @@ export class AuthService {
       }
 
       // 4. create oauth account
-      await this.usersService.createOAuthAccount(
-        user,
-        oauthUser.provider,
-        oauthUser.providerId,
-      );
+      await this.usersService.createOAuthAccount(user, oauthUser.provider, oauthUser.providerId);
     }
 
     // 5. ถ้า email ยังไม่ verified ให้ mark เป็น verified
@@ -234,19 +224,24 @@ export class AuthService {
       await this.usersService.save(user);
     }
 
-    // this.logger.log(`OAuth login: ${oauthUser.provider} - ${user.email}`);
+    // FIX: CRITICAL - ใช้ issueToken() เพื่อได้ JWT ของ app ไม่ใช่ OAuth provider token
+    const tokens = await this.issueToken(user);
 
-    return {
-      accessToken: oauthUser.accessToken,
-      refreshToken: oauthUser.refreshToken,
-      providerId: oauthUser.providerId,
-      provider: oauthUser.provider,
-    };
+    this.logger.log(`OAuth login: ${oauthUser.provider} - userId=${user.id}`);
+
+    return tokens; // { accessToken, refreshToken } - เป็น JWT ของ app แล้ว
+
+    // old
+    // return {
+    //   accessToken: oauthUser.accessToken,
+    //   refreshToken: oauthUser.refreshToken,
+    //   providerId: oauthUser.providerId,
+    //   provider: oauthUser.provider,
+    // };
+
   }
 
-  // =========================
   // REFRESH TOKEN
-  // =========================
   async refreshToken(refreshToken: string) {
     let payload: {
       userId: number;
@@ -263,9 +258,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const user = await this.usersService.findByIdWithRefreshToken(
-      payload.userId,
-    );
+    const user = await this.usersService.findByIdWithRefreshToken(payload.userId);
 
     if (!user || !user.refreshTokenHash) {
       throw new UnauthorizedException('Invalid refresh token');
@@ -274,37 +267,31 @@ export class AuthService {
     const isValid = await compareToken(refreshToken, user.refreshTokenHash);
 
     if (!isValid) {
-      throw new UnauthorizedException('Invalid refresh token');
+      // Refesh token reuse - revoke ทันทีเพื่อความปลอดภัย
+      await this.usersService.updateRefreshToken(payload.userId, null);
+      throw new UnauthorizedException('Refresh token reuse detected - all sessions revoked');
     }
 
-    const tokens = await this.issueToken(user);
-
-    return tokens;
+    return this.issueToken(user);
   }
 
-  // =========================
   // LOGOUT
-  // =========================
   async logout(userId: number) {
     await this.usersService.updateRefreshToken(userId, null);
     return { success: true };
   }
 
-  // =========================
   // VERIFY EMAIL
-  // =========================
   async verifyEmail(token: string) {
     const tokenHash = sha256(token);
-
-    const userByToken =
-      await this.usersService.findByEmailVerificationTokenHash(tokenHash);
+    const userByToken = await this.usersService.findByEmailVerificationTokenHash(tokenHash);
 
     if (!userByToken) {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
     if (userByToken.isEmailVerified) {
-      return { success: true };
+      return { success: true }; // idempotent - verify ซ้ำก็ไม่ error
     }
 
     if (
@@ -315,30 +302,24 @@ export class AuthService {
     }
 
     await this.usersService.markEmailVerified(userByToken.id);
-
     return { success: true };
   }
 
-  // =========================
   // FORGOT PASSWORD
-  // =========================
   async forgotPassword(email: string) {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
 
+    // คืน sussess เสมอป้องกัน email enumeration แต่ถ้า user มีอยู่จริงจะส่งอีเมลรีเซ็ตรหัสผ่านให้
     if (!user) {
       return { success: true };
     }
 
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 15);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // token หมดอายุใน 15 นาที
 
-    await this.usersService.updatePasswordResetToken(
-      user.id,
-      tokenHash,
-      expiresAt,
-    );
+    await this.usersService.updatePasswordResetToken(user.id, tokenHash, expiresAt);
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
 
@@ -356,9 +337,7 @@ export class AuthService {
   // =========================
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
-
-    const user =
-      await this.usersService.findByPasswordResetTokenHash(tokenHash);
+    const user = await this.usersService.findByPasswordResetTokenHash(tokenHash);
 
     if (!user) {
       throw new UnauthorizedException('Invalid or expired token');
@@ -369,7 +348,6 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
     await this.usersService.resetPassword(user.id, hashedPassword);
 
     return { success: true };
