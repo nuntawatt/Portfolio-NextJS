@@ -5,31 +5,60 @@ import {
   Request,
   Delete,
   HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsersService } from './users.service';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('Users')
+@ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
-  @UseGuards(JwtAuthGuard)
+  // ─────────────────────────────────────────────────────────────────────────────
+  // SECTION 1 : Profile
+  // ─────────────────────────────────────────────────────────────────────────────
+
   @Get('profile')
+  @ApiOperation({
+    summary: 'Get current user profile',
+    description: 'ดึงข้อมูล profile ของ user ที่ login อยู่',
+  })
+  @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   getProfile(@Request() req) {
     return req.user;
   }
 
-  @UseGuards(JwtAuthGuard)
+  // ─────────────────────────────────────────────────────────────────────────────
+  // SECTION 2 : Account Management
+  // ─────────────────────────────────────────────────────────────────────────────
+
   @Delete('delete')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Delete user account (soft delete)',
+    description: 'ลบบัญชีแบบ soft delete (ข้อมูลยังอยู่ใน DB แต่ถูก deactivate)',
+  })
+  @ApiResponse({ status: 200, description: 'Account deleted successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async deleteProfile(@Request() req) {
-    const userId = req.user.userId || req.user.id;
+    const userId = req.user.userId ?? req.user.id;
 
     await this.usersService.softDelete(userId);
 
     return {
-      sucess: true,
-      message: 'User deleted successfully',
+      success: true,
+      message: 'Account deleted successfully',
     };
   }
 }
