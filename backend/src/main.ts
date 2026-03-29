@@ -43,6 +43,7 @@ async function bootstrap() {
       .setTitle('NestJS Authentication API')
       .setDescription('API documentation for NestJS Authentication')
       .setVersion('1.0')
+      .addServer(process.env.API_URL ?? `http://localhost:${port}/api`)
       .addBearerAuth({
         type: 'http',
         scheme: 'bearer',
@@ -71,7 +72,7 @@ async function bootstrap() {
     await app.close();
     process.exit(0);
   });
-  
+
   await app.listen(port);
   logger.log(`Server is running on http://localhost:${port}`);
 }
