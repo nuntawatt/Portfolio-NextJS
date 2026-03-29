@@ -35,6 +35,8 @@ async function bootstrap() {
     credentials: true,
   });
 
+  const port = process.env.PORT ?? 3001;
+
   // Swagger configuration
   if (process.env.NODE_ENV !== 'production') {
     const config = new DocumentBuilder()
@@ -59,21 +61,19 @@ async function bootstrap() {
         persistAuthorization: true, // จำ token ไว้ใน UI หลังจากรีเฟรชหน้า
       },
     });
+
+    logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
   }
 
-  // start the server
-  const port = process.env.PORT ?? 3001;
-  await app.listen(port);
-
   // Graceful shutdown handling
-  process.on('SIGINTERM', async () => {
-    logger.log('SIGINTERM received, shutting down gracefully...');
+  process.on('SIGTERM', async () => {
+    logger.log('SIGTERM received, shutting down gracefully...');
     await app.close();
     process.exit(0);
   });
-
+  
+  await app.listen(port);
   logger.log(`Server is running on http://localhost:${port}`);
-  logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
 }
 
 bootstrap();

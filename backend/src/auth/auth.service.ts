@@ -238,7 +238,6 @@ export class AuthService {
     //   providerId: oauthUser.providerId,
     //   provider: oauthUser.provider,
     // };
-
   }
 
   // REFRESH TOKEN
