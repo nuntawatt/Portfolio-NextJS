@@ -57,8 +57,6 @@ async function bootstrap() {
     SwaggerModule.setup('api/docs', app, document, {
       swaggerOptions: {
         persistAuthorization: true, // จำ token ไว้ใน UI หลังจากรีเฟรชหน้า
-        tagsSorter: 'alpha', // เรียงหมวดหมู่ API ตามตัวอักษร
-        operationsSorter: 'alpha', // เรียง endpoint ภายในหมวดหมู่ตามตัวอักษร
       },
     });
   }
