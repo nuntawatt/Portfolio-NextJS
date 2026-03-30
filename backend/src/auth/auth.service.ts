@@ -18,6 +18,8 @@ import {
   sha256,
 } from './utils/token.util';
 import { MailService } from './mail/mail.service';
+import { AuthTokenService } from './auth-token.service';
+import { AuthTokenType } from '../users/entities/auth_tokens.entity';
 
 @Injectable()
 export class AuthService {
@@ -27,9 +29,11 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private mailService: MailService,
+    private authTokenService: AuthTokenService,
   ) { }
 
   // ─── Token Helpers ────────────────────────────────────────────────────────────
+
   private generateAccessToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
   ) {
@@ -44,7 +48,6 @@ export class AuthService {
     );
   }
 
-  // GENERATE REFRESH TOKEN (สำหรับการสร้าง refresh token ที่มีข้อมูลผู้ใช้และระยะเวลาหมดอายุที่ยาวกว่า access token)
   private generateRefreshToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
   ) {
@@ -59,13 +62,18 @@ export class AuthService {
     );
   }
 
-  // ISSUE TOKENS (ACCESS + REFRESH)
   private async issueToken(user: User) {
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
     const refreshTokenHash = await hashToken(refreshToken);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7d
 
-    await this.usersService.updateRefreshToken(user.id, refreshTokenHash);
+    await this.authTokenService.createToken(
+      user,
+      AuthTokenType.REFRESH_TOKEN,
+      refreshTokenHash,
+      expiresAt,
+    );
 
     return { accessToken, refreshToken };
   }
@@ -80,7 +88,6 @@ export class AuthService {
 
     if (!existingUser) return null;
 
-    // กัน OAuth user login ด้วย password
     if (!existingUser.password) {
       throw new UnauthorizedException('Please login with your OAuth provider');
     }
@@ -92,7 +99,7 @@ export class AuthService {
     return result;
   }
 
-  // LOGIN
+  // login - ตรวจสอบข้อมูลรับรองและออก token
   async login(loginData: LoginDto) {
     const email = loginData.email.toLowerCase().trim();
     const user = await this.validateUserCredentials(email, loginData.password);
@@ -102,7 +109,6 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    // verify email
     if (!user.isEmailVerified) {
       throw new UnauthorizedException('Please verify your email address');
     }
@@ -110,7 +116,6 @@ export class AuthService {
     const tokens = await this.issueToken(user as User);
     this.logger.log(`User logged in: userId=${user.id}`);
 
-    // return เฉพาะ safe fields ไม่ spread user object ทั้งก้อน
     return {
       user: {
         id: user.id,
@@ -124,18 +129,16 @@ export class AuthService {
       token: {
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
-        expiresIn: 900, // 15 นาที
-      }
+        expiresIn: 900,
+      },
     };
   }
 
-  // REGISTER
+  // register - สร้างบัญชีใหม่และส่งอีเมลยืนยัน
   async register(userData: RegisterDto) {
     const email = userData.email.toLowerCase().trim();
 
     const existingUser = await this.usersService.findByEmail(email);
-
-    // กันกรณีที่มี user ที่ถูก soft delete แล้วลงทะเบียนใหม่ด้วย email เดิม (อนุญาตให้ลงทะเบียนใหม่ได้ แต่ต้องแน่ใจว่า user เก่าถูก soft delete จริงๆ)
     if (existingUser) {
       this.logger.warn(`Duplicate registration: ${email}`);
       throw new ConflictException('Email already in use');
@@ -152,9 +155,14 @@ export class AuthService {
 
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 ชม.
 
-    await this.usersService.updateEmailVerificationToken(newUser.id, tokenHash, expiresAt);
+    await this.authTokenService.createToken(
+      newUser,
+      AuthTokenType.EMAIL_VERIFY,
+      tokenHash,
+      expiresAt,
+    );
 
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
 
@@ -183,19 +191,17 @@ export class AuthService {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
       },
-    }
+    };
   }
 
-  // OAUTH LOGIN
+  // OAuth login - ใช้ข้อมูลจาก provider เพื่อเข้าสู่ระบบหรือสร้างบัญชีใหม่
   async oauthLogin(oauthUser: OAuthUser) {
-    // 1. validate email
     if (!oauthUser.email) {
       throw new UnauthorizedException('Email is required from OAuth provider');
     }
 
     const email = oauthUser.email.toLowerCase().trim();
 
-    // 2. หา oauth account
     const oauthAccount = await this.usersService.findByOAuth(
       oauthUser.provider,
       oauthUser.providerId,
@@ -206,7 +212,6 @@ export class AuthService {
     if (oauthAccount?.user) {
       user = oauthAccount.user;
     } else {
-      // 3. หา user จาก email
       user = await this.usersService.findByEmail(email);
 
       if (!user) {
@@ -219,19 +224,19 @@ export class AuthService {
         });
       }
 
-      // 4. create oauth account
-      await this.usersService.createOAuthAccount(user, oauthUser.provider, oauthUser.providerId);
+      await this.usersService.createOAuthAccount(
+        user,
+        oauthUser.provider,
+        oauthUser.providerId,
+      );
     }
 
-    // 5. ถ้า email ยังไม่ verified ให้ mark เป็น verified
     if (!user.isEmailVerified) {
       user.isEmailVerified = true;
       await this.usersService.save(user);
     }
 
-    // FIX: CRITICAL - ใช้ issueToken() เพื่อได้ JWT ของ app ไม่ใช่ OAuth provider token
     const tokens = await this.issueToken(user);
-
     this.logger.log(`OAuth login: ${oauthUser.provider} - userId=${user.id}`);
 
     return {
@@ -249,10 +254,10 @@ export class AuthService {
         refreshToken: tokens.refreshToken,
         expiresIn: 900,
       },
-    }
+    };
   }
 
-  // REFRESH TOKEN
+  // refresh token โดยใช้ refresh token เดิมที่ยังไม่หมดอายุและยังไม่ถูกใช้
   async refreshToken(refreshToken: string) {
     let payload: {
       userId: number;
@@ -269,21 +274,21 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const user = await this.usersService.findByIdWithRefreshToken(payload.userId);
+    const tokenHash = await hashToken(refreshToken);
+    const tokenRecord = await this.authTokenService.findValidRefreshToken(
+      payload.userId,
+      tokenHash,
+    );
 
-    if (!user || !user.refreshTokenHash) {
-      throw new UnauthorizedException('Invalid refresh token');
+    if (!tokenRecord) {
+      // token ไม่พบหรือถูกใช้แล้ว — revoke ทั้งหมดเพื่อกัน reuse attack
+      await this.authTokenService.revokeAllUserTokens(payload.userId);
+      throw new UnauthorizedException('Refresh token reuse detected — all sessions revoked');
     }
 
-    const isValid = await compareToken(refreshToken, user.refreshTokenHash);
+    await this.authTokenService.markTokenUsed(tokenRecord.id);
 
-    if (!isValid) {
-      // Refesh token reuse - revoke ทันทีเพื่อความปลอดภัย
-      await this.usersService.updateRefreshToken(payload.userId, null);
-      throw new UnauthorizedException('Refresh token reuse detected - all sessions revoked');
-    }
-
-    const tokens = await this.issueToken(user);
+    const tokens = await this.issueToken(tokenRecord.user);
 
     return {
       token: {
@@ -294,9 +299,8 @@ export class AuthService {
     };
   }
 
-  // LOGOUT
   async logout(userId: number) {
-    await this.usersService.updateRefreshToken(userId, null);
+    await this.authTokenService.revokeUserTokens(userId, AuthTokenType.REFRESH_TOKEN);
 
     return {
       status: 'success',
@@ -304,27 +308,32 @@ export class AuthService {
     };
   }
 
-  // VERIFY EMAIL
+  // อีเมลยืนยัน - verify email โดยใช้ token ที่ส่งไปทาง email
   async verifyEmail(token: string) {
     const tokenHash = sha256(token);
-    const userByToken = await this.usersService.findByEmailVerificationTokenHash(tokenHash);
+    const tokenRecord = await this.authTokenService.findValidToken(
+      tokenHash,
+      AuthTokenType.EMAIL_VERIFY,
+    );
 
-    if (!userByToken) {
+    if (!tokenRecord) {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    if (userByToken.isEmailVerified) {
-      return { success: true }; // idempotent - verify ซ้ำก็ไม่ error
-    }
-
-    if (
-      !userByToken.emailVerificationExpires ||
-      userByToken.emailVerificationExpires < new Date()
-    ) {
+    if (tokenRecord.expiresAt < new Date()) {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    await this.usersService.markEmailVerified(userByToken.id);
+    const user = tokenRecord.user;
+
+    if (user.isEmailVerified) {
+      return { status: 'success', message: 'Email already verified' };
+    }
+
+    await this.authTokenService.markTokenUsed(tokenRecord.id);
+
+    user.isEmailVerified = true;
+    await this.usersService.save(user);
 
     return {
       status: 'success',
@@ -332,21 +341,23 @@ export class AuthService {
     };
   }
 
-  // FORGOT PASSWORD
+  // ลืมรหัสผ่าน - ส่ง email พร้อมลิงก์รีเซ็ตรหัสผ่าน
   async forgotPassword(email: string) {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
 
-    // คืน success เสมอป้องกัน email enumeration แต่ถ้า user มีอยู่จริงจะส่งอีเมลรีเซ็ตรหัสผ่านให้
-    if (!user) {
-      return { success: true };
-    }
+    if (!user) return { status: 'success', message: 'If this email exists, a reset link has been sent' };
 
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // token หมดอายุใน 15 นาที
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // 15 นาที
 
-    await this.usersService.updatePasswordResetToken(user.id, tokenHash, expiresAt);
+    await this.authTokenService.createToken(
+      user,
+      AuthTokenType.PASSWORD_RESET,
+      tokenHash,
+      expiresAt,
+    );
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
 
@@ -362,21 +373,28 @@ export class AuthService {
     };
   }
 
-  // RESET PASSWORD
+  // reset password โดยใช้ token ที่ส่งไปทาง email
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
-    const user = await this.usersService.findByPasswordResetTokenHash(tokenHash);
+    const tokenRecord = await this.authTokenService.findValidToken(
+      tokenHash,
+      AuthTokenType.PASSWORD_RESET,
+    );
 
-    if (!user) {
+    if (!tokenRecord) {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    if (!user.passwordResetExpires || user.passwordResetExpires < new Date()) {
+    if (tokenRecord.expiresAt < new Date()) {
       throw new UnauthorizedException('Invalid or expired token');
     }
+
+    await this.authTokenService.markTokenUsed(tokenRecord.id);
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await this.usersService.resetPassword(user.id, hashedPassword);
+
+    tokenRecord.user.password = hashedPassword;
+    await this.usersService.save(tokenRecord.user);
 
     return {
       status: 'success',

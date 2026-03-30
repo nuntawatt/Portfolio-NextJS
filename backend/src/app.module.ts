@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 
 import { User } from './users/entities/users.entity';
 import { OauthAccount } from './users/entities/oauth_accounts.entity';
+import { AuthToken } from './users/entities/auth_tokens.entity';
 import * as Joi from 'joi';
 
 @Module({
@@ -27,9 +28,9 @@ import * as Joi from 'joi';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
 
-      entities: [User, OauthAccount],
+      entities: [User, OauthAccount, AuthToken],
 
-      synchronize: false,
+      synchronize: true,
     }),
     ThrottlerModule.forRoot({
       throttlers: [

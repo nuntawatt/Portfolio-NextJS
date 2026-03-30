@@ -5,9 +5,9 @@ import {
     ManyToOne,
     Unique,
     CreateDateColumn,
-    DeleteDateColumn,
-    UpdateDateColumn,
     JoinColumn,
+    UpdateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 import { User } from './users.entity';
 

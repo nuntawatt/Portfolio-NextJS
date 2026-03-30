@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthTokenService } from './auth-token.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
@@ -11,8 +12,8 @@ import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [PassportModule, JwtModule.register({}), UsersModule, MailModule],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy],
+  providers: [AuthService, AuthTokenService, JwtStrategy, GoogleStrategy, GithubStrategy],
   controllers: [AuthController],
-  exports: [AuthService],
+  exports: [AuthService, AuthTokenService],
 })
 export class AuthModule {}
