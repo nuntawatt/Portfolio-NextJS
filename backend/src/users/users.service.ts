@@ -186,7 +186,7 @@ export class UsersService {
       },
     );
   }
-  // UPDATE PASSWORD RESET TOKEN (สำหรับการบันทึก hash ของ password reset token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการรีเซ็ตรหัสผ่าน)====================================
+  // UPDATE PASSWORD RESET TOKEN (สำหรับการบันทึก hash ของ password reset token ในฐานข้อมูลเพื่อใช้ในการตรวจสอบเมื่อมีการรีเซ็ตรหัสผ่าน)
   async updatePasswordResetToken(
     userId: number,
     tokenHash: string | null,

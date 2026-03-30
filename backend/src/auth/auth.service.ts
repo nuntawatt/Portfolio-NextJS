@@ -309,7 +309,7 @@ export class AuthService {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
 
-    // คืน sussess เสมอป้องกัน email enumeration แต่ถ้า user มีอยู่จริงจะส่งอีเมลรีเซ็ตรหัสผ่านให้
+    // คืน success เสมอป้องกัน email enumeration แต่ถ้า user มีอยู่จริงจะส่งอีเมลรีเซ็ตรหัสผ่านให้
     if (!user) {
       return { success: true };
     }
@@ -331,9 +331,7 @@ export class AuthService {
     return { success: true };
   }
 
-  // =========================
   // RESET PASSWORD
-  // =========================
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
     const user = await this.usersService.findByPasswordResetTokenHash(tokenHash);

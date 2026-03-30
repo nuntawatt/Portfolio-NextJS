@@ -1,12 +1,11 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtPayload } from '../types/auth-type';
-import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private usersService: UsersService) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -14,18 +13,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
+  // JWT ถูก verify + ไม่หมดอายุแล้วก่อนถึงตรงนี้ - trust payload ได้เลย
   async validate(payload: JwtPayload) {
-    const user = await this.usersService.findById(payload.userId);
-
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-
     return {
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      isEmailVerified: user.isEmailVerified,
+      userId: payload.userId,
+      email: payload.email,
+      role: payload.role,
+      isEmailVerified: payload.isEmailVerified,
     };
   }
 }

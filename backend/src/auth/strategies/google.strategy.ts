@@ -20,9 +20,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         profile: Profile,
     ): Promise<OAuthUser> {
         return {
-            email: profile.emails?.[0].value || null,
-            firstName: profile.name?.givenName || '',
-            lastName: profile.name?.familyName || '',
+            email: profile.emails?.[0].value ?? null,
+            firstName: profile.name?.givenName ?? '',
+            lastName: profile.name?.familyName ?? '',
+            avatar: profile.photos?.[0].value ?? null,
             provider: 'google',
             providerId: profile.id,
             accessToken,
