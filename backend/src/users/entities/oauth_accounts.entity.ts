@@ -5,9 +5,9 @@ import {
     ManyToOne,
     Unique,
     CreateDateColumn,
-    DeleteDateColumn,
-    UpdateDateColumn,
     JoinColumn,
+    UpdateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 import { User } from './users.entity';
 
@@ -30,7 +30,7 @@ export class OauthAccount {
     updatedAt: Date;
 
     @DeleteDateColumn()
-    deletedAt: Date;
+    deletedAt: Date | null;
 
     @ManyToOne(() => User, (user) => user.oauthAccounts, {
         onDelete: 'CASCADE',

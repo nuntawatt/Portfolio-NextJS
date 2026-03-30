@@ -1,10 +1,10 @@
-import {
-    Injectable,
-    Logger,
-    InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable, Logger, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_RETRIES = 2;
+const RETRY_DELAY_MS = 500;
 
 @Injectable()
 export class MailService {
@@ -13,28 +13,32 @@ export class MailService {
     private readonly mailFrom: string;
 
     constructor(private readonly configService: ConfigService) {
-        const apiKey = this.configService.get<string>('RESEND_API_KEY');
-        const mailFrom = this.configService.get<string>('MAIL_FROM');
-
-        if (!apiKey) {
-            throw new Error('RESEND_API_KEY is not defined');
-        }
-
-        if (!mailFrom) {
-            throw new Error('MAIL_FROM is not defined');
-        }
+        const apiKey = this.configService.getOrThrow<string>('RESEND_API_KEY');
+        const mailFrom = this.configService.getOrThrow<string>('MAIL_FROM');
 
         this.resend = new Resend(apiKey);
         this.mailFrom = mailFrom;
     }
 
+    // ─── Public ───────────────────────────────────────────────────────────────────
+
     async sendEmail(to: string, subject: string, html: string): Promise<void> {
-        // basic validation (กัน input แปลก ๆ)
-        if (!to || !to.includes('@')) {
-            this.logger.warn(`Invalid email address: ${to}`);
+        if (!EMAIL_REGEX.test(to)) {
+            this.logger.warn(`Attempted to send email to invalid address: ${to}`);
             throw new InternalServerErrorException('INVALID_EMAIL');
         }
 
+        await this.sendWithRetry(to, subject, html);
+    }
+
+    // ─── Private ─────────────────────────────────────────────────────────────────
+
+    private async sendWithRetry(
+        to: string,
+        subject: string,
+        html: string,
+        attempt = 1,
+    ): Promise<void> {
         try {
             const response = await this.resend.emails.send({
                 from: this.mailFrom,
@@ -44,21 +48,34 @@ export class MailService {
             });
 
             if (response?.data?.id) {
-                this.logger.log(`Email sent (id=${response.data.id})`);
+                this.logger.log(`Email sent to=${to} id=${response.data.id}`);
                 return;
             }
 
-            this.logger.error('Resend failed raw:', response);
-            throw new InternalServerErrorException('EMAIL_SEND_FAILED');
+            throw new Error('No email id returned from Resend');
+
         } catch (error: any) {
-            this.logger.error('Email sending failed (exception)', {
-                message: error?.message,
-                stack: error?.stack,
+            this.logger.warn(
+                `Email attempt ${attempt}/${MAX_RETRIES + 1} failed: ${error?.message}`,
+            );
+
+            if (attempt <= MAX_RETRIES) {
+                await this.delay(RETRY_DELAY_MS * attempt); // exponential backoff เล็กน้อย
+                return this.sendWithRetry(to, subject, html, attempt + 1);
+            }
+
+            this.logger.error('All email attempts failed', {
                 to,
                 subject,
+                message: error?.message,
+                stack: error?.stack,
             });
 
             throw new InternalServerErrorException('EMAIL_SEND_FAILED');
         }
+    }
+
+    private delay(ms: number): Promise<void> {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 }

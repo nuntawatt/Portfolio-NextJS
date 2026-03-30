@@ -35,12 +35,17 @@ async function bootstrap() {
     credentials: true,
   });
 
+  const port = process.env.PORT ?? 3001;
+
   // Swagger configuration
   if (process.env.NODE_ENV !== 'production') {
     const config = new DocumentBuilder()
       .setTitle('NestJS Authentication API')
       .setDescription('API documentation for NestJS Authentication')
       .setVersion('1.0')
+      .addServer(`http://localhost:${port}`, 'Development server')
+      .addServer(`${process.env.API_URL}:${port}`, 'Production server')
+      .addServer(`${process.env.API_URL}`, 'Production server (custom domain)')
       .addBearerAuth({
         type: 'http',
         scheme: 'bearer',
@@ -57,25 +62,21 @@ async function bootstrap() {
     SwaggerModule.setup('api/docs', app, document, {
       swaggerOptions: {
         persistAuthorization: true, // จำ token ไว้ใน UI หลังจากรีเฟรชหน้า
-        tagsSorter: 'alpha', // เรียงหมวดหมู่ API ตามตัวอักษร
-        operationsSorter: 'alpha', // เรียง endpoint ภายในหมวดหมู่ตามตัวอักษร
       },
     });
+
+    logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
   }
 
-  // start the server
-  const port = process.env.PORT ?? 3001;
-  await app.listen(port);
-
   // Graceful shutdown handling
-  process.on('SIGINTERM', async () => {
-    logger.log('SIGINTERM received, shutting down gracefully...');
+  process.on('SIGTERM', async () => {
+    logger.log('SIGTERM received, shutting down gracefully...');
     await app.close();
     process.exit(0);
   });
 
+  await app.listen(port);
   logger.log(`Server is running on http://localhost:${port}`);
-  logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
 }
 
 bootstrap();

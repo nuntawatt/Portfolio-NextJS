@@ -8,6 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { OauthAccount } from './oauth_accounts.entity';
+import { AuthToken } from './auth_tokens.entity';
 
 @Entity()
 export class User {
@@ -35,21 +36,6 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
-  @Column({ nullable: true, select: false })
-  refreshTokenHash: string | null;
-
-  @Column({ nullable: true, select: false })
-  emailVerificationTokenHash: string | null;
-
-  @Column({ nullable: true })
-  emailVerificationExpires: Date | null;
-
-  @Column({ nullable: true, select: false })
-  passwordResetTokenHash: string | null;
-
-  @Column({ nullable: true })
-  passwordResetExpires: Date | null;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -57,7 +43,10 @@ export class User {
   updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt: Date;
+  deletedAt: Date | null;
+
+  @OneToMany(() => AuthToken, (token) => token.user)
+  authTokens: AuthToken[];
 
   @OneToMany(() => OauthAccount, (oauth) => oauth.user)
   oauthAccounts: OauthAccount[];

@@ -20,8 +20,10 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
         profile: Profile,
     ): Promise<OAuthUser> {
         return {
-            email: profile.emails?.[0]?.value,
-            username: profile.username,
+            email: profile.emails?.[0]?.value ?? null,
+            username: profile.username ?? '',
+            firstName: profile.displayName ?? profile.username ?? '',
+            avatar: profile.photos?.[0]?.value ?? null,
             provider: 'github',
             providerId: profile.id,
             accessToken,
