@@ -35,7 +35,14 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   getProfile(@Request() req) {
-    return req.user;
+    return {
+      user: {
+        id: req.user.userId,
+        email: req.user.email,
+        role: req.user.role,
+        isEmailVerified: req.user.isEmailVerified,
+      },
+    }
   }
 
   // ─────────────────────────────────────────────────────────────────────────────

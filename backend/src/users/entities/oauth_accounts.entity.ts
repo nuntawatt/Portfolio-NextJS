@@ -30,7 +30,7 @@ export class OauthAccount {
     updatedAt: Date;
 
     @DeleteDateColumn()
-    deletedAt: Date;
+    deletedAt: Date | null;
 
     @ManyToOne(() => User, (user) => user.oauthAccounts, {
         onDelete: 'CASCADE',

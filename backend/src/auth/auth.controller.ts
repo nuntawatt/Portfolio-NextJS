@@ -181,7 +181,12 @@ export class AuthController {
   @ApiExcludeEndpoint() // ไม่ต้องการให้แสดงใน Swagger เพราะเป็น endpoint สำหรับ callback เท่านั้น
   async googleCallback(@Req() req, @Res() res) {
     const data = await this.authService.oauthLogin(req.user);
-    return res.redirect(`${process.env.FRONTEND_URL}?${new URLSearchParams(data)}`);
+
+    const params = new URLSearchParams({
+      data: JSON.stringify(data),
+    });
+
+    return res.redirect(`${process.env.FRONTEND_URL}?${params}`);
   }
 
   // ====================
@@ -198,6 +203,11 @@ export class AuthController {
   @ApiExcludeEndpoint() // ไม่ต้องการให้แสดงใน Swagger เพราะเป็น endpoint สำหรับ callback เท่านั้น
   async githubCallback(@Req() req, @Res() res) {
     const data = await this.authService.oauthLogin(req.user);
-    return res.redirect(`${process.env.FRONTEND_URL}?${new URLSearchParams(data)}`);
+
+    const params = new URLSearchParams({
+      data: JSON.stringify(data),
+    });
+
+    return res.redirect(`${process.env.FRONTEND_URL}?${params}`);
   }
 }

@@ -57,7 +57,7 @@ export class User {
   updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   @OneToMany(() => OauthAccount, (oauth) => oauth.user)
   oauthAccounts: OauthAccount[];

@@ -112,7 +112,6 @@ export class AuthService {
 
     // return เฉพาะ safe fields ไม่ spread user object ทั้งก้อน
     return {
-      ...tokens,
       user: {
         id: user.id,
         email: user.email,
@@ -122,6 +121,11 @@ export class AuthService {
         isEmailVerified: user.isEmailVerified,
         avatar: user.avatar,
       },
+      token: {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        expiresIn: 900, // 15 นาที
+      }
     };
   }
 
@@ -171,6 +175,7 @@ export class AuthService {
     this.logger.log(`New user registered: ${email}`);
 
     return {
+      status: 'success',
       message: 'Registration successful. Please verify your email.',
       user: {
         id: newUser.id,
@@ -207,10 +212,10 @@ export class AuthService {
       if (!user) {
         user = await this.usersService.create({
           email,
-          firstName: oauthUser.firstName || oauthUser.username || '',
-          lastName: oauthUser.lastName || '',
+          firstName: oauthUser.firstName ?? oauthUser.username ?? '',
+          lastName: oauthUser.lastName ?? '',
           password: null,
-          avatar: oauthUser.avatar || null,
+          avatar: oauthUser.avatar ?? null,
         });
       }
 
@@ -229,15 +234,22 @@ export class AuthService {
 
     this.logger.log(`OAuth login: ${oauthUser.provider} - userId=${user.id}`);
 
-    return tokens; // { accessToken, refreshToken } - เป็น JWT ของ app แล้ว
-
-    // old
-    // return {
-    //   accessToken: oauthUser.accessToken,
-    //   refreshToken: oauthUser.refreshToken,
-    //   providerId: oauthUser.providerId,
-    //   provider: oauthUser.provider,
-    // };
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        avatar: user.avatar ?? null,
+      },
+      token: {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        expiresIn: 900,
+      },
+    }
   }
 
   // REFRESH TOKEN
@@ -271,13 +283,25 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token reuse detected - all sessions revoked');
     }
 
-    return this.issueToken(user);
+    const tokens = await this.issueToken(user);
+
+    return {
+      token: {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        expiresIn: 900,
+      },
+    };
   }
 
   // LOGOUT
   async logout(userId: number) {
     await this.usersService.updateRefreshToken(userId, null);
-    return { success: true };
+
+    return {
+      status: 'success',
+      message: 'Logged out successfully',
+    };
   }
 
   // VERIFY EMAIL
@@ -301,7 +325,11 @@ export class AuthService {
     }
 
     await this.usersService.markEmailVerified(userByToken.id);
-    return { success: true };
+
+    return {
+      status: 'success',
+      message: 'Email verified successfully',
+    };
   }
 
   // FORGOT PASSWORD
@@ -328,7 +356,10 @@ export class AuthService {
       `<p>Click here to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
     );
 
-    return { success: true };
+    return {
+      status: 'success',
+      message: 'If this email exists, a reset link has been sent',
+    };
   }
 
   // RESET PASSWORD
@@ -347,6 +378,9 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.usersService.resetPassword(user.id, hashedPassword);
 
-    return { success: true };
+    return {
+      status: 'success',
+      message: 'Password reset successfully',
+    };
   }
 }
