@@ -12,7 +12,6 @@ import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { OAuthUser } from './types/auth-type';
 import {
-  compareToken,
   generateRandomToken,
   hashToken,
   sha256,

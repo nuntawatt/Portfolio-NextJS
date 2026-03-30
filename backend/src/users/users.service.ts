@@ -20,7 +20,7 @@ export class UsersService {
 
     @InjectRepository(OauthAccount)
     private oauthRepository: Repository<OauthAccount>,
-  ) {}
+  ) { }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ export class UsersService {
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
-        email:     this.normalizeEmail(email),
+        email: this.normalizeEmail(email),
         deletedAt: null,
       },
     });
@@ -42,7 +42,7 @@ export class UsersService {
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
       where: {
-        email:     this.normalizeEmail(email),
+        email: this.normalizeEmail(email),
         deletedAt: null,
       },
       select: ['id', 'firstName', 'lastName', 'email', 'password', 'role', 'isEmailVerified', 'avatar', 'deletedAt'],
@@ -60,17 +60,17 @@ export class UsersService {
 
   async create(userData: {
     firstName?: string;
-    lastName?:  string;
-    email:      string;
-    password:   string | null;
-    avatar?:    string | null;
+    lastName?: string;
+    email: string;
+    password: string | null;
+    avatar?: string | null;
   }): Promise<User> {
     const user = this.usersRepository.create({
       firstName: userData.firstName ?? null,
-      lastName:  userData.lastName  ?? null,
-      email:     userData.email,
-      password:  userData.password,
-      avatar:    userData.avatar    ?? null,
+      lastName: userData.lastName ?? null,
+      email: userData.email,
+      password: userData.password,
+      avatar: userData.avatar ?? null,
     });
 
     try {
