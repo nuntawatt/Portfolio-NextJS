@@ -43,9 +43,9 @@ async function bootstrap() {
       .setTitle('NestJS Authentication API')
       .setDescription('API documentation for NestJS Authentication')
       .setVersion('1.0')
-      .addServer(`http://localhost:${port}/api`, 'Development server')
-      .addServer(process.env.API_URL ?? `http://localhost:${port}`, 'Production server')
-      .addServer(`https://api-authen.skllracademy.com/api`, 'Production server (custom domain)')
+      .addServer(`http://localhost:${port}`, 'Development server')
+      .addServer(`${process.env.API_URL}:${port}`, 'Production server')
+      .addServer(`${process.env.API_URL}:${port}`, 'Production server (custom domain)')
       .addBearerAuth({
         type: 'http',
         scheme: 'bearer',
