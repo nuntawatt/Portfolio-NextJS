@@ -45,7 +45,7 @@ async function bootstrap() {
       .setVersion('1.0')
       .addServer(`http://localhost:${port}`, 'Development server')
       .addServer(`${process.env.API_URL}:${port}`, 'Production server')
-      .addServer(`${process.env.API_URL}:${port}`, 'Production server (custom domain)')
+      .addServer(`${process.env.API_URL}`, 'Production server (custom domain)')
       .addBearerAuth({
         type: 'http',
         scheme: 'bearer',
