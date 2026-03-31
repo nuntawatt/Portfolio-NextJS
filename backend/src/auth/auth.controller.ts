@@ -6,7 +6,6 @@ import {
   Res,
   Req,
   UseGuards,
-  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -22,9 +21,11 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBody,
-  ApiQuery,
   ApiExcludeEndpoint,
 } from '@nestjs/swagger';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 
 @ApiTags('Authentication')
@@ -67,16 +68,26 @@ export class AuthController {
     return this.authService.login(loginData);
   }
 
-  @Get('verify-email')
+  @Post('verify-email')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 300 } }) // กัน brute force
   @ApiOperation({
     summary: 'Verify email address',
-    description: 'ยืนยันตัวตนด้วย token ที่ได้รับจากอีเมล verifycation',
+    description: 'ยืนยันตัวตนด้วย token ที่ได้รับจากอีเมล',
   })
-  @ApiQuery({ name: 'token', description: 'JWT token จาก email', required: true })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['token'],
+      properties: {
+        token: { type: 'string', example: 'a3f9c2...' },
+      },
+    },
+  })
   @ApiResponse({ status: 200, description: 'Email verified successfully' })
   @ApiResponse({ status: 400, description: 'Invalid or expired token' })
-  async verifyEmail(@Query('token') token: string) {
-    return this.authService.verifyEmail(token);
+  async verifyEmail(@Body() dto: VerifyEmailDto) {
+    return this.authService.verifyEmail(dto.token);
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -85,6 +96,7 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60 } }) 
   @ApiOperation({
     summary: 'Refresh access token',
     description: 'ใช้ refresh token เพื่อขอ access token ใหม่เมื่อ access token หมดอายุ',
@@ -141,8 +153,8 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Password reset email sent successfully' })
   @ApiResponse({ status: 400, description: 'Invalid email' })
-  async forgotPassword(@Body('email') email: string) {
-    return this.authService.forgotPassword(email);
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto.email);
   }
 
   @Post('reset-password')
@@ -163,8 +175,8 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Password reset successfully' })
   @ApiResponse({ status: 400, description: 'Invalid or expired token' })
-  async resetPassword(@Body() body: { token: string; password: string }) {
-    return this.authService.resetPassword(body.token, body.password);
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto.token, dto.password);
   }
 
   // ====================
