@@ -25,20 +25,18 @@ export class AuthToken {
     tokenHash: string;
 
     @Column({ type: 'enum', enum: AuthTokenType })
-    type: AuthTokenType
+    type: AuthTokenType;
 
-    @Column()
+    @Column({ type: 'timestamptz' })
     expiresAt: Date;
 
-    @Column({ nullable: true })
+    @Column({ type: 'timestamptz', nullable: true })
     usedAt: Date | null;
 
-    @ManyToOne(() => User, (user) => user.authTokens, {
-        onDelete: 'CASCADE'
-    })
+    @ManyToOne(() => User, (user) => user.authTokens, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamptz' })
     createdAt: Date;
 }

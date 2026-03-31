@@ -23,18 +23,16 @@ export class OauthAccount {
     @Column()
     providerId: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
-
-    @DeleteDateColumn()
-    deletedAt: Date | null;
-
-    @ManyToOne(() => User, (user) => user.oauthAccounts, {
-        onDelete: 'CASCADE',
-    })
+    @ManyToOne(() => User, (user) => user.oauthAccounts, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: User;
+
+    @CreateDateColumn({ type: 'timestamptz' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamptz' })
+    updatedAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamptz' })
+    deletedAt: Date | null;
 }

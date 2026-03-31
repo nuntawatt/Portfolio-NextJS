@@ -92,7 +92,11 @@ export class UsersService {
 
   async findByOAuth(provider: string, providerId: string): Promise<OauthAccount | null> {
     return this.oauthRepository.findOne({
-      where: { provider, providerId },
+      where: {
+        provider,
+        providerId,
+        deletedAt: null, // filter out soft-deleted accounts
+      },
       relations: ['user'],
     });
   }
@@ -119,9 +123,7 @@ export class UsersService {
       throw new NotFoundException('User not found or already deleted');
     }
 
-    await this.usersRepository.update(
-      { id: userId, deletedAt: null },
-      { deletedAt: new Date() },
-    );
+    // ใช้ TypeORM built-in แทน manual update
+    await this.usersRepository.softDelete({ id: userId });
   }
 }

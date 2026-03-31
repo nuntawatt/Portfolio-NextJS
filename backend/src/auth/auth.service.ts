@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   Logger,
@@ -11,11 +12,7 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { OAuthUser } from './types/auth-type';
-import {
-  generateRandomToken,
-  hashToken,
-  sha256,
-} from './utils/token.util';
+import { generateRandomToken, sha256 } from './utils/token.util';
 import { MailService } from './mail/mail.service';
 import { AuthTokenService } from './auth-token.service';
 import { AuthTokenType } from '../users/entities/auth_tokens.entity';
@@ -64,7 +61,8 @@ export class AuthService {
   private async issueToken(user: User) {
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
-    const refreshTokenHash = await hashToken(refreshToken);
+
+    const refreshTokenHash = sha256(refreshToken);
     const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7d
 
     await this.authTokenService.createToken(
@@ -273,7 +271,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const tokenHash = await hashToken(refreshToken);
+    // hash token ก่อน lookup เสมอ
+    const tokenHash = sha256(refreshToken);
     const tokenRecord = await this.authTokenService.findValidRefreshToken(
       payload.userId,
       tokenHash,
@@ -282,11 +281,10 @@ export class AuthService {
     if (!tokenRecord) {
       // token ไม่พบหรือถูกใช้แล้ว — revoke ทั้งหมดเพื่อกัน reuse attack
       await this.authTokenService.revokeAllUserTokens(payload.userId);
-      throw new UnauthorizedException('Refresh token reuse detected — all sessions revoked');
+      throw new UnauthorizedException('Refresh token reuse detected - all sessions revoked');
     }
 
     await this.authTokenService.markTokenUsed(tokenRecord.id);
-
     const tokens = await this.issueToken(tokenRecord.user);
 
     return {
@@ -307,37 +305,31 @@ export class AuthService {
     };
   }
 
-  // อีเมลยืนยัน - verify email โดยใช้ token ที่ส่งไปทาง email
-  async verifyEmail(token: string) {
-    const tokenHash = sha256(token);
-    const tokenRecord = await this.authTokenService.findValidToken(
+  // verify email โดยใช้ token ที่ส่งไปทาง email
+  async verifyEmail(token: string): Promise<{ message: string }> {
+    const tokenHash = sha256(token); // hash ก่อน lookup เสมอ
+
+    // ใช้ consumeToken แทน find + markUsed แยก (atomic)
+    const authToken = await this.authTokenService.consumeToken(
       tokenHash,
       AuthTokenType.EMAIL_VERIFY,
     );
 
-    if (!tokenRecord) {
-      throw new UnauthorizedException('Invalid or expired token');
+    if (!authToken) {
+      throw new BadRequestException('Invalid or expired verification token');
     }
 
-    if (tokenRecord.expiresAt < new Date()) {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
+    const user = authToken.user;
 
-    const user = tokenRecord.user;
-
+    // Early return ถ้า verify แล้ว
     if (user.isEmailVerified) {
-      return { status: 'success', message: 'Email already verified' };
+      return { message: 'Email already verified' };
     }
-
-    await this.authTokenService.markTokenUsed(tokenRecord.id);
 
     user.isEmailVerified = true;
     await this.usersService.save(user);
 
-    return {
-      status: 'success',
-      message: 'Email verified successfully',
-    };
+    return { message: 'Email verified successfully' };
   }
 
   // ลืมรหัสผ่าน - ส่ง email พร้อมลิงก์รีเซ็ตรหัสผ่าน
@@ -345,7 +337,10 @@ export class AuthService {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
 
-    if (!user) return { status: 'success', message: 'If this email exists, a reset link has been sent' };
+    // ไม่บอกผู้ใช้ว่ามี email หรือไม่ เพื่อความปลอดภัย
+    if (!user) {
+      return { status: 'success', message: 'If this email exists, a reset link has been sent' };
+    }
 
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
@@ -360,11 +355,20 @@ export class AuthService {
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
 
-    await this.mailService.sendEmail(
-      normalizedEmail,
-      'Reset your password',
-      `<p>Click here to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
-    );
+    // fire-and-forget เหมือน register - ไม่ให้ mail failure ทำ request พัง
+    this.mailService
+      .sendEmail(
+        normalizedEmail,
+        'Reset your password',
+        `<p>Click here to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
+      )
+      .catch((error) => {
+        this.logger.error('Failed to send reset password email', {
+          email: normalizedEmail,
+          message: error?.message,
+          stack: error?.stack,
+        });
+      });
 
     return {
       status: 'success',
@@ -375,25 +379,25 @@ export class AuthService {
   // reset password โดยใช้ token ที่ส่งไปทาง email
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
-    const tokenRecord = await this.authTokenService.findValidToken(
+
+    const authToken = await this.authTokenService.consumeToken(
       tokenHash,
       AuthTokenType.PASSWORD_RESET,
     );
 
-    if (!tokenRecord) {
-      throw new UnauthorizedException('Invalid or expired token');
+    if (!authToken) {
+      throw new BadRequestException('Invalid or expired token');
     }
-
-    if (tokenRecord.expiresAt < new Date()) {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-
-    await this.authTokenService.markTokenUsed(tokenRecord.id);
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    authToken.user.password = hashedPassword;
+    await this.usersService.save(authToken.user);
 
-    tokenRecord.user.password = hashedPassword;
-    await this.usersService.save(tokenRecord.user);
+    // revoke refresh token ทั้งหมด เพราะ password เปลี่ยนแล้ว
+    await this.authTokenService.revokeUserTokens(
+      authToken.user.id,
+      AuthTokenType.REFRESH_TOKEN,
+    );
 
     return {
       status: 'success',
