@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Monitor, Cpu, Database, Wrench, Palette, Users, Code2, Layers, GitBranch, Terminal } from 'lucide-react';
+import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
 
-// Reusable card container with elegant borders and spotlight coordinates tracking
+// Reusable card shell — spotlight hover stays, but icon treatment now varies
+// per card below instead of every card sharing the same boxed-icon container.
 function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
@@ -43,9 +44,7 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
       <div className="relative z-10 flex-1 flex flex-col justify-between">
         {/* Title & Icon Header */}
         <div className="flex items-center gap-3 mb-5 select-none">
-          <div className="p-2 border border-border bg-card text-muted-foreground rounded-lg transition-colors group-hover:text-foreground group-hover:border-foreground/30">
-            {icon}
-          </div>
+          {icon}
           <h3 className="text-lg font-bold text-foreground font-heading">
             {title}
           </h3>
@@ -60,146 +59,172 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
   );
 }
 
+// Shared tag pill, unchanged in spirit — just no orange unless a tag is the single
+// most relevant one for that category (handled per-card, not globally).
+function TagRow({ items }: { items: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {items.map((item) => (
+        <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function SkillsSection() {
   return (
     <section id="skills" className="scroll-mt-24 py-16 md:py-24 lg:py-28 bg-transparent transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Main Grid Wrapper */}
         <div className="relative bg-card/40 border border-border rounded-[24px] p-6 sm:p-8 backdrop-blur-md">
-          
+
           {/* Headline */}
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4 transition-colors font-heading tracking-tight">
-              Technical <span className="text-gradient">Expertise</span>
+              Technical <span className="text-orange-500">Expertise</span>
             </h2>
-            <div className="w-20 h-0.5 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
+            <div className="w-20 h-0.5 bg-orange-500 mx-auto rounded-full"></div>
             <p className="mt-4 text-sm text-muted-foreground max-w-md mx-auto">
               A breakdown of languages, systems, and toolkits I use to design high-performance applications.
             </p>
           </div>
 
-          {/* Handcrafted Widgets Grid */}
+          {/* Handcrafted Widgets Grid — each card gets a visual native to its
+              own domain instead of all six reusing the same fake-terminal block. */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            {/* 1. Backend Widget */}
-            <SkillCard title="Backend Development" subtitle="BACKEND SERVICES" icon={<Cpu className="w-5 h-5" />}>
+            {/* 1. Backend — request flow diagram */}
+            <SkillCard
+              title="Backend Development"
+              subtitle="BACKEND SERVICES"
+              icon={<Cpu className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
+            >
               <div className="flex flex-col h-full justify-between">
-                {/* Mock Server Config log */}
-                <div className="bg-card border border-border rounded-xl p-3.5 font-mono text-[11px] text-foreground/80 space-y-1 mb-5 select-none">
-                  <div className="flex items-center justify-between text-[9px] text-muted-foreground pb-1.5 border-b border-border mb-1.5">
-                    <span className="flex items-center gap-1"><Terminal className="w-2.5 h-2.5" /> runtime_config.yaml</span>
-                    <span className="text-orange-500 font-bold">READY</span>
+                <div className="mb-6 select-none">
+                  <div className="flex items-center gap-1.5">
+                    {['Request', 'NestJS', 'FastAPI'].map((node, i, arr) => (
+                      <React.Fragment key={node}>
+                        <div className="flex-1 text-center py-2.5 px-1 rounded-lg border border-border bg-card text-[11px] font-semibold text-foreground/80 truncate">
+                          {node}
+                        </div>
+                        {i < arr.length - 1 && (
+                          <span className="text-border text-xs" aria-hidden="true">→</span>
+                        )}
+                      </React.Fragment>
+                    ))}
                   </div>
-                  <div>engine: Node.js (V8)</div>
-                  <div>framework: NestJS Microservices</div>
-                  <div>endpoints: FastAPI Router (port: 8000)</div>
-                  <div className="text-muted-foreground">latency: Go compiler optimized (p99 &lt; 2ms)</div>
+                  <p className="mt-3 text-[11px] text-muted-foreground text-center">
+                    Go runtime · p99 latency under 2ms
+                  </p>
                 </div>
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {['Node.js', 'NestJS', 'FastAPI', 'Go'].map((item) => (
-                    <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TagRow items={['Node.js', 'NestJS', 'FastAPI', 'Go']} />
               </div>
             </SkillCard>
 
-            {/* 2. Frontend Widget */}
-            <SkillCard title="Frontend Development" subtitle="FRONTEND INTERFACES" icon={<Monitor className="w-5 h-5" />}>
+            {/* 2. Frontend — component tree, not code */}
+            <SkillCard
+              title="Frontend Development"
+              subtitle="FRONTEND INTERFACES"
+              icon={<Monitor className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
+            >
               <div className="flex flex-col h-full justify-between">
-                {/* Mock Code Editor */}
-                <div className="bg-card border border-border rounded-xl p-3.5 font-mono text-[11px] text-foreground/70 space-y-1.5 mb-5 select-none">
-                  <div className="text-[9px] text-muted-foreground pb-1.5 border-b border-border mb-1.5 flex items-center gap-1">
-                    <Code2 className="w-2.5 h-2.5" /> workspace.tsx
+                <div className="mb-6 select-none text-xs font-medium text-foreground/75 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                    <span className="font-semibold text-foreground">App</span>
                   </div>
-                  <div><span className="text-orange-500">import</span> &#123; NextJS, React &#125; <span className="text-orange-500">from</span> <span className="text-muted-foreground">&apos;frontend&apos;</span>;</div>
-                  <div><span className="text-muted-foreground">const</span> <span className="text-foreground">App</span> = () =&gt; (</div>
-                  <div className="pl-3">&lt;<span className="text-orange-500">View</span> layout=<span className="text-muted-foreground">&apos;responsive&apos;</span> /&gt;</div>
-                  <div>);</div>
+                  <div className="ml-3.5 pl-3 border-l border-border space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-border" />
+                      <span>Layout · responsive</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-border" />
+                      <span>Routes · Next.js</span>
+                    </div>
+                    <div className="ml-3.5 pl-3 border-l border-border">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-border" />
+                        <span>Components · TypeScript</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {['Next.js', 'React.js', 'TypeScript', 'Tailwind CSS'].map((item) => (
-                    <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TagRow items={['Next.js', 'React.js', 'TypeScript', 'Tailwind CSS']} />
               </div>
             </SkillCard>
 
-            {/* 3. Database Widget */}
-            <SkillCard title="Databases & Caching" subtitle="DATA SYSTEMS" icon={<Database className="w-5 h-5" />}>
+            {/* 3. Database — comparative mini bar chart */}
+            <SkillCard
+              title="Databases & Caching"
+              subtitle="DATA SYSTEMS"
+              icon={<Database className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
+            >
               <div className="flex flex-col h-full justify-between">
-                {/* Mock relational schema */}
-                <div className="bg-card border border-border rounded-xl p-3.5 font-mono text-[11px] text-foreground/80 space-y-2 mb-5 select-none">
-                  <div className="flex items-center justify-between text-[9px] text-muted-foreground pb-1.5 border-b border-border">
-                    <span className="flex items-center gap-1"><Layers className="w-2.5 h-2.5" /> schema_manifest</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-foreground">PostgreSQL</span>
-                    <span className="text-[10px] text-muted-foreground">Relational / SQL</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-foreground">MongoDB</span>
-                    <span className="text-[10px] text-muted-foreground">NoSQL Documents</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-foreground">Redis</span>
-                    <span className="text-[10px] text-orange-500 font-semibold">In-Memory Cache</span>
-                  </div>
-                </div>
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {['PostgreSQL', 'MongoDB', 'Redis (caching)'].map((item) => (
-                    <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
-                      {item}
-                    </span>
+                <div className="mb-6 select-none space-y-3">
+                  {[
+                    { name: 'PostgreSQL', note: 'Relational', width: '70%' },
+                    { name: 'MongoDB', note: 'Documents', width: '55%' },
+                    { name: 'Redis', note: 'In-memory cache', width: '92%' },
+                  ].map((row) => (
+                    <div key={row.name}>
+                      <div className="flex justify-between items-baseline mb-1">
+                        <span className="text-xs font-semibold text-foreground/85">{row.name}</span>
+                        <span className="text-[10px] text-muted-foreground">{row.note}</span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-foreground/30"
+                          style={{ width: row.width }}
+                        />
+                      </div>
+                    </div>
                   ))}
                 </div>
+                <TagRow items={['PostgreSQL', 'MongoDB', 'Redis (caching)']} />
               </div>
             </SkillCard>
 
-            {/* 4. DevOps Widget */}
-            <SkillCard title="DevOps & Deployment" subtitle="INFRASTRUCTURE" icon={<Wrench className="w-5 h-5" />}>
+            {/* 4. DevOps — pipeline stepper, dots not fake-log */}
+            <SkillCard
+              title="DevOps & Deployment"
+              subtitle="INFRASTRUCTURE"
+              icon={<Wrench className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
+            >
               <div className="flex flex-col h-full justify-between">
-                {/* Visual flowchart pipeline */}
-                <div className="bg-card border border-border rounded-xl p-4 mb-5 select-none flex flex-col justify-center gap-2">
-                  <div className="flex items-center justify-between text-[9px] font-mono text-muted-foreground pb-1.5 border-b border-border mb-1">
-                    <span className="flex items-center gap-1"><GitBranch className="w-2.5 h-2.5" /> deployment_pipeline</span>
+                <div className="mb-6 select-none">
+                  <div className="flex items-center">
+                    {['Build', 'Containerize', 'Deploy'].map((stage, i, arr) => (
+                      <React.Fragment key={stage}>
+                        <div className="flex flex-col items-center gap-1.5 flex-1">
+                          <span className={`w-2.5 h-2.5 rounded-full ${i === arr.length - 1 ? 'bg-orange-500' : 'bg-foreground/30'}`} />
+                          <span className="text-[10px] font-medium text-muted-foreground text-center">{stage}</span>
+                        </div>
+                        {i < arr.length - 1 && (
+                          <span className="flex-1 h-px bg-border -mt-4" aria-hidden="true" />
+                        )}
+                      </React.Fragment>
+                    ))}
                   </div>
-                  <div className="flex items-center justify-between text-xs font-semibold px-2 py-1 bg-secondary rounded-md">
-                    <span className="text-muted-foreground">Docker</span>
-                    <span className="text-foreground/80">Containerized</span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs font-semibold px-2 py-1 bg-secondary rounded-md">
-                    <span className="text-muted-foreground">APISIX / Nginx</span>
-                    <span className="text-foreground/80">API Gateway</span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs font-semibold px-2 py-1 bg-secondary rounded-md">
-                    <span className="text-muted-foreground">AWS / Cloud</span>
-                    <span className="text-orange-500 font-medium">Production</span>
-                  </div>
+                  <p className="mt-3 text-[11px] text-muted-foreground text-center">
+                    Docker · APISIX/Nginx · AWS
+                  </p>
                 </div>
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {['Docker', 'CI/CD', 'AWS', 'Gateway'].map((item) => (
-                    <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TagRow items={['Docker', 'CI/CD', 'AWS', 'Gateway']} />
               </div>
             </SkillCard>
 
-            {/* 5. Tools Widget */}
-            <SkillCard title="Workbench Tools" subtitle="DEVELOPMENT TOOLKIT" icon={<Palette className="w-5 h-5" />}>
+            {/* 5. Tools — grid mockup kept, it's already not code */}
+            <SkillCard
+              title="Workbench Tools"
+              subtitle="DEVELOPMENT TOOLKIT"
+              icon={<Palette className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
+            >
               <div className="flex flex-col h-full justify-between">
-                {/* Interactive Grid Mockup */}
-                <div className="grid grid-cols-2 gap-2 mb-5 select-none text-center">
+                <div className="grid grid-cols-2 gap-2 mb-6 select-none text-center">
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
                     GitHub / VCS
                   </div>
@@ -213,43 +238,32 @@ export function SkillsSection() {
                     Figma / Design
                   </div>
                 </div>
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {['Git', 'Postman', 'VS Code', 'Figma'].map((item) => (
-                    <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TagRow items={['Git', 'Postman', 'VS Code', 'Figma']} />
               </div>
             </SkillCard>
 
-            {/* 6. Languages Widget */}
-            <SkillCard title="Languages & Soft Skills" subtitle="COMMUNICATION & LEARNING" icon={<Users className="w-5 h-5" />}>
+            {/* 6. Languages & soft skills — one orange accent, on Native only */}
+            <SkillCard
+              title="Languages & Soft Skills"
+              subtitle="COMMUNICATION & LEARNING"
+              icon={<Users className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
+            >
               <div className="flex flex-col h-full justify-between">
-                {/* Textual descriptions */}
                 <div className="space-y-4 mb-6 select-none font-medium text-sm">
                   <div className="flex justify-between items-center border-b border-border/50 pb-2">
                     <span className="text-foreground/90">Thai</span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-orange-500 bg-orange-500/5 px-2.5 py-0.5 rounded-full">Native Language</span>
+                    <span className="text-xs font-bold text-orange-500">Native</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-border/50 pb-2">
                     <span className="text-foreground/90">English</span>
-                    <span className="text-xs font-semibold text-muted-foreground">Professional Working Proficiency</span>
+                    <span className="text-xs font-semibold text-muted-foreground">Professional</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-border/50 pb-2">
                     <span className="text-foreground/90">Adaptability</span>
-                    <span className="text-xs font-semibold text-muted-foreground">Highly Adaptive & Continuous Learner</span>
+                    <span className="text-xs font-semibold text-muted-foreground">Highly adaptive</span>
                   </div>
                 </div>
-                {/* Soft skills list */}
-                <div className="flex flex-wrap gap-1.5">
-                  {['Thai', 'English', 'Adaptability', 'Learning'].map((item) => (
-                    <span key={item} className="px-2.5 py-1 text-xs font-semibold text-foreground bg-secondary border border-border rounded-md">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TagRow items={['Thai', 'English', 'Adaptability', 'Learning']} />
               </div>
             </SkillCard>
 
