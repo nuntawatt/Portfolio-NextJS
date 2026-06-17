@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: portfolio-backend
+    env: docker
+    dockerfilepath: Dockerfile
+    plan: free
+    port: 3001
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://your-frontend-domain.vercel.app # Change to your actual frontend URL
+      - key: API_URL
+        value: https://portfolio-backend.onrender.com # Change to your Render URL once provisioned
+      - key: DB_HOST
+        fromDatabase:
+          name: portfolio-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: portfolio-db
+          property: port
+      - key: DB_USERNAME
+        fromDatabase:
+          name: portfolio-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: portfolio-db
+          property: password
+      - key: DB_DATABASE
+        fromDatabase:
+          name: portfolio-db
+          property: database
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: MINIO_ENDPOINT
+        value: "" # Optional: Add your remote MinIO endpoint if using cloud storage
+      - key: MINIO_PORT
+        value: "9000"
+      - key: MINIO_USE_SSL
+        value: "false"
+      - key: MINIO_ACCESS_KEY
+        value: ""
+      - key: MINIO_SECRET_KEY
+        value: ""
+      - key: MINIO_BUCKET_NAME
+        value: "portfolio"
+      - key: MINIO_PUBLIC_URL
+        value: ""
+
+databases:
+  - name: portfolio-db
+    plan: free
