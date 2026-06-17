@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { TiltCard } from './TiltCard';
 import { GraduationCap } from '../icons/Icon';
 
 export function EducationCard() {
@@ -20,7 +19,7 @@ export function EducationCard() {
     };
 
     return (
-        <TiltCard
+        <div
             className="relative rounded-[20px] p-5 overflow-hidden bg-white/60 dark:bg-white/[0.025] border border-orange-200/60 dark:border-orange-500/[0.18] backdrop-blur-xl transition-all duration-300 group cursor-pointer"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -53,6 +52,6 @@ export function EducationCard() {
                     </p>
                 </div>
             </div>
-        </TiltCard>
+        </div>
     );
 }
