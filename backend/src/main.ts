@@ -43,47 +43,44 @@ async function bootstrap() {
   });
 
   // Swagger
-  const enableSwagger = configService.get<string>('ENABLE_SWAGGER') === 'true' || nodeEnv !== 'production';
   const apiUrl = configService.get<string>('API_URL') || `http://localhost:${port}`;
 
-  if (enableSwagger) {
-    const configBuilder = new DocumentBuilder()
-      .setTitle('Portfolio Platform API')
-      .setDescription(
-        'REST API documentation for the Portfolio Platform backend',
-      )
-      .setVersion('1.0')
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          name: 'Authorization',
-          in: 'header',
-        },
-        'access-token',
-      );
-
-    if (nodeEnv === 'production') {
-      configBuilder.addServer(apiUrl, 'Production server');
-    } else {
-      configBuilder.addServer(`http://localhost:${port}`, 'Development server');
-      if (apiUrl && !apiUrl.includes('localhost')) {
-        configBuilder.addServer(apiUrl, 'Production server');
-      }
-    }
-
-    const config = configBuilder.build();
-    const document = SwaggerModule.createDocument(app, config);
-
-    SwaggerModule.setup('api/docs', app, document, {
-      swaggerOptions: {
-        persistAuthorization: true,
+  const configBuilder = new DocumentBuilder()
+    .setTitle('Portfolio Platform API')
+    .setDescription(
+      'REST API documentation for the Portfolio Platform backend',
+    )
+    .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        in: 'header',
       },
-    });
+      'access-token',
+    );
 
-    logger.log(`Swagger docs: ${apiUrl}/api/docs`);
+  if (nodeEnv === 'production') {
+    configBuilder.addServer(apiUrl, 'Production server');
+  } else {
+    configBuilder.addServer(`http://localhost:${port}`, 'Development server');
+    if (apiUrl && !apiUrl.includes('localhost')) {
+      configBuilder.addServer(apiUrl, 'Production server');
+    }
   }
+
+  const config = configBuilder.build();
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
+
+  logger.log(`Swagger docs: ${apiUrl}/api/docs`);
 
   // Graceful shutdown
   app.enableShutdownHooks();
