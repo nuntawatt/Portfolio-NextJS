@@ -6,6 +6,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { PrismaModule } from './database/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { UploadModule } from './upload/upload.module';
 
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
@@ -13,11 +14,31 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { validationSchema } from './common/config/validation.schema';
 
+import {
+  appConfig,
+  databaseConfig,
+  jwtConfig,
+  mailConfig,
+  oauthConfig,
+  minioConfig,
+  redisConfig,
+} from './common/config/app.config';
+
 @Module({
   imports: [
     // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
+      expandVariables: true,
+      load: [
+        appConfig,
+        databaseConfig,
+        jwtConfig,
+        mailConfig,
+        oauthConfig,
+        minioConfig,
+        redisConfig,
+      ],
       validationSchema,
     }),
 
@@ -37,6 +58,7 @@ import { validationSchema } from './common/config/validation.schema';
     // Feature Modules
     AuthModule,
     UsersModule,
+    UploadModule,
   ],
 
   providers: [

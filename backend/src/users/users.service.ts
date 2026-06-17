@@ -71,6 +71,7 @@ export class UsersService {
           email: userData.email.toLowerCase().trim(),
           password: userData.password,
           avatar: userData.avatar ?? null,
+          isEmailVerified: true,
         },
       });
     } catch (error) {

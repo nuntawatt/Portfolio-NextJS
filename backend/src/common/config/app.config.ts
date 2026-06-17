@@ -9,9 +9,24 @@ export const appConfig = registerAs('app', () => ({
 }));
 
 /** Database config. */
-export const databaseConfig = registerAs('database', () => ({
-  url: process.env.DATABASE_URL,
-}));
+export const databaseConfig = registerAs('database', () => {
+  const host = process.env.DB_HOST || 'localhost';
+  const port = process.env.DB_PORT || '5432';
+  const username = process.env.DB_USERNAME || 'postgres';
+  const password = process.env.DB_PASSWORD || '';
+  const database = process.env.DB_DATABASE || 'portfolio';
+
+  const url = `postgresql://${username}:${password}@${host}:${port}/${database}?schema=public`;
+
+  return {
+    url,
+    host,
+    port: parseInt(port, 10),
+    username,
+    password,
+    database,
+  };
+});
 
 /** JWT config. */
 export const jwtConfig = registerAs('jwt', () => ({
@@ -45,9 +60,19 @@ export const oauthConfig = registerAs('oauth', () => ({
   },
 }));
 
-/** Cloudinary config. */
-export const cloudinaryConfig = registerAs('cloudinary', () => ({
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
-  apiKey: process.env.CLOUDINARY_API_KEY || '',
-  apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+/** MinIO config. */
+export const minioConfig = registerAs('minio', () => ({
+  endpoint: process.env.MINIO_ENDPOINT || 'localhost',
+  port: parseInt(process.env.MINIO_PORT || '9000', 10),
+  useSsl: process.env.MINIO_USE_SSL === 'true',
+  accessKey: process.env.MINIO_ACCESS_KEY || '',
+  secretKey: process.env.MINIO_SECRET_KEY || '',
+  bucketName: process.env.MINIO_BUCKET_NAME || 'portfolio',
+  publicUrl: process.env.MINIO_PUBLIC_URL || '',
+}));
+
+/** Redis config. */
+export const redisConfig = registerAs('redis', () => ({
+  host: process.env.REDIS_HOST || 'localhost',
+  port: parseInt(process.env.REDIS_PORT || '6379', 10),
 }));

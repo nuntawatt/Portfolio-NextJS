@@ -4,6 +4,7 @@ import {
   OnModuleDestroy,
   Logger,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
 /**
@@ -16,8 +17,13 @@ export class PrismaService
 {
   private readonly logger = new Logger(PrismaService.name);
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     super({
+      datasources: {
+        db: {
+          url: configService.getOrThrow<string>('database.url'),
+        },
+      },
       log: [
         { emit: 'event', level: 'query' },
         { emit: 'stdout', level: 'info' },
