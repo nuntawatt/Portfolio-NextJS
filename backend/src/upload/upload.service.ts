@@ -6,7 +6,11 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as Minio from 'minio';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import * as crypto from 'crypto';
 
 export interface UploadedFileDto {
@@ -21,7 +25,7 @@ export interface UploadedFileDto {
 @Injectable()
 export class UploadService implements OnModuleInit {
   private readonly logger = new Logger(UploadService.name);
-  private minioClient: Minio.Client;
+  private s3Client: S3Client;
   private defaultBucket: string;
 
   constructor(private readonly configService: ConfigService) {
@@ -36,56 +40,38 @@ export class UploadService implements OnModuleInit {
       'portfolio',
     );
 
-    this.minioClient = new Minio.Client({
-      endPoint: endpoint,
-      port,
-      useSSL: useSsl,
-      accessKey,
-      secretKey,
+    // Parse endpoint URL
+    let s3Endpoint: string;
+    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+      s3Endpoint = endpoint;
+    } else {
+      const protocol = useSsl ? 'https' : 'http';
+      // For local MinIO, port is usually required unless using standard 80/443
+      s3Endpoint = port === 80 || port === 443 ? `${protocol}://${endpoint}` : `${protocol}://${endpoint}:${port}`;
+    }
+
+    this.s3Client = new S3Client({
+      endpoint: s3Endpoint,
+      credentials: {
+        accessKeyId: accessKey,
+        secretAccessKey: secretKey,
+      },
+      region: 'us-east-1', // Default region
+      forcePathStyle: true, // Required for local MinIO and Supabase Storage
     });
+
+    this.logger.log(`Initialized S3 Storage Client pointing to endpoint: ${s3Endpoint}`);
   }
 
   async onModuleInit(): Promise<void> {
-    try {
-      await this.ensureBucketExists(this.defaultBucket);
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      this.logger.error(`Failed to initialize MinIO bucket: ${msg}`);
-    }
+    // In production S3-compatible systems like Supabase/R2, we don't auto-create buckets
+    // because permissions might be restricted and buckets are created via dashboard.
+    // We just log that the upload service is ready.
+    this.logger.log('Upload Service initialized successfully');
   }
 
   /**
-   * Ensures the specified bucket exists and has public read access.
-   */
-  private async ensureBucketExists(bucketName: string): Promise<void> {
-    const exists = await this.minioClient.bucketExists(bucketName);
-    if (!exists) {
-      await this.minioClient.makeBucket(bucketName, 'us-east-1');
-      this.logger.log(`Created bucket: ${bucketName}`);
-
-      // Set public read bucket policy
-      const policy = {
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Effect: 'Allow',
-            Principal: { AWS: ['*'] },
-            Action: ['s3:GetObject'],
-            Resource: [`arn:aws:s3:::${bucketName}/*`],
-          },
-        ],
-      };
-
-      await this.minioClient.setBucketPolicy(
-        bucketName,
-        JSON.stringify(policy),
-      );
-      this.logger.log(`Set public read policy on bucket: ${bucketName}`);
-    }
-  }
-
-  /**
-   * Uploads a file to MinIO and returns the public URL.
+   * Uploads a file to S3 and returns the public URL.
    */
   async uploadFile(
     file: UploadedFileDto,
@@ -97,22 +83,21 @@ export class UploadService implements OnModuleInit {
     }
 
     try {
-      await this.ensureBucketExists(bucketName);
-
       const fileExtension = file.originalname.split('.').pop() || '';
       const randomString = crypto.randomBytes(8).toString('hex');
       const uniqueName = `${Date.now()}-${randomString}.${fileExtension}`;
       const objectName = folder ? `${folder}/${uniqueName}` : uniqueName;
 
-      await this.minioClient.putObject(
-        bucketName,
-        objectName,
-        file.buffer,
-        file.size,
-        {
-          'Content-Type': file.mimetype,
-        },
-      );
+      // Upload using AWS SDK S3Client
+      const command = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: objectName,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      });
+
+      await this.s3Client.send(command);
+      this.logger.log(`Uploaded object: ${objectName} to bucket: ${bucketName}`);
 
       const url = this.constructFileUrl(bucketName, objectName);
       return { url, key: objectName };
@@ -124,14 +109,19 @@ export class UploadService implements OnModuleInit {
   }
 
   /**
-   * Deletes a file from MinIO.
+   * Deletes a file from S3.
    */
   async deleteFile(
     objectName: string,
     bucketName = this.defaultBucket,
   ): Promise<void> {
     try {
-      await this.minioClient.removeObject(bucketName, objectName);
+      const command = new DeleteObjectCommand({
+        Bucket: bucketName,
+        Key: objectName,
+      });
+
+      await this.s3Client.send(command);
       this.logger.log(
         `Deleted object: ${objectName} from bucket: ${bucketName}`,
       );
@@ -154,6 +144,11 @@ export class UploadService implements OnModuleInit {
     const endpoint = this.configService.getOrThrow<string>('minio.endpoint');
     const port = this.configService.get<number>('minio.port', 9000);
     const useSsl = this.configService.get<boolean>('minio.useSsl', false);
+
+    // If endpoint is a full URL (like Supabase), we construct URL relative to it
+    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+      return `${endpoint.replace(/\/$/, '')}/${bucketName}/${objectName}`;
+    }
 
     const protocol = useSsl ? 'https' : 'http';
     const host = port === 80 || port === 443 ? endpoint : `${endpoint}:${port}`;
