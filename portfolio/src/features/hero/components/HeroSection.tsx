@@ -20,15 +20,15 @@ export function HeroSection() {
                 Hello, Welcome
               </h2>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-[1.1] transition-colors">
-                I&apos;m <span className="text-orange-500 drop-shadow-md">Morgorn</span>
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tighter leading-none transition-colors">
+                I&apos;m <span className="text-orange-500">Morgorn</span>
               </h1>
 
-              <h3 className="text-xl md:text-2xl lg:text-4xl text-gray-700 dark:text-gray-300 font-semibold transition-colors">
+              <h3 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-tight transition-colors">
                 Backend Developer
               </h3>
 
-              <p className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-gray-800 dark:text-gray-300 text-base md:text-lg lg:text-xl font-medium leading-relaxed transition-colors">
+              <p className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-foreground/80 text-base md:text-lg lg:text-[1.125rem] font-normal leading-relaxed transition-colors">
                 I architect highly scalable backend services and responsive frontend applications, focusing on clean code, robust system design, and delivering production software.
               </p>
             </div>
@@ -62,7 +62,7 @@ function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="text-gray-500 dark:text-gray-400 hover:text-orange-500 transition-colors hover:-translate-y-1 transform duration-300 p-2.5 lg:p-3 bg-white/50 dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-full shadow-sm hover:shadow-orange-500/20"
+      className="text-muted-foreground hover:text-orange-500 transition-colors p-2.5 lg:p-3 bg-card/60 backdrop-blur-sm border border-border rounded-full shadow-sm hover:border-orange-500/30"
     >
       {icon}
     </a>

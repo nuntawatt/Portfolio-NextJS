@@ -38,10 +38,11 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen flex flex-col antialiased selection:bg-orange-500/30 transition-colors duration-300",
-          "bg-gradient-to-br from-white to-orange-50 dark:from-black dark:to-neutral-900",
-          "text-gray-900 dark:text-gray-100"
+          "continuous-mesh-bg",
+          "text-foreground"
         )}
       >
+        <div className="noise-overlay" />
         <AuthProvider>
           <Providers>
             {children}

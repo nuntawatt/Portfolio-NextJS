@@ -32,7 +32,7 @@ export function BioCard() {
 
     return (
         <div
-            className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-white/80 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
+            className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-card/80 border border-border backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
@@ -57,12 +57,7 @@ export function BioCard() {
             <div className="flex items-start gap-5 mb-7">
                 <div className="relative flex-shrink-0">
                     <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                        style={{
-                            background: 'linear-gradient(135deg, #f97316, #ea580c)',
-                            boxShadow: '0 0 28px rgba(249,115,22,0.5)',
-                            color: '#fff',
-                        }}
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center border border-border bg-card text-foreground"
                     >
                         {/* Generic dev icon */}
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -71,16 +66,10 @@ export function BioCard() {
                             <path d="m14.5 4-5 16" />
                         </svg>
                     </div>
-
-                    {/* online indicator */}
-                    <span
-                        className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#080808]"
-                        aria-label="Available for work"
-                    />
                 </div>
 
                 <div>
-                    <h3 className="text-2xl font-black text-gray-900 dark:text-gray-50 tracking-tight leading-tight transition-colors">
+                    <h3 className="text-2xl font-black text-foreground tracking-tight leading-tight transition-colors">
                         Nuntawat Saehuam
                     </h3>
                     <p className="text-sm font-semibold mt-1 text-orange-500">
@@ -88,7 +77,7 @@ export function BioCard() {
                     </p>
                     <div className="flex items-center gap-4 mt-2 flex-wrap">
                         {PROFILE_META.map(({ icon, text }) => (
-                            <span key={text} className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500 transition-colors">
+                            <span key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground transition-colors">
                                 {icon}
                                 {text}
                             </span>
@@ -99,20 +88,19 @@ export function BioCard() {
 
             {/* divider */}
             <div
-                className="mb-6 h-px"
-                style={{ background: 'linear-gradient(to right, rgba(249,115,22,0.3), transparent)' }}
+                className="mb-6 h-px bg-border"
             />
 
             {/* bio copy */}
-            <p className="leading-loose mb-4 text-[0.9375rem] text-gray-700 dark:text-gray-300 transition-colors">
+            <p className="leading-loose mb-4 text-[0.9375rem] text-foreground/90 transition-colors">
                 Computer and Information Science student at{' '}
-                <span className="text-orange-500 font-bold">Khon Kaen University</span>{' '}
+                <span className="text-foreground font-bold">Khon Kaen University</span>{' '}
                 (Expected May 2026, GPAX 3.26), focused on architecting scalable backend systems,
                 full-stack web applications, and machine learning–driven solutions.
             </p>
-            <p className="leading-loose mb-7 text-sm text-gray-600 dark:text-gray-400 transition-colors">
+            <p className="leading-loose mb-7 text-sm text-muted-foreground transition-colors">
                 From building real-time CCTV detection pipelines with{' '}
-                <span className="text-orange-500">YOLOv8</span> to shipping e-commerce platforms—I
+                <span className="text-orange-500 font-medium">YOLOv8</span> to shipping e-commerce platforms—I
                 obsess over clean architecture, performance, and code that is maintainable long after
                 handoff. Fluent in Thai, conversational in English.
             </p>
@@ -125,9 +113,9 @@ export function BioCard() {
                         href={href}
                         target={href.startsWith('http') ? '_blank' : undefined}
                         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-105 ${variant === 'primary'
-                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50'
-                            : 'bg-orange-500/[0.08] border border-orange-500/30 text-orange-500 hover:bg-orange-500/[0.15]'
+                        className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${variant === 'primary'
+                            ? 'border border-border text-foreground hover:bg-secondary bg-transparent hover:shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent'
                             }`}
                     >
                         {icon}

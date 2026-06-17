@@ -16,11 +16,11 @@ export function StatCard({ stat }: StatCardProps) {
 
     return (
         <div
-            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-white/60 dark:bg-white/[0.032] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-xl transition-colors duration-300"
+            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-card/60 border border-border backdrop-blur-xl transition-colors duration-300"
         >
             {/* icon badge */}
             {Icon && (
-                <div className="p-2.5 rounded-xl bg-orange-100 dark:bg-orange-500/[0.12] text-orange-500 transition-colors">
+                <div className="p-2.5 rounded-xl border border-border bg-card text-muted-foreground transition-colors">
                     <Icon />
                 </div>
             )}
@@ -31,14 +31,12 @@ export function StatCard({ stat }: StatCardProps) {
                     {count}
                     {stat.suffix}
                 </p>
-                <p className="text-xs font-semibold uppercase tracking-widest mt-1 text-gray-500 dark:text-gray-500 transition-colors"
+                <p className="text-xs font-semibold uppercase tracking-widest mt-1 text-muted-foreground transition-colors"
                     style={{ letterSpacing: '0.12em' }}
                 >
                     {stat.label}
                 </p>
             </div>
-
-            {/* hover glow */}
         </div>
     );
 }

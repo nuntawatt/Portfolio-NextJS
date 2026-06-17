@@ -8,7 +8,6 @@ import { SectionLabel } from './SectionLabel';
 import { useInView } from '../hooks/useInView';
 import { STATS } from '../constants/data';
 import { motion } from 'motion/react';
-import { TypingTerminal } from '@/animation/ui/TypingTerminal';
 
 // ─── Background: floating blurred orbs ───────────────────────────────────────
 const ORBS = [
@@ -56,7 +55,7 @@ export function AboutSection() {
 
             <section
                 id="about"
-                className="relative scroll-mt-24 py-16 md:py-24 lg:py-28 overflow-hidden bg-gray-50 dark:bg-[#080808] transition-colors duration-300"
+                className="relative scroll-mt-24 py-16 md:py-24 lg:py-28 overflow-hidden bg-transparent transition-colors duration-300"
             >
                 {/* ── Background ── */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -76,28 +75,6 @@ export function AboutSection() {
                             }}
                         />
                     ))}
-                    {/* subtle dot-grid */}
-                    <div
-                        className="absolute inset-0"
-                        style={{
-                            backgroundImage: [
-                                'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px)',
-                                'linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)',
-                            ].join(', '),
-                            backgroundSize: '60px 60px',
-                        }}
-                    />
-                    {/* dark mode overlay for grid */}
-                    <div
-                        className="absolute inset-0 hidden dark:block"
-                        style={{
-                            backgroundImage: [
-                                'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px)',
-                                'linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
-                            ].join(', '),
-                            backgroundSize: '60px 60px',
-                        }}
-                    />
                 </div>
 
                 {/* ── Content ── */}
@@ -115,7 +92,7 @@ export function AboutSection() {
                                 Who I Am
                             </p>
                             <h2
-                                className="font-black leading-[1.1] tracking-tight text-gray-900 dark:text-gray-50"
+                                className="font-black leading-[1.1] tracking-tight text-foreground"
                                 style={{
                                     fontSize: 'clamp(2.5rem, 8vw, 5.5rem)',
                                     letterSpacing: '-0.03em',
@@ -139,19 +116,16 @@ export function AboutSection() {
                             viewport={{ once: true }}
                             className="w-full relative group"
                         >
-                            <div className="absolute -inset-4 bg-orange-500/10 dark:bg-orange-500/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10" />
-
-                            <TypingTerminal
-                                key={6}
-                                lines={[
-                                    "Fetching technical_stack.json... [OK]",
-                                    "import { Creativity, Logic } from 'morgorn-dev';",
-                                    "const name = 'Morgorn';",
-                                    "const role = 'Fullstack Developer';",
-                                    "console.log('Welcome to my portfolio!');",
-                                    "console.log('Ready to build something amazing?');",
-                                ]}
-                            />
+                            <div className="relative p-6 sm:p-8 rounded-[24px] border border-border bg-card/40 backdrop-blur-md">
+                                <span className="absolute -top-6 -left-3 text-8xl text-orange-500/10 font-serif pointer-events-none select-none">“</span>
+                                <p className="text-xl md:text-2xl font-light italic text-foreground/95 leading-relaxed relative z-10">
+                                    I believe in writing <strong className="font-semibold text-orange-500">clean code</strong>, architecting robust systems, and developing software that solves real-world problems.
+                                </p>
+                                <div className="mt-6 flex items-center gap-3">
+                                    <span className="w-8 h-px bg-border" />
+                                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground" style={{ letterSpacing: '0.12em' }}>Philosophy</p>
+                                </div>
+                            </div>
                         </motion.div>
                     </div>
 

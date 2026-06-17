@@ -20,7 +20,7 @@ export function EducationCard() {
 
     return (
         <div
-            className="relative rounded-[20px] p-5 overflow-hidden bg-white/60 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-xl transition-all duration-300 group cursor-pointer"
+            className="relative rounded-[20px] p-5 overflow-hidden bg-card/60 border border-border backdrop-blur-xl transition-all duration-300 group cursor-pointer"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
@@ -34,7 +34,7 @@ export function EducationCard() {
             />
 
             <div className="relative z-10 flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-orange-100 dark:bg-gradient-to-br dark:from-orange-500/20 dark:to-orange-600/10 text-orange-500 transition-colors">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border border-border bg-card text-muted-foreground transition-colors group-hover:text-foreground group-hover:border-foreground/30">
                     <GraduationCap />
                 </div>
 
@@ -44,10 +44,10 @@ export function EducationCard() {
                     >
                         Education
                     </p>
-                    <p className="font-bold text-sm text-gray-900 dark:text-white leading-snug transition-colors">
+                    <p className="font-bold text-sm text-foreground leading-snug transition-colors">
                         B.Sc. Computer &amp; Information Science
                     </p>
-                    <p className="text-xs mt-0.5 text-gray-500 dark:text-gray-500 transition-colors">
+                    <p className="text-xs mt-0.5 text-muted-foreground transition-colors">
                         Khon Kaen University · GPAX 3.26 · May 2026
                     </p>
                 </div>
