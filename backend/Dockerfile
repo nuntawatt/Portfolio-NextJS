@@ -32,10 +32,11 @@ COPY prisma ./prisma
 
 RUN npm install -g pnpm && pnpm install --prod
 
-# Copy built application and generated Prisma Client from development stage
+# Generate Prisma Client in the production node_modules
+RUN pnpm run prisma:generate
+
+# Copy built application from development stage
 COPY --from=development /usr/src/app/dist ./dist
-COPY --from=development /usr/src/app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=development /usr/src/app/node_modules/@prisma/client ./node_modules/@prisma/client
 
 EXPOSE 3001
 
