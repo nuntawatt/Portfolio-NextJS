@@ -5,11 +5,10 @@ import {
   ArgumentMetadata,
 } from '@nestjs/common';
 
-/** UUID regex pattern. */
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+// Regular expression to validate UUID format (version 4).
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Pipe to validate UUID path/query parameters. */
+// ตั้งค่า CustomParseUUIDPipe เป็น Injectable เพื่อให้สามารถใช้ใน NestJS ได้
 @Injectable()
 export class CustomParseUUIDPipe implements PipeTransform<string, string> {
   transform(value: string, metadata: ArgumentMetadata): string {
