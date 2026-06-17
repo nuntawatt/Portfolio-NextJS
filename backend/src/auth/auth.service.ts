@@ -199,14 +199,15 @@ export class AuthService {
 
     this.logger.log(`New user registered: ${email}`);
 
+    const tokens = await this.issueTokens(newUser);
+
     return {
       status: 'success',
       message: 'Registration successful. Account is verified and ready.',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
+      user: this.formatUserResponse(newUser),
+      token: {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
       },
     };
   }
