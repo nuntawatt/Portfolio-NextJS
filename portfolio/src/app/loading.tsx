@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Footer } from '@/features/navigation';
+import { Navbar, Footer } from '@/feature/navigation';
 
 function Shimmer({ className }: { className?: string }) {
   return (

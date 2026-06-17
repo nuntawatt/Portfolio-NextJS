@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Navbar, Footer } from '@/features/navigation';
-import { ContactSection } from '@/features/contact';
+import { Navbar, Footer } from '@/feature/navigation';
+import { ContactSection } from '@/feature/contact';
 
 export default function ContactPage() {
   return (

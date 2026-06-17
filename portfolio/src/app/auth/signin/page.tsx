@@ -1,4 +1,4 @@
-import { SignInContainer } from '@/features/auth';
+import { SignInContainer } from '@/feature/auth';
 
 export const metadata = {
   title: 'Sign In - Morgorn Portfolio',

@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { AuthProvider } from "@/shared/providers/AuthProvider";
-import Providers from "./providers";
+import { AuthProvider } from "@/shared/provider/AuthProvider";
+import Providers from "./provider";
 import { siteConfig } from "@/config/site";
-import { AudioProvider } from "@/features/audio";
+import { AudioProvider } from "@/feature/audio";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
