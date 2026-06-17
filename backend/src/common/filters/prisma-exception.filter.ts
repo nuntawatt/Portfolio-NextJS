@@ -8,7 +8,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 
-/** Maps Prisma error codes to HTTP statuses and messages. */
+// Maps Prisma error codes to HTTP statuses and messages.
 const PRISMA_ERROR_MAP: Record<
   string,
   { status: HttpStatus; message: string }
@@ -30,7 +30,7 @@ const PRISMA_ERROR_MAP: Record<
   },
 };
 
-/** Global filter to catch Prisma errors and return structured errors. */
+//  Global filter to catch Prisma errors and return structured errors.
 @Catch(Prisma.PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(PrismaExceptionFilter.name);
@@ -67,7 +67,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     response.status(statusCode).json(errorBody);
   }
 
-  /** Builds a detailed error message with field details. */
+  // Builds a detailed error message with field details.
   private buildDetailedMessage(
     exception: Prisma.PrismaClientKnownRequestError,
     baseMessage: string,
