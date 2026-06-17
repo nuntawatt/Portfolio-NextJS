@@ -11,6 +11,6 @@ export const siteConfig = {
     project: "https://nanthawat-github-io.vercel.app"
   },
   contact: {
-    email: "nanthawat.s@kkumail.com"
+    email: "morgorn.wk@gmail.com"
   }
 } as const;

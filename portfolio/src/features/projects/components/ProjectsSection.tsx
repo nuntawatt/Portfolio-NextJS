@@ -3,31 +3,31 @@ import { Github } from 'lucide-react';
 
 const projects = [
   {
-    title: 'Scalable E-Commerce Microservices',
-    description: 'Architected a distributed e-commerce backend utilizing NestJS and RabbitMQ to process high-volume transactions concurrently. Improved order processing speed and system resilience through decoupled event-driven services and strict PostgreSQL data modeling.',
-    tags: ['NestJS', 'RabbitMQ', 'PostgreSQL', 'Microservices', 'Docker'],
-    githubUrl: '#',
+    title: 'Face Attendance System',
+    description: 'Developed an AI-based face recognition attendance system for automated attendance tracking. Implemented real-time face detection and recognition workflows using OpenCV and computer vision techniques. Designed backend APIs and database operations for attendance management and user records.',
+    tags: ['Python', 'OpenCV', 'FastAPI', 'PostgreSQL', 'Docker', 'Minio'],
+    githubUrl: 'https://github.com/nuntawatt?tab=repositories',
     liveUrl: '#'
   },
   {
-    title: 'Real-Time Telemetry Dashboard',
-    description: 'Engineered a highly responsive enterprise dashboard using Next.js and WebSockets to deliver live analytic streams. Optimized data aggregation caching with Redis, reducing database load by 60% and guaranteeing sub-second UI update latency.',
-    tags: ['Next.js', 'TypeScript', 'Redis', 'Socket.io', 'System Optimization'],
-    githubUrl: '#',
+    title: 'WeGo Event Platform',
+    description: 'Developed a full-stack web platform for event participation and social interaction. Implemented REST APIs, business logic, and database operations for core system functionalities. Designed responsive frontend interfaces and managed application deployment.',
+    tags: ['React.js', 'Node.js', 'MongoDB', 'WebSocket'],
+    githubUrl: 'https://github.com/nuntawatt?tab=repositories',
     liveUrl: '#'
   },
   {
-    title: 'Enterprise Workflow API',
-    description: 'Developed a secure, production-ready REST API featuring granular Role-Based Access Control (RBAC) and automated background notification workers. Ensured zero-downtime deployments and 100% data integrity through comprehensive testing and logging.',
-    tags: ['Node.js', 'Express', 'MongoDB', 'RBAC', 'Workers'],
-    githubUrl: '#',
+    title: 'E-Commerce Shopping Cart',
+    description: 'Developed a responsive e-commerce shopping cart interface with product listing and checkout features. Built reusable frontend components and interactive user interfaces. Implemented responsive layouts and client-side state management using modern frontend technologies.',
+    tags: ['Next.js', 'React', 'State Management'],
+    githubUrl: 'https://github.com/nuntawatt?tab=repositories',
     liveUrl: '#'
   }
 ];
 
 export function ProjectsSection() {
   return (
-    <section id="projects" className="scroll-mt-24 py-16 md:py-20 transition-colors duration-300">
+    <section id="projects" className="scroll-mt-24 py-16 md:py-24 lg:py-28 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 transition-colors">

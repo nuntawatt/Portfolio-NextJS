@@ -4,12 +4,6 @@ export interface StatItem {
     label: string;
     iconKey: string;
 }
-
-export interface SkillItem {
-    label: string;
-    level: 1 | 2 | 3 | 4 | 5;
-}
-
 export type ExperienceType = 'internship' | 'project';
 
 export interface ExperienceItem {

@@ -21,7 +21,7 @@ export function EducationCard() {
                         B.Sc. Computer &amp; Information Science
                     </p>
                     <p className="text-xs mt-0.5 text-gray-500 dark:text-gray-500 transition-colors">
-                        Khon Kaen University · GPAX 3.21 · May 2026
+                        Khon Kaen University · GPAX 3.26 · May 2026
                     </p>
                 </div>
             </div>

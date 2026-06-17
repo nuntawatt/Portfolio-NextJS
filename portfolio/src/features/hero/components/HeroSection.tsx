@@ -8,7 +8,7 @@ import { siteConfig } from '@/config/site';
 
 export function HeroSection() {
   return (
-    <section id="home" className="pt-28 md:pt-36 pb-20 md:pb-28 lg:pb-36 overflow-hidden relative">
+    <section id="home" className="pt-28 md:pt-36 pb-16 md:pb-24 lg:pb-28 overflow-hidden relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
 

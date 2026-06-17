@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
+import Providers from "./providers";
 import { siteConfig } from "@/config/site";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
@@ -42,7 +43,9 @@ export default function RootLayout({
         )}
       >
         <AuthProvider>
-          {children}
+          <Providers>
+            {children}
+          </Providers>
         </AuthProvider>
       </body>
     </html>

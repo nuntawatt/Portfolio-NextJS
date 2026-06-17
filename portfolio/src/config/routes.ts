@@ -4,5 +4,8 @@ export const routes = {
   skills: "#skills",
   projects: "#projects",
   contact: "#contact",
-  auth: "/auth",
+  auth: {
+    signin: "/auth/signin",
+    signup: "/auth/signup",
+  },
 } as const;

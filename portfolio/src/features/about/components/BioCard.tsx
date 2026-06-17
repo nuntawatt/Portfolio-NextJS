@@ -5,7 +5,7 @@ import { GitHub, Mail, MapPin, Phone } from '../icons/Icon';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
-    { href: 'mailto:nanthawat.s@kkumail.com', icon: <Mail />, label: 'Contact', variant: 'ghost' as const },
+    { href: 'mailto:morgorn.wk@gmail.com', icon: <Mail />, label: 'Contact', variant: 'ghost' as const },
 ] as const;
 
 const PROFILE_META = [
@@ -54,7 +54,7 @@ export function BioCard() {
 
                 <div>
                     <h3 className="text-2xl font-black text-gray-900 dark:text-gray-50 tracking-tight leading-tight transition-colors">
-                        Nuntawat Sae-Huam
+                        Nuntawat Saehuam
                     </h3>
                     <p className="text-sm font-semibold mt-1 text-orange-500">
                         Full-Stack Engineer · AI Enthusiast
@@ -80,7 +80,7 @@ export function BioCard() {
             <p className="leading-loose mb-4 text-[0.9375rem] text-gray-700 dark:text-gray-300 transition-colors">
                 Computer and Information Science student at{' '}
                 <span className="text-orange-500 font-bold">Khon Kaen University</span>{' '}
-                (Expected May 2026, GPAX 3.23), focused on architecting scalable backend systems,
+                (Expected May 2026, GPAX 3.26), focused on architecting scalable backend systems,
                 full-stack web applications, and machine learning–driven solutions.
             </p>
             <p className="leading-loose mb-7 text-sm text-gray-600 dark:text-gray-400 transition-colors">

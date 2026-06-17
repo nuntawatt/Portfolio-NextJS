@@ -5,40 +5,40 @@ const skills = [
   {
     title: 'Frontend',
     icon: <Monitor className="w-6 h-6 text-orange-500" />,
-    items: ['NextJs', 'TypeScript', 'React', 'HTML5', 'CSS3', 'JavaScript', 'Vite', 'Tailwind CSS']
-  },
-  {
-    title: 'UX/UI Design',
-    icon: <Palette className="w-6 h-6 text-orange-500" />,
-    items: ['UX/UI Basics', 'Wireframe', 'Figma']
+    items: ['Next.js', 'React.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'HTML5', 'CSS3']
   },
   {
     title: 'Backend',
     icon: <Cpu className="w-6 h-6 text-orange-500" />,
-    items: ['NestJS', 'Node.js', 'RESTful API', 'Auth (JWT / Session)', 'WebSocket', 'gRPC', 'RabbitMQ', 'Docker']
+    items: ['Node.js', 'NestJS', 'FastAPI', 'Go']
   },
   {
-    title: 'Database & Cloud',
+    title: 'Database',
     icon: <Database className="w-6 h-6 text-orange-500" />,
-    items: ['PostgreSQL', 'MongoDB', 'Firebase', 'Google Cloud']
+    items: ['PostgreSQL', 'MongoDB', 'Redis (caching)']
+  },
+  {
+    title: 'DevOps & Cloud',
+    icon: <Wrench className="w-6 h-6 text-orange-500" />,
+    items: ['Docker', 'CI/CD (GitHub Action)', 'Apisix', 'Nginx', 'Portainer', 'AWS', 'Cloudflare']
   },
   {
     title: 'Tools & Workflow',
-    icon: <Wrench className="w-6 h-6 text-orange-500" />,
-    items: ['GitHub', 'Visual Studio Code', 'Postman']
+    icon: <Palette className="w-6 h-6 text-orange-500" />,
+    items: ['Git', 'GitHub', 'Postman', 'VS Code', 'Figma']
   },
   {
-    title: 'Soft Skills',
+    title: 'Languages & Soft Skills',
     icon: <Users className="w-6 h-6 text-orange-500" />,
-    items: ['ปรับตัวเข้ากับคนอื่นได้ดี', 'ชอบเรียนรู้สิ่งใหม่ ๆ']
+    items: ['Thai (Native)', 'English (Intermediate)', 'Adaptability', 'Continuous Learning']
   }
 ];
 
 export function SkillsSection() {
   return (
-    <section id="skills" className="scroll-mt-24 py-16 md:py-20 bg-gray-50 dark:bg-[#050505] transition-colors duration-300">
+    <section id="skills" className="scroll-mt-24 py-16 md:py-24 lg:py-28 bg-gray-50 dark:bg-[#050505] transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 transition-colors">
             Technical <span className="text-gradient">Expertise</span>
           </h2>

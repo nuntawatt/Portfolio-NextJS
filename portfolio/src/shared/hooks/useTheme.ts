@@ -14,12 +14,8 @@ export function useTheme() {
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = stored || (systemPrefersDark ? 'dark' : 'light');
     
-    const timer = setTimeout(() => {
-      setTheme(initialTheme);
-      setMounted(true);
-    }, 0);
-
-    return () => clearTimeout(timer);
+    setTheme(initialTheme);
+    setMounted(true);
   }, []);
 
   const toggleTheme = () => {

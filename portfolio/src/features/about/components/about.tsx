@@ -4,11 +4,10 @@ import { ParticleCanvas } from './ParticleCanvas';
 import { BioCard } from './BioCard';
 import { EducationCard } from './EducationCard';
 import { StatCard } from './StatCard';
-import { SkillPill } from './SkillPill';
 import { SectionLabel } from './SectionLabel';
 import { TimelineItem } from './TimelineItem';
 import { useInView } from '../hooks/useInView';
-import { STATS, SKILLS, EXPERIENCES } from '../constants/data';
+import { STATS, EXPERIENCES } from '../constants/data';
 import { motion } from 'motion/react';
 import { TypingTerminal } from '@/animation/ui/TypingTerminal';
 
@@ -58,7 +57,7 @@ export function AboutSection() {
 
             <section
                 id="about"
-                className="relative scroll-mt-24 py-28 overflow-hidden bg-gray-50 dark:bg-[#080808] transition-colors duration-300"
+                className="relative scroll-mt-24 py-16 md:py-24 lg:py-28 overflow-hidden bg-gray-50 dark:bg-[#080808] transition-colors duration-300"
             >
                 {/* ── Background ── */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -104,7 +103,7 @@ export function AboutSection() {
 
                 {/* ── Content ── */}
                 <div
-                    className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 about-slide-up"
+                    className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 about-slide-up"
                     style={{ opacity: headerInView ? undefined : 0 }}
                 >
                     {/* Header Row: Title + Terminal */}
@@ -168,20 +167,6 @@ export function AboutSection() {
                                 ))}
                             </div>
                             <EducationCard />
-                        </div>
-                    </div>
-
-                    {/* Skills */}
-                    <div className="mt-16 lg:mt-24">
-                        <SectionLabel>Technical Skills</SectionLabel>
-                        <div
-                            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5"
-                            role="list"
-                            aria-label="Skills list"
-                        >
-                            {SKILLS.map((skill, i) => (
-                                <SkillPill key={skill.label} skill={skill} index={i} />
-                            ))}
                         </div>
                     </div>
 
