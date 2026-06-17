@@ -5,29 +5,29 @@ import { OAuthUser } from '../types/auth-type';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
-    constructor() {
-        super({
-            clientID: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: process.env.GITHUB_CALLBACK_URL,
-            scope: ['user:email'],
-        });
-    }
+  constructor() {
+    super({
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      scope: ['user:email'],
+    });
+  }
 
-    async validate(
-        accessToken: string,
-        refreshToken: string,
-        profile: Profile,
-    ): Promise<OAuthUser> {
-        return {
-            email: profile.emails?.[0]?.value ?? null,
-            username: profile.username ?? '',
-            firstName: profile.displayName ?? profile.username ?? '',
-            avatar: profile.photos?.[0]?.value ?? null,
-            provider: 'github',
-            providerId: profile.id,
-            accessToken,
-            refreshToken,
-        };
-    }
+  validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+  ): OAuthUser {
+    return {
+      email: profile.emails?.[0]?.value ?? null,
+      username: profile.username ?? '',
+      firstName: profile.displayName ?? profile.username ?? '',
+      avatar: profile.photos?.[0]?.value ?? null,
+      provider: 'github',
+      providerId: profile.id,
+      accessToken,
+      refreshToken,
+    };
+  }
 }

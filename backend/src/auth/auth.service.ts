@@ -5,34 +5,35 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
+import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
-import { User } from '../users/entities/users.entity';
 import { LoginDto } from './dto/login.dto';
 import { OAuthUser } from './types/auth-type';
 import { generateRandomToken, sha256 } from './utils/token.util';
 import { MailService } from './mail/mail.service';
 import { AuthTokenService } from './auth-token.service';
-import { AuthTokenType } from '../users/entities/auth_tokens.entity';
+import { AuthTokenType, User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-    private mailService: MailService,
-    private authTokenService: AuthTokenService,
-  ) { }
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly mailService: MailService,
+    private readonly authTokenService: AuthTokenService,
+  ) {}
 
-  // ─── Token Helpers ────────────────────────────────────────────────────────────
+  // Token Helpers
 
   private generateAccessToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
-  ) {
+  ): string {
     return this.jwtService.sign(
       {
         userId: user.id,
@@ -40,13 +41,16 @@ export class AuthService {
         role: user.role,
         isEmailVerified: user.isEmailVerified,
       },
-      { secret: process.env.JWT_SECRET, expiresIn: '15m' },
+      {
+        secret: this.configService.getOrThrow<string>('JWT_SECRET'),
+        expiresIn: '15m',
+      },
     );
   }
 
   private generateRefreshToken(
     user: Pick<User, 'id' | 'email' | 'role' | 'isEmailVerified'>,
-  ) {
+  ): string {
     return this.jwtService.sign(
       {
         userId: user.id,
@@ -54,19 +58,22 @@ export class AuthService {
         role: user.role,
         isEmailVerified: user.isEmailVerified,
       },
-      { secret: process.env.JWT_REFRESH_SECRET, expiresIn: '7d' },
+      {
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        expiresIn: '7d',
+      },
     );
   }
 
-  private async issueToken(user: User) {
+  private async issueTokens(user: User) {
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
 
     const refreshTokenHash = sha256(refreshToken);
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7d
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7 days
 
     await this.authTokenService.createToken(
-      user,
+      user.id,
       AuthTokenType.REFRESH_TOKEN,
       refreshTokenHash,
       expiresAt,
@@ -75,28 +82,40 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  // ─── Auth Core ────────────────────────────────────────────────────────────────
+  /** Format user response. */
+  private formatUserResponse(user: User) {
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      isEmailVerified: user.isEmailVerified,
+      avatar: user.avatar,
+    };
+  }
 
+  // Auth Core
+
+  /** Validate user credentials. */
   async validateUserCredentials(
     email: string,
     pass: string,
-  ): Promise<Omit<User, 'password'> | null> {
-    const existingUser = await this.usersService.findByEmailWithPassword(email);
+  ): Promise<User | null> {
+    const user = await this.usersService.findByEmailWithPassword(email);
+    if (!user) return null;
 
-    if (!existingUser) return null;
-
-    if (!existingUser.password) {
+    if (!user.password) {
       throw new UnauthorizedException('Please login with your OAuth provider');
     }
 
-    const isMatch = await bcrypt.compare(pass, existingUser.password);
+    const isMatch = await bcrypt.compare(pass, user.password);
     if (!isMatch) return null;
 
-    const { password, ...result } = existingUser;
-    return result;
+    return user;
   }
 
-  // login - ตรวจสอบข้อมูลรับรองและออก token
+  /** Log in user. */
   async login(loginData: LoginDto) {
     const email = loginData.email.toLowerCase().trim();
     const user = await this.validateUserCredentials(email, loginData.password);
@@ -110,19 +129,11 @@ export class AuthService {
       throw new UnauthorizedException('Please verify your email address');
     }
 
-    const tokens = await this.issueToken(user as User);
+    const tokens = await this.issueTokens(user);
     this.logger.log(`User logged in: userId=${user.id}`);
 
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-        isEmailVerified: user.isEmailVerified,
-        avatar: user.avatar,
-      },
+      user: this.formatUserResponse(user),
       token: {
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
@@ -131,7 +142,7 @@ export class AuthService {
     };
   }
 
-  // register - สร้างบัญชีใหม่และส่งอีเมลยืนยัน
+  /** Register user. */
   async register(userData: RegisterDto) {
     const email = userData.email.toLowerCase().trim();
 
@@ -150,30 +161,38 @@ export class AuthService {
       password: hashedPassword,
     });
 
+    // Generate verification token
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 ชม.
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
     await this.authTokenService.createToken(
-      newUser,
+      newUser.id,
       AuthTokenType.EMAIL_VERIFY,
       tokenHash,
       expiresAt,
     );
 
-    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawToken}`;
+    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    const verifyUrl = `${frontendUrl}/verify-email?token=${rawToken}`;
 
+    // Send email asynchronously
     this.mailService
       .sendEmail(
         email,
         'Verify your email',
         `<p>Click here to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
       )
-      .catch((error) => {
+      .catch((error: unknown) => {
+        const message =
+          error instanceof Error
+            ? error.message
+            : typeof error === 'string'
+              ? error
+              : JSON.stringify(error);
         this.logger.error('Failed to send verification email', {
           email,
-          message: error?.message,
-          stack: error?.stack,
+          message,
         });
       });
 
@@ -191,7 +210,7 @@ export class AuthService {
     };
   }
 
-  // OAuth login - ใช้ข้อมูลจาก provider เพื่อเข้าสู่ระบบหรือสร้างบัญชีใหม่
+  /** OAuth login. */
   async oauthLogin(oauthUser: OAuthUser) {
     if (!oauthUser.email) {
       throw new UnauthorizedException('Email is required from OAuth provider');
@@ -199,6 +218,7 @@ export class AuthService {
 
     const email = oauthUser.email.toLowerCase().trim();
 
+    // Check OAuth link
     const oauthAccount = await this.usersService.findByOAuth(
       oauthUser.provider,
       oauthUser.providerId,
@@ -209,9 +229,13 @@ export class AuthService {
     if (oauthAccount?.user) {
       user = oauthAccount.user;
     } else {
-      user = await this.usersService.findByEmail(email);
+      // Check user by email
+      const existingUser = await this.usersService.findByEmail(email);
 
-      if (!user) {
+      if (existingUser) {
+        user = existingUser;
+      } else {
+        // Create user
         user = await this.usersService.create({
           email,
           firstName: oauthUser.firstName ?? oauthUser.username ?? '',
@@ -221,31 +245,24 @@ export class AuthService {
         });
       }
 
+      // Link OAuth
       await this.usersService.createOAuthAccount(
-        user,
+        user.id,
         oauthUser.provider,
         oauthUser.providerId,
       );
     }
 
+    // Auto-verify OAuth email
     if (!user.isEmailVerified) {
-      user.isEmailVerified = true;
-      await this.usersService.save(user);
+      user = await this.usersService.save(user.id, { isEmailVerified: true });
     }
 
-    const tokens = await this.issueToken(user);
+    const tokens = await this.issueTokens(user);
     this.logger.log(`OAuth login: ${oauthUser.provider} - userId=${user.id}`);
 
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-        isEmailVerified: user.isEmailVerified,
-        avatar: user.avatar ?? null,
-      },
+      user: this.formatUserResponse(user),
       token: {
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
@@ -254,10 +271,10 @@ export class AuthService {
     };
   }
 
-  // refresh token โดยใช้ refresh token เดิมที่ยังไม่หมดอายุและยังไม่ถูกใช้
+  /** Refresh access token. */
   async refreshToken(refreshToken: string) {
     let payload: {
-      userId: number;
+      userId: string;
       email: string;
       role: string;
       isEmailVerified: boolean;
@@ -265,13 +282,12 @@ export class AuthService {
 
     try {
       payload = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
       });
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // hash token ก่อน lookup เสมอ
     const tokenHash = sha256(refreshToken);
     const tokenRecord = await this.authTokenService.findValidRefreshToken(
       payload.userId,
@@ -279,13 +295,16 @@ export class AuthService {
     );
 
     if (!tokenRecord) {
-      // token ไม่พบหรือถูกใช้แล้ว — revoke ทั้งหมดเพื่อกัน reuse attack
+      // Revoke all user tokens if reuse suspected
       await this.authTokenService.revokeAllUserTokens(payload.userId);
-      throw new UnauthorizedException('Refresh token reuse detected - all sessions revoked');
+      throw new UnauthorizedException(
+        'Refresh token reuse detected — all sessions revoked',
+      );
     }
 
+    // Rotate token pair
     await this.authTokenService.markTokenUsed(tokenRecord.id);
-    const tokens = await this.issueToken(tokenRecord.user);
+    const tokens = await this.issueTokens(tokenRecord.user as User);
 
     return {
       token: {
@@ -296,8 +315,12 @@ export class AuthService {
     };
   }
 
-  async logout(userId: number) {
-    await this.authTokenService.revokeUserTokens(userId, AuthTokenType.REFRESH_TOKEN);
+  /** Log out user. */
+  async logout(userId: string) {
+    await this.authTokenService.revokeUserTokens(
+      userId,
+      AuthTokenType.REFRESH_TOKEN,
+    );
 
     return {
       status: 'success',
@@ -305,11 +328,10 @@ export class AuthService {
     };
   }
 
-  // verify email โดยใช้ token ที่ส่งไปทาง email
+  /** Verify user email. */
   async verifyEmail(token: string): Promise<{ message: string }> {
-    const tokenHash = sha256(token); // hash ก่อน lookup เสมอ
+    const tokenHash = sha256(token);
 
-    // ใช้ consumeToken แทน find + markUsed แยก (atomic)
     const authToken = await this.authTokenService.consumeToken(
       tokenHash,
       AuthTokenType.EMAIL_VERIFY,
@@ -321,52 +343,58 @@ export class AuthService {
 
     const user = authToken.user;
 
-    // Early return ถ้า verify แล้ว
     if (user.isEmailVerified) {
       return { message: 'Email already verified' };
     }
 
-    user.isEmailVerified = true;
-    await this.usersService.save(user);
+    await this.usersService.save(user.id, { isEmailVerified: true });
 
     return { message: 'Email verified successfully' };
   }
 
-  // ลืมรหัสผ่าน - ส่ง email พร้อมลิงก์รีเซ็ตรหัสผ่าน
+  /** Request password reset. */
   async forgotPassword(email: string) {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
 
-    // ไม่บอกผู้ใช้ว่ามี email หรือไม่ เพื่อความปลอดภัย
     if (!user) {
-      return { status: 'success', message: 'If this email exists, a reset link has been sent' };
+      // Avoid revealing email existence
+      return {
+        status: 'success',
+        message: 'If this email exists, a reset link has been sent',
+      };
     }
 
     const rawToken = generateRandomToken();
     const tokenHash = sha256(rawToken);
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // 15 นาที
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // 15 minutes
 
     await this.authTokenService.createToken(
-      user,
+      user.id,
       AuthTokenType.PASSWORD_RESET,
       tokenHash,
       expiresAt,
     );
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
+    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
 
-    // fire-and-forget เหมือน register - ไม่ให้ mail failure ทำ request พัง
     this.mailService
       .sendEmail(
         normalizedEmail,
         'Reset your password',
         `<p>Click here to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
       )
-      .catch((error) => {
+      .catch((error: unknown) => {
+        const message =
+          error instanceof Error
+            ? error.message
+            : typeof error === 'string'
+              ? error
+              : JSON.stringify(error);
         this.logger.error('Failed to send reset password email', {
           email: normalizedEmail,
-          message: error?.message,
-          stack: error?.stack,
+          message,
         });
       });
 
@@ -376,7 +404,7 @@ export class AuthService {
     };
   }
 
-  // reset password โดยใช้ token ที่ส่งไปทาง email
+  /** Reset password. */
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
 
@@ -390,10 +418,12 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    authToken.user.password = hashedPassword;
-    await this.usersService.save(authToken.user);
 
-    // revoke refresh token ทั้งหมด เพราะ password เปลี่ยนแล้ว
+    await this.usersService.save(authToken.user.id, {
+      password: hashedPassword,
+    });
+
+    // Revoke sessions
     await this.authTokenService.revokeUserTokens(
       authToken.user.id,
       AuthTokenType.REFRESH_TOKEN,

@@ -1,47 +1,70 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
+import { PrismaModule } from './database/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
-import { User } from './users/entities/users.entity';
-import { OauthAccount } from './users/entities/oauth_accounts.entity';
-import { AuthToken } from './users/entities/auth_tokens.entity';
-import * as Joi from 'joi';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { validationSchema } from './common/config/validation.schema';
 
 @Module({
   imports: [
+    // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        RESEND_API_KEY: Joi.string().required(),
-        MAIL_FROM: Joi.string().required(),
-      }),
+      validationSchema,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
 
-      entities: [User, OauthAccount, AuthToken],
+    // Database
+    PrismaModule,
 
-      synchronize: false,
-    }),
+    // Rate Limiting
     ThrottlerModule.forRoot({
       throttlers: [
         {
-          ttl: 60,
-          limit: 10, // 10 requests / minute
+          ttl: 60000, // 1 minute in milliseconds
+          limit: 30, // 30 requests per minute (global default)
         },
       ],
     }),
+
+    // Feature Modules
     AuthModule,
     UsersModule,
+  ],
+
+  providers: [
+    // Global Guards
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+
+    // Global Filters
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: PrismaExceptionFilter,
+    },
+
+    // Global Interceptors
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
   ],
 })
 export class AppModule {}

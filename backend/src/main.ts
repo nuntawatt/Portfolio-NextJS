@@ -1,59 +1,65 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'], // ควบคุมระดับการ log ตามความต้องการ
+    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
 
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT', 3001);
+  const frontendUrl = configService.get<string>(
+    'FRONTEND_URL',
+    'http://localhost:3000',
+  );
+  const nodeEnv = configService.get<string>('NODE_ENV', 'development');
+
+  // Global prefix
   app.setGlobalPrefix('api');
 
-  // Global validation pipe configuration
+  // Validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,  // ตัด Field ที่ไม่ได้กำหนดใน DTO ออก
-      forbidNonWhitelisted: true, // ปฏิเสธคำข้าที่มี Field ที่ไม่ได้กำหนดใน DTO
-      transform: true,  // auto-transform payloads ตาม DTO type
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
       transformOptions: {
-        enableImplicitConversion: true, // แปลง string -> number/boolean อัตโนมัติ
-      }
+        enableImplicitConversion: true,
+      },
     }),
   );
 
-  // CORS configuration
+  // CORS
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: frontendUrl,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
 
-  const port = process.env.PORT ?? 3001;
-
-  // Swagger configuration
-  if (process.env.NODE_ENV !== 'production') {
+  // Swagger
+  if (nodeEnv !== 'production') {
     const config = new DocumentBuilder()
-      .setTitle('NestJS Authentication API')
-      .setDescription('API documentation for NestJS Authentication')
+      .setTitle('Portfolio Platform API')
+      .setDescription(
+        'REST API documentation for the Portfolio Platform backend',
+      )
       .setVersion('1.0')
       .addServer(`http://localhost:${port}`, 'Development server')
-      .addServer(`${process.env.API_URL}:${port}`, 'Production server')
-      .addServer(`${process.env.API_URL}`, 'Production server (custom domain)')
-      .addBearerAuth({
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'Authorization',
-        in: 'header',
-      },
-        'access-token', // name key สำหรับการอ้างอิงใน @ApiBearerAuth()
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          name: 'Authorization',
+          in: 'header',
+        },
+        'access-token',
       )
       .build();
 
@@ -61,22 +67,36 @@ async function bootstrap() {
 
     SwaggerModule.setup('api/docs', app, document, {
       swaggerOptions: {
-        persistAuthorization: true, // จำ token ไว้ใน UI หลังจากรีเฟรชหน้า
+        persistAuthorization: true,
       },
     });
 
-    logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
+    logger.log(`Swagger docs: http://localhost:${port}/api/docs`);
   }
 
-  // Graceful shutdown handling
-  process.on('SIGTERM', async () => {
+  // Graceful shutdown
+  app.enableShutdownHooks();
+
+  process.on('SIGTERM', () => {
     logger.log('SIGTERM received, shutting down gracefully...');
-    await app.close();
-    process.exit(0);
+    app
+      .close()
+      .then(() => {
+        process.exit(0);
+      })
+      .catch((err) => {
+        logger.error('Error during shutdown', err);
+        process.exit(1);
+      });
   });
 
+  // Start
   await app.listen(port);
-  logger.log(`Server is running on http://localhost:${port}`);
+  logger.log(`Server running on http://localhost:${port}`);
+  logger.log(`Environment: ${nodeEnv}`);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  const logger = new Logger('Bootstrap');
+  logger.error('Error starting server', err);
+});

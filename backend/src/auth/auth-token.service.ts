@@ -1,110 +1,139 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
-import { AuthToken, AuthTokenType } from '../users/entities/auth_tokens.entity';
-import { User } from '../users/entities/users.entity';
+import { PrismaService } from '../database/prisma.service';
+import { AuthToken, AuthTokenType } from '@prisma/client';
+
+type AuthTokenWithUser = AuthToken & {
+  user: {
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    avatar: string | null;
+    role: string;
+    isEmailVerified: boolean;
+    password: string | null;
+  };
+};
 
 @Injectable()
 export class AuthTokenService {
-    private readonly logger = new Logger(AuthTokenService.name);
+  private readonly logger = new Logger(AuthTokenService.name);
 
-    constructor(
-        @InjectRepository(AuthToken)
-        private authTokenRepository: Repository<AuthToken>,
-    ) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-    // ─── Create ───────────────────────────────────────────────────────────────────
+  /** Create a new auth token. */
+  async createToken(
+    userId: string,
+    type: AuthTokenType,
+    tokenHash: string,
+    expiresAt: Date,
+  ): Promise<AuthToken> {
+    // Revoke existing
+    await this.revokeUserTokens(userId, type);
 
-    async createToken(
-        user: User,
-        type: AuthTokenType,
-        tokenHash: string,
-        expiresAt: Date,
-    ): Promise<AuthToken> {
-        // revoke token เก่าของ type เดิมก่อนสร้างใหม่
-        await this.revokeUserTokens(user.id, type);
+    return this.prisma.authToken.create({
+      data: {
+        userId,
+        type,
+        tokenHash,
+        expiresAt,
+      },
+    });
+  }
 
-        const token = this.authTokenRepository.create({
-            user,
-            type,
-            tokenHash,
-            expiresAt,
-        });
+  /** Find a valid token by hash and type. */
+  async findValidToken(
+    tokenHash: string,
+    type: AuthTokenType,
+  ): Promise<AuthTokenWithUser | null> {
+    return this.prisma.authToken.findFirst({
+      where: {
+        tokenHash,
+        type,
+        usedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      include: { user: true },
+    }) as Promise<AuthTokenWithUser | null>;
+  }
 
-        return this.authTokenRepository.save(token);
-    }
+  /** Find a valid refresh token. */
+  async findValidRefreshToken(
+    userId: string,
+    tokenHash: string,
+  ): Promise<AuthTokenWithUser | null> {
+    return this.prisma.authToken.findFirst({
+      where: {
+        tokenHash,
+        type: AuthTokenType.REFRESH_TOKEN,
+        usedAt: null,
+        expiresAt: { gt: new Date() },
+        userId,
+      },
+      include: { user: true },
+    }) as Promise<AuthTokenWithUser | null>;
+  }
 
-    // ─── Finders ─────────────────────────────────────────────────────────────────
+  /** Consume a token (mark as used). */
+  async consumeToken(
+    tokenHash: string,
+    type: AuthTokenType,
+  ): Promise<AuthTokenWithUser | null> {
+    const now = new Date();
 
-    async findValidToken(tokenHash: string, type: AuthTokenType): Promise<AuthToken | null> {
-        return this.authTokenRepository.findOne({
-            where: {
-                tokenHash,
-                type,
-                usedAt: null,
-                expiresAt: MoreThan(new Date()),
-            },
-            relations: ['user'],
-        });
-    }
+    // Find token
+    const token = await this.prisma.authToken.findFirst({
+      where: {
+        tokenHash,
+        type,
+        usedAt: null,
+        expiresAt: { gt: now },
+      },
+    });
 
-    async findValidRefreshToken(userId: number, tokenHash: string): Promise<AuthToken | null> {
-        return this.authTokenRepository.findOne({
-            where: {
-                tokenHash,
-                type: AuthTokenType.REFRESH_TOKEN,
-                usedAt: null,
-                expiresAt: MoreThan(new Date()),
-                user: { id: userId },
-            },
-            relations: ['user'],
-        });
-    }
+    if (!token) return null;
 
-    // ─── Mutations ────────────────────────────────────────────────────────────────
+    // Mark used
+    await this.prisma.authToken.update({
+      where: { id: token.id },
+      data: { usedAt: now },
+    });
 
-    // Atomic find + mark used ในครั้งเดียว เพื่อป้องกัน race condition
-    async consumeToken(tokenHash: string, type: AuthTokenType): Promise<AuthToken | null> {
-        const now = new Date();
+    // Return with user
+    return this.prisma.authToken.findUnique({
+      where: { id: token.id },
+      include: { user: true },
+    }) as Promise<AuthTokenWithUser | null>;
+  }
 
-        const result = await this.authTokenRepository
-            .createQueryBuilder('t') // ใช้ query builder เพื่อทำ atomic update
-            .update(AuthToken)
-            .set({ usedAt: now })
-            .where(
-                't.tokenHash = :tokenHash AND t.type = :type AND t.usedAt IS NULL AND t.expiresAt > :now',
-                { tokenHash, type, now },
-            )
-            .returning('*') // PostgreSQL เท่านั้น
-            .execute();
+  /** Mark token as used. */
+  async markTokenUsed(tokenId: string): Promise<void> {
+    await this.prisma.authToken.update({
+      where: { id: tokenId },
+      data: { usedAt: new Date() },
+    });
+  }
 
-        if (!result.affected || result.affected === 0) return null;
+  /** Revoke tokens of type for user. */
+  async revokeUserTokens(userId: string, type: AuthTokenType): Promise<void> {
+    await this.prisma.authToken.updateMany({
+      where: {
+        userId,
+        type,
+        usedAt: null,
+      },
+      data: { usedAt: new Date() },
+    });
+  }
 
-        // โหลด relations เพิ่ม
-        const tokenId = result.raw[0]?.id;
-        if (!tokenId) return null;
-
-        return this.authTokenRepository.findOne({
-            where: { id: tokenId },
-            relations: ['user'],
-        });
-    }
-
-    async markTokenUsed(tokenId: number): Promise<void> {
-        await this.authTokenRepository.update(tokenId, { usedAt: new Date() });
-    }
-
-    async revokeUserTokens(userId: number, type: AuthTokenType): Promise<void> {
-        await this.authTokenRepository.update(
-            { user: { id: userId }, type, usedAt: null },
-            { usedAt: new Date() },
-        );
-    }
-
-    async revokeAllUserTokens(userId: number): Promise<void> {
-        await this.authTokenRepository.update(
-            { user: { id: userId }, usedAt: null },
-            { usedAt: new Date() },
-        );
-    }
+  /** Revoke all tokens for user. */
+  async revokeAllUserTokens(userId: string): Promise<void> {
+    await this.prisma.authToken.updateMany({
+      where: {
+        userId,
+        usedAt: null,
+      },
+      data: { usedAt: new Date() },
+    });
+  }
 }

@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import {
   Controller,
   Post,
@@ -9,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -26,27 +28,32 @@ import {
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { OAuthUser } from './types/auth-type';
 
 @ApiTags('Authentication')
 @ApiBearerAuth('access-token')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SECTION 1 : Register / Login / Verify
-  // ─────────────────────────────────────────────────────────────────────────────
+  // Register / Login / Verify
+
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
+  @Throttle({ default: { limit: 3, ttl: 300 } })
   @ApiOperation({
     summary: 'Register a new user',
-    description: 'สมัครสมาชิกด้วย email/password จะได้รับอีเมล verifycation เพื่อยืนยันตัวตน',
+    description:
+      'Register with email/password. A verification email will be sent.',
   })
   @ApiBody({ type: RegisterDto })
   @ApiResponse({ status: 201, description: 'User registered successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 409, description: 'Email already in use' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
   async register(@Body() userData: RegisterDto) {
     return this.authService.register(userData);
@@ -54,15 +61,15 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 5, ttl: 60 } }) // 5 ครั้ง / นาที
+  @Throttle({ default: { limit: 5, ttl: 60 } })
   @ApiOperation({
     summary: 'Login with email and password',
-    description: 'เข้าสู่ระบบด้วย email/password จะได้รับ access token และ refresh token',
+    description:
+      'Authenticate with credentials. Returns access token and refresh token.',
   })
   @ApiBody({ type: LoginDto })
   @ApiResponse({ status: 200, description: 'Login successful' })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
   async login(@Body() loginData: LoginDto) {
     return this.authService.login(loginData);
@@ -70,18 +77,16 @@ export class AuthController {
 
   @Post('verify-email')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 5, ttl: 300 } }) // กัน brute force
+  @Throttle({ default: { limit: 5, ttl: 300 } })
   @ApiOperation({
     summary: 'Verify email address',
-    description: 'ยืนยันตัวตนด้วย token ที่ได้รับจากอีเมล',
+    description: 'Verify email using the token received via email.',
   })
   @ApiBody({
     schema: {
       type: 'object',
       required: ['token'],
-      properties: {
-        token: { type: 'string', example: 'a3f9c2...' },
-      },
+      properties: { token: { type: 'string', example: 'a3f9c2d1...' } },
     },
   })
   @ApiResponse({ status: 200, description: 'Email verified successfully' })
@@ -90,29 +95,26 @@ export class AuthController {
     return this.authService.verifyEmail(dto.token);
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SECTION 2 : Token Management
-  // ─────────────────────────────────────────────────────────────────────────────
+  // Token Management
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 10, ttl: 60 } }) 
+  @Throttle({ default: { limit: 10, ttl: 60 } })
   @ApiOperation({
     summary: 'Refresh access token',
-    description: 'ใช้ refresh token เพื่อขอ access token ใหม่เมื่อ access token หมดอายุ',
+    description: 'Use a refresh token to obtain a new access token.',
   })
   @ApiBody({
     schema: {
       type: 'object',
       required: ['refreshToken'],
       properties: {
-        refreshToken: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+        refreshToken: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIs...' },
       },
     },
   })
-  @ApiResponse({ status: 200, description: 'New access token issued successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid refresh token' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 200, description: 'New access token issued' })
+  @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   async refresh(@Body('refreshToken') refreshToken: string) {
     return this.authService.refreshToken(refreshToken);
   }
@@ -122,25 +124,23 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({
-    summary: 'Logout (Revoke refresh token)',
-    description: 'ออกจากระบบโดยการลบ refresh token ที่ใช้งานอยู่',
+    summary: 'Logout (revoke refresh token)',
+    description: 'Revoke all active refresh tokens for the current user.',
   })
   @ApiResponse({ status: 200, description: 'Logout successful' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async logout(@Req() req: any) {
-    return this.authService.logout(req.user.userId);
+  async logout(@CurrentUser('userId') userId: string) {
+    return this.authService.logout(userId);
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SECTION 3 : Password Reset
-  // ─────────────────────────────────────────────────────────────────────────────
+  // Password Reset
 
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 3, ttl: 300 } }) // 3 ครั้ง / 5 นาที
+  @Throttle({ default: { limit: 3, ttl: 300 } })
   @ApiOperation({
     summary: 'Request password reset email',
-    description: 'ส่งลิงก์ reset password ไปยัง email ที่ระบุ',
+    description: 'Send a password reset link to the specified email.',
   })
   @ApiBody({
     schema: {
@@ -151,8 +151,10 @@ export class AuthController {
       },
     },
   })
-  @ApiResponse({ status: 200, description: 'Password reset email sent successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset email sent (if account exists)',
+  })
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto.email);
   }
@@ -161,15 +163,15 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Reset password',
-    description: 'ใช้ token ที่ได้รับจากอีเมล reset password เพื่อกำหนดรหัสผ่านใหม่',
+    description: 'Use the reset token from email to set a new password.',
   })
   @ApiBody({
     schema: {
       type: 'object',
       required: ['token', 'password'],
       properties: {
-        token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
-        password: { type: 'string', minLength: 6, example: 'newpassword123' },
+        token: { type: 'string' },
+        password: { type: 'string', minLength: 6 },
       },
     },
   })
@@ -179,47 +181,39 @@ export class AuthController {
     return this.authService.resetPassword(dto.token, dto.password);
   }
 
-  // ====================
-  // OAUTH LOGIN (GOOGLE)
-  // ====================
+  // OAuth: Google
+
   @Get('google')
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Login with Google (redirect)' })
   @ApiResponse({ status: 302, description: 'Redirect to Google OAuth' })
-  async googleAuth() { }
+  async googleAuth() {}
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  @ApiExcludeEndpoint() // ไม่ต้องการให้แสดงใน Swagger เพราะเป็น endpoint สำหรับ callback เท่านั้น
-  async googleCallback(@Req() req, @Res() res) {
-    const data = await this.authService.oauthLogin(req.user);
-
-    const params = new URLSearchParams({
-      data: JSON.stringify(data),
-    });
-
-    return res.redirect(`${process.env.FRONTEND_URL}?${params}`);
+  @ApiExcludeEndpoint()
+  async googleCallback(@Req() req: Request, @Res() res: Response) {
+    const data = await this.authService.oauthLogin(req.user as OAuthUser);
+    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    const params = new URLSearchParams({ data: JSON.stringify(data) });
+    res.redirect(`${frontendUrl}?${params}`);
   }
 
-  // ====================
-  // OAUTH LOGIN (GITHUB)
-  // ====================
+  // OAuth: GitHub
+
   @Get('github')
   @UseGuards(AuthGuard('github'))
   @ApiOperation({ summary: 'Login with GitHub (redirect)' })
   @ApiResponse({ status: 302, description: 'Redirect to GitHub OAuth' })
-  async githubAuth() { }
+  async githubAuth() {}
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
-  @ApiExcludeEndpoint() // ไม่ต้องการให้แสดงใน Swagger เพราะเป็น endpoint สำหรับ callback เท่านั้น
-  async githubCallback(@Req() req, @Res() res) {
-    const data = await this.authService.oauthLogin(req.user);
-
-    const params = new URLSearchParams({
-      data: JSON.stringify(data),
-    });
-
-    return res.redirect(`${process.env.FRONTEND_URL}?${params}`);
+  @ApiExcludeEndpoint()
+  async githubCallback(@Req() req: Request, @Res() res: Response) {
+    const data = await this.authService.oauthLogin(req.user as OAuthUser);
+    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    const params = new URLSearchParams({ data: JSON.stringify(data) });
+    res.redirect(`${frontendUrl}?${params}`);
   }
 }

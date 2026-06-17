@@ -1,0 +1,333 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Portfolio Platform — Prisma Schema
+// Database: PostgreSQL (Neon)
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AuthTokenType {
+  EMAIL_VERIFY
+  PASSWORD_RESET
+  REFRESH_TOKEN
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContactStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// AUTH & USERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String?
+  firstName       String?
+  lastName        String?
+  avatar          String?
+  role            Role      @default(USER)
+  isEmailVerified Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  // Relations
+  oauthAccounts OauthAccount[]
+  authTokens    AuthToken[]
+  projects      Project[]
+  blogs         Blog[]
+  contacts      Contact[]
+  aiHistories   AIHistory[]
+
+  @@map("users")
+}
+
+model OauthAccount {
+  id         String    @id @default(uuid())
+  provider   String
+  providerId String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerId])
+  @@map("oauth_accounts")
+}
+
+model AuthToken {
+  id        String        @id @default(uuid())
+  tokenHash String
+  type      AuthTokenType
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime      @default(now())
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash, type])
+  @@index([userId, type])
+  @@map("auth_tokens")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PORTFOLIO CONTENT
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Project {
+  id           String        @id @default(uuid())
+  title        String
+  slug         String        @unique
+  description  String
+  content      String?       @db.Text
+  thumbnail    String?
+  gallery      String[]
+  githubUrl    String?
+  liveUrl      String?
+  techStack    String[]
+  architecture String?       @db.Text
+  challenges   String?       @db.Text
+  solutions    String?       @db.Text
+  lessons      String?       @db.Text
+  featured     Boolean       @default(false)
+  order        Int           @default(0)
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  authorId String
+  author   User         @relation(fields: [authorId], references: [id])
+  tags     ProjectTag[]
+
+  @@index([status, featured])
+  @@index([order])
+  @@map("projects")
+}
+
+model ProjectTag {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  // Relations
+  projects Project[]
+
+  @@map("project_tags")
+}
+
+model Blog {
+  id          String        @id @default(uuid())
+  title       String
+  slug        String        @unique
+  excerpt     String?
+  content     String        @db.Text
+  thumbnail   String?
+  readingTime Int?
+  featured    Boolean       @default(false)
+  status      ContentStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publishedAt DateTime?
+
+  // Relations
+  authorId   String
+  author     User      @relation(fields: [authorId], references: [id])
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  tags       BlogTag[]
+
+  @@index([status, featured])
+  @@index([publishedAt])
+  @@map("blogs")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  // Relations
+  blogs Blog[]
+
+  @@map("categories")
+}
+
+model BlogTag {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  // Relations
+  blogs Blog[]
+
+  @@map("blog_tags")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PROFESSIONAL INFO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Skill {
+  id          String  @id @default(uuid())
+  name        String
+  icon        String?
+  category    String
+  proficiency Int     @default(0)
+  order       Int     @default(0)
+  featured    Boolean @default(false)
+
+  @@index([category])
+  @@index([order])
+  @@map("skills")
+}
+
+model Experience {
+  id          String    @id @default(uuid())
+  company     String
+  position    String
+  description String?   @db.Text
+  techStack   String[]
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean   @default(false)
+  order       Int       @default(0)
+  logo        String?
+
+  @@index([order])
+  @@map("experiences")
+}
+
+model Certificate {
+  id            String    @id @default(uuid())
+  name          String
+  issuer        String
+  issueDate     DateTime
+  expiryDate    DateTime?
+  credentialId  String?
+  credentialUrl String?
+  image         String?
+  order         Int       @default(0)
+
+  @@index([order])
+  @@map("certificates")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ENGAGEMENT & ANALYTICS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Contact {
+  id        String        @id @default(uuid())
+  name      String
+  email     String
+  subject   String?
+  message   String        @db.Text
+  status    ContactStatus @default(UNREAD)
+  createdAt DateTime      @default(now())
+
+  // Relations
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("contacts")
+}
+
+model Visitor {
+  id        String   @id @default(uuid())
+  ip        String?
+  userAgent String?
+  country   String?
+  city      String?
+  path      String
+  referrer  String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path])
+  @@map("visitors")
+}
+
+model Analytics {
+  id        String   @id @default(uuid())
+  event     String
+  metadata  Json?
+  path      String?
+  createdAt DateTime @default(now())
+
+  @@index([event])
+  @@index([createdAt])
+  @@map("analytics")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ASSETS & INTEGRATIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Resume {
+  id        String   @id @default(uuid())
+  title     String
+  fileUrl   String
+  version   String?
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resumes")
+}
+
+model GithubProfile {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  data         Json
+  lastSyncedAt DateTime @default(now())
+
+  @@map("github_profiles")
+}
+
+model AIHistory {
+  id        String   @id @default(uuid())
+  question  String
+  answer    String   @db.Text
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@map("ai_histories")
+}

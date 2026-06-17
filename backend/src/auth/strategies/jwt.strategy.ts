@@ -13,8 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  // JWT ถูก verify + ไม่หมดอายุแล้วก่อนถึงตรงนี้ - trust payload ได้เลย
-  async validate(payload: JwtPayload) {
+  // JWT is already verified and active
+  validate(payload: JwtPayload) {
     return {
       userId: payload.userId,
       email: payload.email,

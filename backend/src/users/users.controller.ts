@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   UseGuards,
-  Request,
   Delete,
   HttpCode,
   HttpStatus,
@@ -15,52 +14,55 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiTags('Users')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SECTION 1 : Profile
-  // ─────────────────────────────────────────────────────────────────────────────
+  constructor(private readonly usersService: UsersService) {}
 
   @Get('profile')
   @ApiOperation({
     summary: 'Get current user profile',
-    description: 'ดึงข้อมูล profile ของ user ที่ login อยู่',
+    description: 'Retrieve the authenticated user profile.',
   })
-  @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User profile retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Request() req) {
+  getProfile(
+    @CurrentUser()
+    user: {
+      userId: string;
+      email: string;
+      role: string;
+      isEmailVerified: boolean;
+    },
+  ) {
     return {
       user: {
-        id: req.user.userId,
-        email: req.user.email,
-        role: req.user.role,
-        isEmailVerified: req.user.isEmailVerified,
+        id: user.userId,
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
       },
-    }
+    };
   }
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SECTION 2 : Account Management
-  // ─────────────────────────────────────────────────────────────────────────────
 
   @Delete('delete')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Delete user account (soft delete)',
-    description: 'ลบบัญชีแบบ soft delete (ข้อมูลยังอยู่ใน DB แต่ถูก deactivate)',
+    description:
+      'Soft-delete the account. Data remains in DB but is deactivated.',
   })
   @ApiResponse({ status: 200, description: 'Account deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async deleteProfile(@Request() req) {
-    const userId = req.user.userId ?? req.user.id;
-
+  async deleteProfile(@CurrentUser('userId') userId: string) {
     await this.usersService.softDelete(userId);
 
     return {

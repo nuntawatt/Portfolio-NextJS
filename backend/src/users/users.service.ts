@@ -5,59 +5,57 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './entities/users.entity';
-import { OauthAccount } from './entities/oauth_accounts.entity';
+import { PrismaService } from '../database/prisma.service';
+import { Prisma, OauthAccount, User } from '@prisma/client';
+
+/** Fields safe to return in API responses (excludes password). */
+const USER_PUBLIC_SELECT = {
+  id: true,
+  email: true,
+  firstName: true,
+  lastName: true,
+  avatar: true,
+  role: true,
+  isEmailVerified: true,
+  createdAt: true,
+  updatedAt: true,
+} satisfies Prisma.UserSelect;
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+  constructor(private readonly prisma: PrismaService) {}
 
-    @InjectRepository(OauthAccount)
-    private oauthRepository: Repository<OauthAccount>,
-  ) { }
-
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-  private normalizeEmail(email: string): string {
-    return email.toLowerCase().trim();
-  }
-
-  // ─── Finders ─────────────────────────────────────────────────────────────────
-
+  /** Find user by email. */
   async findByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.findOne({
+    return this.prisma.user.findFirst({
       where: {
-        email: this.normalizeEmail(email),
+        email: email.toLowerCase().trim(),
         deletedAt: null,
       },
     });
   }
 
+  /** Find user by email with password. */
   async findByEmailWithPassword(email: string): Promise<User | null> {
-    return this.usersRepository.findOne({
+    return this.prisma.user.findFirst({
       where: {
-        email: this.normalizeEmail(email),
+        email: email.toLowerCase().trim(),
         deletedAt: null,
       },
-      select: ['id', 'firstName', 'lastName', 'email', 'password', 'role', 'isEmailVerified', 'avatar', 'deletedAt'],
     });
   }
 
-  async findById(id: number): Promise<User | null> {
-    return this.usersRepository.findOne({
+  /** Find user by ID. */
+  async findById(id: string) {
+    return this.prisma.user.findFirst({
       where: { id, deletedAt: null },
-      select: ['id', 'email', 'role', 'isEmailVerified', 'avatar'],
+      select: USER_PUBLIC_SELECT,
     });
   }
 
-  // ─── Mutations ────────────────────────────────────────────────────────────────
-
+  /** Create a new user. */
   async create(userData: {
     firstName?: string;
     lastName?: string;
@@ -65,57 +63,78 @@ export class UsersService {
     password: string | null;
     avatar?: string | null;
   }): Promise<User> {
-    const user = this.usersRepository.create({
-      firstName: userData.firstName ?? null,
-      lastName: userData.lastName ?? null,
-      email: userData.email,
-      password: userData.password,
-      avatar: userData.avatar ?? null,
-    });
-
     try {
-      return await this.usersRepository.save(user);
+      return await this.prisma.user.create({
+        data: {
+          firstName: userData.firstName ?? null,
+          lastName: userData.lastName ?? null,
+          email: userData.email.toLowerCase().trim(),
+          password: userData.password,
+          avatar: userData.avatar ?? null,
+        },
+      });
     } catch (error) {
-      if (error.code === '23505') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new ConflictException('Email already in use');
       }
-      this.logger.error(`Error creating user: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Error creating user: ${message}`);
       throw new InternalServerErrorException('Failed to create user');
     }
   }
 
-  async save(user: User): Promise<User> {
-    return this.usersRepository.save(user);
-  }
-
-  // ─── OAuth ───────────────────────────────────────────────────────────────────
-
-  async findByOAuth(provider: string, providerId: string): Promise<OauthAccount | null> {
-    return this.oauthRepository.findOne({
-      where: {
-        provider,
-        providerId,
-        deletedAt: null, // filter out soft-deleted accounts
-      },
-      relations: ['user'],
+  /** Update user record. */
+  async save(id: string, data: Prisma.UserUpdateInput): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data,
     });
   }
 
-  async createOAuthAccount(user: User, provider: string, providerId: string): Promise<OauthAccount> {
-    const oauth = this.oauthRepository.create({ provider, providerId, user });
+  /** Find OAuth account by provider and ID. */
+  async findByOAuth(
+    provider: string,
+    providerId: string,
+  ): Promise<(OauthAccount & { user: User }) | null> {
+    return this.prisma.oauthAccount.findFirst({
+      where: {
+        provider,
+        providerId,
+        deletedAt: null,
+      },
+      include: { user: true },
+    });
+  }
 
+  /** Link OAuth account to user. */
+  async createOAuthAccount(
+    userId: string,
+    provider: string,
+    providerId: string,
+  ): Promise<OauthAccount> {
     try {
-      return await this.oauthRepository.save(oauth);
+      return await this.prisma.oauthAccount.create({
+        data: {
+          provider,
+          providerId,
+          userId,
+        },
+      });
     } catch (error) {
-      this.logger.error(`Error creating OAuth account (${provider}:${providerId}): ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(
+        `Error creating OAuth account (${provider}:${providerId}): ${message}`,
+      );
       throw new InternalServerErrorException('Failed to create OAuth account');
     }
   }
 
-  // ─── Soft Delete ──────────────────────────────────────────────────────────────
-
-  async softDelete(userId: number): Promise<void> {
-    const user = await this.usersRepository.findOne({
+  /** Soft-delete a user. */
+  async softDelete(userId: string): Promise<void> {
+    const user = await this.prisma.user.findFirst({
       where: { id: userId, deletedAt: null },
     });
 
@@ -123,7 +142,9 @@ export class UsersService {
       throw new NotFoundException('User not found or already deleted');
     }
 
-    // ใช้ TypeORM built-in แทน manual update
-    await this.usersRepository.softDelete({ id: userId });
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { deletedAt: new Date() },
+    });
   }
 }
