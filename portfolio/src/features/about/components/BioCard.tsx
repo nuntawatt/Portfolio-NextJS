@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { routes } from '@/config/routes';
-import { GitHub, Mail, MapPin, Phone } from '../icons/Icon';
+import { GitHub, MapPin, Phone } from '../icons/Icon';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
-    { href: routes.contact, icon: <Mail />, label: 'Contact', variant: 'ghost' as const },
 ] as const;
 
 const PROFILE_META = [

@@ -13,19 +13,19 @@ export function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
 
           {/* Left Column - Text */}
-          <div className="space-y-8 lg:space-y-10 z-10 order-2 lg:order-1 px-4 md:px-12 lg:px-0">
-            <div className="space-y-5 lg:space-y-6 text-center lg:text-left">
-              <h2 className="text-orange-500 font-semibold tracking-widest uppercase text-xs sm:text-sm flex items-center justify-center lg:justify-start gap-3 lg:gap-4">
+          <div className="z-10 order-2 lg:order-1 px-4 md:px-12 lg:px-0">
+            <div className="text-center lg:text-left mb-8 lg:mb-10">
+              <h2 className="text-orange-500 font-semibold tracking-widest uppercase text-xs sm:text-sm flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4">
                 <span className="w-8 lg:w-12 h-[2px] bg-orange-500 inline-block drop-shadow-sm"></span>
                 Hello, Welcome
               </h2>
 
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tighter leading-none transition-colors">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-[1.15] transition-colors mb-3">
                 I&apos;m <span className="text-orange-500">Morgorn</span>
               </h1>
 
-              <h3 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-tight transition-colors">
-                Backend Developer
+              <h3 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-tight transition-colors mb-6">
+                Fullstack Developer
               </h3>
 
               <p className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-foreground/80 text-base md:text-lg lg:text-[1.125rem] font-normal leading-relaxed transition-colors">
@@ -33,7 +33,7 @@ export function HeroSection() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4 lg:pt-2">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mb-8 lg:mb-10">
               <Button variant="primary" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open(siteConfig.links.project, "_blank")}>
                 View Project <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -43,7 +43,7 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <div className="flex items-center justify-center lg:justify-start gap-6 pt-4 lg:pt-8">
+            <div className="flex items-center justify-center lg:justify-start gap-6">
               <SocialLink href={siteConfig.links.github} icon={<Github className="w-5 h-5 lg:w-6 lg:h-6" />} />
               <SocialLink href={siteConfig.links.linkedin} icon={<Linkedin className="w-5 h-5 lg:w-6 lg:h-6" />} />
               <SocialLink href={siteConfig.links.facebook} icon={<Facebook className="w-5 h-5 lg:w-6 lg:h-6" />} />

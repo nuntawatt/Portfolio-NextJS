@@ -121,6 +121,7 @@ export function AboutSection() {
                                 <p className="text-xl md:text-2xl font-light italic text-foreground/95 leading-relaxed relative z-10">
                                     I believe in writing <strong className="font-semibold text-orange-500">clean code</strong>, architecting robust systems, and developing software that solves real-world problems.
                                 </p>
+                                <span className="absolute bottom-2 right-4 text-8xl text-orange-500/10 font-serif pointer-events-none select-none">”</span>
                                 <div className="mt-6 flex items-center gap-3">
                                     <span className="w-8 h-px bg-border" />
                                     <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground" style={{ letterSpacing: '0.12em' }}>Philosophy</p>
