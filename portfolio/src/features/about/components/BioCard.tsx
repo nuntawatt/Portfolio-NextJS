@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { TiltCard } from './TiltCard';
 import { GitHub, Mail, MapPin, Phone } from '../icons/Icon';
 
@@ -12,12 +13,34 @@ const PROFILE_META = [
     { icon: <MapPin />, text: 'Khon Kaen, Thailand' },
     { icon: <Phone />, text: '062-520-6392' },
 ] as const;
-
 export function BioCard() {
+    const [coords, setCoords] = useState({ x: 0, y: 0 });
+    const [hovered, setHovered] = useState(false);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setCoords({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+        });
+    };
+
     return (
         <TiltCard
-            className="relative rounded-3xl p-6 sm:p-8 overflow-hidden bg-white/80 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-2xl transition-colors duration-300"
+            className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-white/80 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
         >
+            {/* spotlight overlay */}
+            <div
+                className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out"
+                style={{
+                    opacity: hovered ? 1 : 0,
+                    background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.08), transparent 80%)`,
+                }}
+            />
+
             {/* corner glow */}
             <div
                 className="absolute top-0 right-0 w-56 h-56 pointer-events-none"

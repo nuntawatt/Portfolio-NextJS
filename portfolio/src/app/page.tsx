@@ -2,7 +2,6 @@ import { Navbar, Footer } from '@/features/navigation';
 import { HeroSection } from '@/features/hero';
 import { AboutSection } from '@/features/about/components/about';
 import { SkillsSection } from '@/features/skills';
-import { ProjectsSection } from '@/features/projects';
 import { ContactCTA } from '@/features/contact';
 
 export default async function Home() {
@@ -14,7 +13,6 @@ export default async function Home() {
         <HeroSection />
         <AboutSection />
         <SkillsSection />
-        <ProjectsSection />
         <ContactCTA />
       </main>
 
