@@ -5,12 +5,9 @@ import { useSession, signOut } from 'next-auth/react';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
-import { useAuth } from '@/feature/auth/hook/auth';
-import { AuthService } from '@/feature/auth/core/lib';
 
 export function AuthButton() {
   const { data: session, status: nextAuthStatus } = useSession();
-  const { user: localUser, isAuthenticated: isLocalAuthenticated, logout: localLogout } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -26,24 +23,18 @@ export function AuthButton() {
   }, []);
 
   const isLoading = nextAuthStatus === 'loading';
-
-  // Determine user info and authenticated state
-  const isUserAuthenticated = !!session?.user || isLocalAuthenticated;
-  const userEmail = session?.user?.email || localUser?.email;
-  const userName = session?.user?.name || (localUser ? `${localUser.firstName} ${localUser.lastName}`.trim() : '');
+  const isAuthenticated = nextAuthStatus === 'authenticated';
+  
+  const userEmail = session?.user?.email;
+  const userName = session?.user?.name || '';
   const userImage = session?.user?.image || null;
 
   const handleSignOut = () => {
-    if (session) {
-      signOut();
-    } else {
-      AuthService.logout();
-      localLogout();
-    }
+    signOut({ callbackUrl: '/' });
     setIsProfileOpen(false);
   };
 
-  if (isUserAuthenticated) {
+  if (isAuthenticated && session?.user) {
     return (
       <div className="relative" ref={profileRef}>
         <button

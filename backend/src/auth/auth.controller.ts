@@ -196,7 +196,7 @@ export class AuthController {
     const data = await this.authService.oauthLogin(req.user as OAuthUser);
     const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
     const params = new URLSearchParams({ data: JSON.stringify(data) });
-    res.redirect(`${frontendUrl}?${params}`);
+    res.redirect(`${frontendUrl}/auth/callback?${params}`);
   }
 
   // OAuth: GitHub
@@ -214,6 +214,6 @@ export class AuthController {
     const data = await this.authService.oauthLogin(req.user as OAuthUser);
     const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
     const params = new URLSearchParams({ data: JSON.stringify(data) });
-    res.redirect(`${frontendUrl}?${params}`);
+    res.redirect(`${frontendUrl}/auth/callback?${params}`);
   }
 }

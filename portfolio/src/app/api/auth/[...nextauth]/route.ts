@@ -1,25 +1,62 @@
-import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID || "",
-      clientSecret: process.env.GITHUB_SECRET || "",
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        token: { label: "Token", type: "text" },
+        id: { label: "ID", type: "text" },
+        email: { label: "Email", type: "text" },
+        firstName: { label: "First Name", type: "text" },
+        lastName: { label: "Last Name", type: "text" },
+      },
+      async authorize(credentials) {
+        if (credentials?.token && credentials?.id && credentials?.email) {
+          // ตรวจสอบข้อมูลผู้ใช้ที่ได้รับจาก credentials และส่งกลับข้อมูลผู้ใช้ที่ถูกต้อง
+          // สามารถปรับแต่งการตรวจสอบนี้ตามความต้องการ เช่น การตรวจสอบกับฐานข้อมูลหรือ API ภายนอก
+          return {
+            id: credentials.id,
+            email: credentials.email,
+            name: `${credentials.firstName || ''} ${credentials.lastName || ''}`.trim(),
+            accessToken: credentials.token,
+          } as any;
+        }
+        return null;
+      }
     })
   ],
-  secret: process.env.NEXTAUTH_SECRET || "fallback_secret_for_development_do_not_use_in_prod",
+  callbacks: {
+    async jwt({ token, user }) {
+      // Initial sign in
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.accessToken = (user as any).accessToken;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Send properties to the client
+      if (session.user) {
+        (session.user as any).id = token.id;
+        (session.user as any).accessToken = token.accessToken;
+      }
+      return session;
+    }
+  },
+  pages: {
+    signIn: "/auth/signin",
+  },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  theme: {
-    colorScheme: "auto",
-  },
-});
+  secret: process.env.NEXTAUTH_SECRET || "fallback_secret_for_development_do_not_use_in_prod",
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

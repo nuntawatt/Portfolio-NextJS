@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { AuthService, getErrorMessage } from '../core/lib';
 import { SignInData } from '../core/type';
 import { useAuthStore } from '../store/store';
@@ -17,7 +18,23 @@ export const useLogin = () => {
     
     try {
       const response = await AuthService.login(data);
+      // We still update local store if needed for legacy reasons, 
+      // but NextAuth handles the primary session now.
       setAuth(response.user);
+      
+      const result = await signIn('credentials', {
+        redirect: false,
+        token: response.user.token,
+        id: response.user.id,
+        email: response.user.email,
+        firstName: response.user.firstName,
+        lastName: response.user.lastName,
+      });
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
       onSuccess?.();
     } catch (err) {
       setError(getErrorMessage(err));
