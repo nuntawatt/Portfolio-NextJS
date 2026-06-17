@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
 import Providers from "./providers";
 import { siteConfig } from "@/config/site";
+import { AudioProvider } from "@/features/audio";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -43,11 +44,13 @@ export default function RootLayout({
         )}
       >
         <div className="noise-overlay" />
-        <AuthProvider>
-          <Providers>
-            {children}
-          </Providers>
-        </AuthProvider>
+        <AudioProvider>
+          <AuthProvider>
+            <Providers>
+              {children}
+            </Providers>
+          </AuthProvider>
+        </AudioProvider>
       </body>
     </html>
   );

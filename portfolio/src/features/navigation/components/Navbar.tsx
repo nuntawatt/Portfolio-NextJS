@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/shared/components/ThemeToggle';
 import { AuthButton } from '@/shared/components/AuthButton';
+import { AudioToggle } from '@/features/audio';
 import { routes } from '@/config/routes';
 
 export function Navbar() {
@@ -114,6 +115,7 @@ export function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
+              <AudioToggle />
               <ThemeToggle />
               <AuthButton />
             </div>
@@ -171,7 +173,7 @@ export function Navbar() {
               Navigation
             </span>
             {navLinks.map((link) => (
-              <a
+               <a
                 key={link.name}
                 href={link.href}
                 className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${activeHash === link.href
@@ -186,6 +188,11 @@ export function Navbar() {
           </div>
 
           <div className="pt-8 mt-8 border-t border-border flex flex-col gap-6">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-sm font-semibold text-muted-foreground">Background Music</span>
+              <AudioToggle />
+            </div>
+            
             <div className="flex items-center justify-between px-2">
               <span className="text-sm font-semibold text-muted-foreground">Theme Preference</span>
               <ThemeToggle />
