@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/shared/components/ThemeToggle';
 import { AuthButton } from '@/shared/components/AuthButton';
@@ -8,7 +9,8 @@ import { routes } from '@/config/routes';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeHash, setActiveHash] = useState<string>(routes.home);
+  const [activeHash, setActiveHash] = useState<string>('');
+  const pathname = usePathname();
 
   const navLinks = [
     { name: 'Home', href: routes.home },
@@ -37,6 +39,35 @@ export function Navbar() {
     document.addEventListener('keydown', handleEsc);
     return () => document.removeEventListener('keydown', handleEsc);
   }, [isOpen]);
+
+  // Handle active hash detection dynamically on homepage scroll, and force active contact page state
+  useEffect(() => {
+    if (pathname === '/contact') {
+      setActiveHash(routes.contact);
+      return;
+    }
+
+    const sections = ['home', 'about', 'skills'];
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 250; // offset for better detection
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveHash(`/#${sectionId}`);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // initial check
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pathname]);
 
   const handleLinkClick = (href: string) => {
     setActiveHash(href);
