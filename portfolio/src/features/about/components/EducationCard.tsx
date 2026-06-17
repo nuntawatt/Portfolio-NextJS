@@ -20,7 +20,7 @@ export function EducationCard() {
 
     return (
         <div
-            className="relative rounded-[20px] p-5 overflow-hidden bg-white/60 dark:bg-white/[0.025] border border-orange-200/60 dark:border-orange-500/[0.18] backdrop-blur-xl transition-all duration-300 group cursor-pointer"
+            className="relative rounded-[20px] p-5 overflow-hidden bg-white/60 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-xl transition-all duration-300 group cursor-pointer"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >

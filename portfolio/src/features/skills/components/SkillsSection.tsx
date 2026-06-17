@@ -32,13 +32,8 @@ function SkillCard({ children, title, icon }: { children: React.ReactNode; title
         }}
       />
 
-      {/* Card Window Header */}
+      {/* Card Header */}
       <div className="relative z-10 flex items-center justify-between pb-3 mb-5 border-b border-black/5 dark:border-white/5 select-none">
-        <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10 group-hover:bg-red-400/80 transition-colors" />
-          <span className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10 group-hover:bg-yellow-400/80 transition-colors" />
-          <span className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10 group-hover:bg-green-400/80 transition-colors" />
-        </div>
         <span className="font-mono text-[9px] text-black/35 dark:text-white/35 tracking-wider font-bold">
           {title}
         </span>
@@ -75,12 +70,7 @@ export function SkillsSection() {
           <div className="ambient-glow -top-24 -right-24" />
 
           {/* Window Header */}
-          <div className="flex items-center justify-between pb-4 mb-8 border-b border-black/5 dark:border-white/5 select-none">
-            <div className="flex gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-black/10 dark:bg-white/10 hover:bg-red-400/80 transition-colors" />
-              <span className="w-2.5 h-2.5 rounded-full bg-black/10 dark:bg-white/10 hover:bg-yellow-400/80 transition-colors" />
-              <span className="w-2.5 h-2.5 rounded-full bg-black/10 dark:bg-white/10 hover:bg-green-400/80 transition-colors" />
-            </div>
+          <div className="flex items-center justify-end pb-4 mb-8 border-b border-black/5 dark:border-white/5 select-none">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

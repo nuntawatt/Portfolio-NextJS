@@ -16,7 +16,7 @@ export function StatCard({ stat }: StatCardProps) {
 
     return (
         <div
-            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-white/60 dark:bg-white/[0.032] border border-orange-200/60 dark:border-orange-500/[0.18] backdrop-blur-xl transition-colors duration-300"
+            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-white/60 dark:bg-white/[0.032] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-xl transition-colors duration-300"
         >
             {/* icon badge */}
             {Icon && (
