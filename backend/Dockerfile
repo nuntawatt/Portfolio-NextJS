@@ -41,5 +41,5 @@ COPY --from=development /usr/src/app/dist ./dist
 EXPOSE 3001
 
 # Start the server
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
 
