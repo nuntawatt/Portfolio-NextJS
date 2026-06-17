@@ -21,7 +21,7 @@ export function HeroSection() {
               </h2>
 
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-[1.1] transition-colors">
-                I'm <span className="text-orange-500 drop-shadow-md">Morgorn</span>
+                I&apos;m <span className="text-orange-500 drop-shadow-md">Morgorn</span>
               </h1>
 
               <h3 className="text-xl md:text-2xl lg:text-4xl text-gray-700 dark:text-gray-300 font-semibold transition-colors">

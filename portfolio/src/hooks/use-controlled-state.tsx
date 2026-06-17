@@ -5,8 +5,8 @@ interface CommonControlledStateProps<T> {
   defaultValue?: T;
 }
 
-// ใช้ค่าจาก props และ state เพื่อควบคุม state
-export function useControlledState<T, Rest extends any[] = []>(
+// Controls state using props and local state
+export function useControlledState<T, Rest extends unknown[] = []>(
   props: CommonControlledStateProps<T> & {
     onChange?: (value: T, ...args: Rest) => void;
   },

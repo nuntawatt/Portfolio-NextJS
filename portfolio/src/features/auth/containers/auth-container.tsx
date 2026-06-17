@@ -16,12 +16,12 @@ export function AuthContainer() {
 
   // Hook Form instances
   const signInForm = useForm<SignInData>({
-    resolver: zodResolver(signInSchema as any),
+    resolver: zodResolver(signInSchema),
     mode: 'onChange',
   });
 
   const signUpForm = useForm<SignUpData>({
-    resolver: zodResolver(signUpSchema as any),
+    resolver: zodResolver(signUpSchema),
     mode: 'onChange',
   });
 

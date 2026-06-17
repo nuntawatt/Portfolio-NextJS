@@ -9,11 +9,11 @@ export function ContactCTA() {
       
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-7 transition-colors">
-          Let's Build Something <span className="text-gradient">Amazing</span> Together
+          Let&apos;s Build Something <span className="text-gradient">Amazing</span> Together
         </h2>
         
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed transition-colors">
-          Whether you have a project in mind or just want to chat about architecture and code, feel free to reach out. I'm currently open for new opportunities.
+          Whether you have a project in mind or just want to chat about architecture and code, feel free to reach out. I&apos;m currently open for new opportunities.
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
