@@ -2,7 +2,6 @@ import { Navbar, Footer } from '@/features/navigation';
 import { HeroSection } from '@/features/hero';
 import { AboutSection } from '@/features/about/components/about';
 import { SkillsSection } from '@/features/skills';
-import { ContactCTA } from '@/features/contact';
 
 export default async function Home() {
   return (
@@ -13,7 +12,6 @@ export default async function Home() {
         <HeroSection />
         <AboutSection />
         <SkillsSection />
-        <ContactCTA />
       </main>
 
       <Footer />

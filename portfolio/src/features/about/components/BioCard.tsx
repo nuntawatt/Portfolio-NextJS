@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { TiltCard } from './TiltCard';
+import { routes } from '@/config/routes';
 import { GitHub, Mail, MapPin, Phone } from '../icons/Icon';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
-    { href: 'mailto:morgorn.wk@gmail.com', icon: <Mail />, label: 'Contact', variant: 'ghost' as const },
+    { href: routes.contact, icon: <Mail />, label: 'Contact', variant: 'ghost' as const },
 ] as const;
 
 const PROFILE_META = [
@@ -23,14 +23,18 @@ export function BioCard() {
             x: e.clientX - rect.left,
             y: e.clientY - rect.top,
         });
+        if (!hovered) setHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setHovered(false);
     };
 
     return (
-        <TiltCard
+        <div
             className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-white/80 dark:bg-white/[0.025] border border-gray-200/80 dark:border-white/[0.07] backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
             onMouseMove={handleMouseMove}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
+            onMouseLeave={handleMouseLeave}
         >
             {/* spotlight overlay */}
             <div
@@ -131,6 +135,6 @@ export function BioCard() {
                     </a>
                 ))}
             </div>
-        </TiltCard>
+        </div>
     );
 }

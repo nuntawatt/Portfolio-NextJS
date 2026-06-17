@@ -1,9 +1,8 @@
 export const routes = {
-  home: "#home",
-  about: "#about",
-  skills: "#skills",
-  projects: "#projects",
-  contact: "#contact",
+  home: "/#home",
+  about: "/#about",
+  skills: "/#skills",
+  contact: "/contact",
   auth: {
     signin: "/auth/signin",
     signup: "/auth/signup",

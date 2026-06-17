@@ -5,9 +5,8 @@ import { BioCard } from './BioCard';
 import { EducationCard } from './EducationCard';
 import { StatCard } from './StatCard';
 import { SectionLabel } from './SectionLabel';
-import { TimelineItem } from './TimelineItem';
 import { useInView } from '../hooks/useInView';
-import { STATS, EXPERIENCES } from '../constants/data';
+import { STATS } from '../constants/data';
 import { motion } from 'motion/react';
 import { TypingTerminal } from '@/animation/ui/TypingTerminal';
 
@@ -170,25 +169,6 @@ export function AboutSection() {
                         </div>
                     </div>
 
-                    {/* Experience */}
-                    <div>
-                        <SectionLabel>Experience &amp; Projects</SectionLabel>
-                        <div className="relative">
-                            {/* timeline spine */}
-                            <div
-                                className="absolute left-6 top-2 bottom-2 w-px hidden md:block"
-                                style={{
-                                    background: 'linear-gradient(to bottom, transparent, rgba(249,115,22,0.5) 15%, rgba(234,88,12,0.5) 85%, transparent)',
-                                }}
-                                aria-hidden="true"
-                            />
-                            <div className="space-y-4">
-                                {EXPERIENCES.map((exp, i) => (
-                                    <TimelineItem key={exp.title} experience={exp} index={i} />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </section>

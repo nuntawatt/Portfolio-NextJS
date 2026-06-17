@@ -1,12 +1,40 @@
+import React, { useState } from 'react';
 import { TiltCard } from './TiltCard';
 import { GraduationCap } from '../icons/Icon';
 
 export function EducationCard() {
+    const [coords, setCoords] = useState({ x: 0, y: 0 });
+    const [hovered, setHovered] = useState(false);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setCoords({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+        });
+        if (!hovered) setHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setHovered(false);
+    };
+
     return (
         <TiltCard
-            className="rounded-2xl p-5 overflow-hidden bg-white/60 dark:bg-white/[0.025] border border-orange-200/60 dark:border-orange-500/[0.18] backdrop-blur-xl transition-colors duration-300"
+            className="relative rounded-[20px] p-5 overflow-hidden bg-white/60 dark:bg-white/[0.025] border border-orange-200/60 dark:border-orange-500/[0.18] backdrop-blur-xl transition-all duration-300 group cursor-pointer"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
         >
-            <div className="flex items-center gap-4">
+            {/* spotlight overlay */}
+            <div
+                className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out"
+                style={{
+                    opacity: hovered ? 1 : 0,
+                    background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.08), transparent 80%)`,
+                }}
+            />
+
+            <div className="relative z-10 flex items-center gap-4">
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-orange-100 dark:bg-gradient-to-br dark:from-orange-500/20 dark:to-orange-600/10 text-orange-500 transition-colors">
                     <GraduationCap />
                 </div>

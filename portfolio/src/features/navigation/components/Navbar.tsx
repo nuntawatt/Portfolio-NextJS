@@ -14,7 +14,6 @@ export function Navbar() {
     { name: 'Home', href: routes.home },
     { name: 'About', href: routes.about },
     { name: 'Skills', href: routes.skills },
-    { name: 'Projects', href: routes.projects },
     { name: 'Contact', href: routes.contact },
   ];
 
