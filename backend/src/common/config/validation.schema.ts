@@ -51,4 +51,7 @@ export const validationSchema = Joi.object({
   // Redis (optional)
   REDIS_HOST: Joi.string().allow('').default('localhost'),
   REDIS_PORT: Joi.number().default(6379),
+
+  // Swagger Configuration
+  ENABLE_SWAGGER: Joi.string().valid('true', 'false').default('false'),
 });

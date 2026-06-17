@@ -43,14 +43,16 @@ async function bootstrap() {
   });
 
   // Swagger
-  if (nodeEnv !== 'production') {
-    const config = new DocumentBuilder()
+  const enableSwagger = configService.get<string>('ENABLE_SWAGGER') === 'true' || nodeEnv !== 'production';
+  const apiUrl = configService.get<string>('API_URL') || `http://localhost:${port}`;
+
+  if (enableSwagger) {
+    const configBuilder = new DocumentBuilder()
       .setTitle('Portfolio Platform API')
       .setDescription(
         'REST API documentation for the Portfolio Platform backend',
       )
       .setVersion('1.0')
-      .addServer(`http://localhost:${port}`, 'Development server')
       .addBearerAuth(
         {
           type: 'http',
@@ -60,9 +62,18 @@ async function bootstrap() {
           in: 'header',
         },
         'access-token',
-      )
-      .build();
+      );
 
+    if (nodeEnv === 'production') {
+      configBuilder.addServer(apiUrl, 'Production server');
+    } else {
+      configBuilder.addServer(`http://localhost:${port}`, 'Development server');
+      if (apiUrl && !apiUrl.includes('localhost')) {
+        configBuilder.addServer(apiUrl, 'Production server');
+      }
+    }
+
+    const config = configBuilder.build();
     const document = SwaggerModule.createDocument(app, config);
 
     SwaggerModule.setup('api/docs', app, document, {
@@ -71,7 +82,7 @@ async function bootstrap() {
       },
     });
 
-    logger.log(`Swagger docs: http://localhost:${port}/api/docs`);
+    logger.log(`Swagger docs: ${apiUrl}/api/docs`);
   }
 
   // Graceful shutdown
