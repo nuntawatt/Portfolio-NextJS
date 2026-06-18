@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 
 // Regular expression to validate UUID format (version 4).
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // ตั้งค่า CustomParseUUIDPipe เป็น Injectable เพื่อให้สามารถใช้ใน NestJS ได้
 @Injectable()

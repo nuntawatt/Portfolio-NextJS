@@ -35,9 +35,7 @@ import { OAuthUser } from './types/auth-type';
 @ApiBearerAuth('access-token')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   // Register / Login / Verify
 
@@ -193,7 +191,7 @@ export class AuthController {
   @ApiExcludeEndpoint()
   async googleCallback(@Req() req: Request, @Res() res: Response) {
     const data = await this.authService.oauthLogin(req.user as OAuthUser);
-    const frontendUrl = process.env.FRONTEND_URL as string;
+    const frontendUrl = process.env.FRONTEND_URL;
     const params = new URLSearchParams({ data: JSON.stringify(data) });
     res.redirect(`${frontendUrl}/auth/callback?${params}`);
   }
@@ -211,7 +209,7 @@ export class AuthController {
   @ApiExcludeEndpoint()
   async githubCallback(@Req() req: Request, @Res() res: Response) {
     const data = await this.authService.oauthLogin(req.user as OAuthUser);
-    const frontendUrl = process.env.FRONTEND_URL as string;
+    const frontendUrl = process.env.FRONTEND_URL;
     const params = new URLSearchParams({ data: JSON.stringify(data) });
     res.redirect(`${frontendUrl}/auth/callback?${params}`);
   }

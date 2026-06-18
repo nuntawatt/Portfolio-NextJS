@@ -11,9 +11,9 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
 
-  const port = parseInt(process.env.PORT as string, 10);
-  const frontendUrl = process.env.FRONTEND_URL as string;
-  const nodeEnv = process.env.NODE_ENV as string;
+  const port = parseInt(process.env.PORT, 10);
+  const frontendUrl = process.env.FRONTEND_URL;
+  const nodeEnv = process.env.NODE_ENV;
 
   // Global prefix
   app.setGlobalPrefix('api');
@@ -39,13 +39,11 @@ async function bootstrap() {
   });
 
   // Swagger
-  const apiUrl = process.env.API_URL as string;
+  const apiUrl = process.env.API_URL;
 
   const configBuilder = new DocumentBuilder()
     .setTitle('Portfolio Platform API')
-    .setDescription(
-      'REST API documentation for the Portfolio Platform backend',
-    )
+    .setDescription('REST API documentation for the Portfolio Platform backend')
     .setVersion('1.0')
     .addBearerAuth(
       {

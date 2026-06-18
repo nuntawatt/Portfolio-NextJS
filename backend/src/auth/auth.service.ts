@@ -41,7 +41,7 @@ export class AuthService {
         isEmailVerified: user.isEmailVerified,
       },
       {
-        secret: process.env.JWT_SECRET as string,
+        secret: process.env.JWT_SECRET,
         expiresIn: '15m',
       },
     );
@@ -58,7 +58,7 @@ export class AuthService {
         isEmailVerified: user.isEmailVerified,
       },
       {
-        secret: process.env.JWT_REFRESH_SECRET as string,
+        secret: process.env.JWT_REFRESH_SECRET,
         expiresIn: '7d',
       },
     );
@@ -173,7 +173,7 @@ export class AuthService {
       expiresAt,
     );
 
-    const frontendUrl = process.env.FRONTEND_URL as string;
+    const frontendUrl = process.env.FRONTEND_URL;
     const verifyUrl = `${frontendUrl}/auth/verify-email?token=${rawToken}`;
 
     // Send email asynchronously
@@ -283,7 +283,7 @@ export class AuthService {
 
     try {
       payload = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET as string,
+        secret: process.env.JWT_REFRESH_SECRET,
       });
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
@@ -377,7 +377,7 @@ export class AuthService {
       expiresAt,
     );
 
-    const frontendUrl = process.env.FRONTEND_URL as string;
+    const frontendUrl = process.env.FRONTEND_URL;
     const resetUrl = `${frontendUrl}/auth/reset-password?token=${rawToken}`;
 
     this.mailService

@@ -17,8 +17,8 @@ export class MailService {
   private readonly mailFrom: string;
 
   constructor() {
-    const apiKey = process.env.RESEND_API_KEY as string;
-    const mailFrom = process.env.MAIL_FROM as string;
+    const apiKey = process.env.RESEND_API_KEY;
+    const mailFrom = process.env.MAIL_FROM;
 
     this.resend = new Resend(apiKey);
     this.mailFrom = mailFrom;

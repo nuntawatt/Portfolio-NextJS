@@ -5,7 +5,12 @@ import { MailService } from '../auth/mail/mail.service';
 export class ContactService {
   constructor(private readonly mailService: MailService) {}
 
-  async sendContactMessage(name: string, userEmail: string, subject: string, message: string) {
+  async sendContactMessage(
+    name: string,
+    userEmail: string,
+    subject: string,
+    message: string,
+  ) {
     const developerEmail = 'morgorn.wk@gmail.com';
 
     const emailHtml = `

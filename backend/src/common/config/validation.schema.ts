@@ -10,9 +10,7 @@ export const validationSchema = Joi.object({
   // ตั้งค่าพื้นฐานของโปรเจกต์
   // ==========================================
   PORT: Joi.number().required(),
-  NODE_ENV: Joi.string()
-    .valid('development', 'production', 'test')
-    .required(),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
   FRONTEND_URL: Joi.string().uri().required(),
   API_URL: Joi.string().uri().optional(),
 

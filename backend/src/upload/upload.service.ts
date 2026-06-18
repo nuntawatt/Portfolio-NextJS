@@ -30,21 +30,23 @@ export class UploadService implements OnModuleInit {
 
   constructor() {
     // ดึงค่าคอนฟิกของ S3/Supabase Storage จาก .env
-    const endpoint = process.env.MINIO_ENDPOINT as string;
-    const port = parseInt(process.env.MINIO_PORT as string, 10);
+    const endpoint = process.env.MINIO_ENDPOINT;
+    const port = parseInt(process.env.MINIO_PORT, 10);
     const useSsl = process.env.MINIO_USE_SSL === 'true';
-    const accessKey = process.env.MINIO_ACCESS_KEY as string;
-    const secretKey = process.env.MINIO_SECRET_KEY as string;
+    const accessKey = process.env.MINIO_ACCESS_KEY;
+    const secretKey = process.env.MINIO_SECRET_KEY;
 
     // ชื่อ Bucket หลัก
-    this.defaultBucket = process.env.MINIO_BUCKET_NAME as string;
+    this.defaultBucket = process.env.MINIO_BUCKET_NAME;
 
     // จัดการจัดรูปแบบ Endpoint ให้ถูกต้อง
     let s3Endpoint = endpoint;
     if (!endpoint.startsWith('http')) {
       const protocol = useSsl ? 'https' : 'http';
       const isStandardPort = port === 80 || port === 443;
-      s3Endpoint = isStandardPort ? `${protocol}://${endpoint}` : `${protocol}://${endpoint}:${port}`;
+      s3Endpoint = isStandardPort
+        ? `${protocol}://${endpoint}`
+        : `${protocol}://${endpoint}:${port}`;
     }
 
     // สร้างการเชื่อมต่อ S3 Client
@@ -128,7 +130,7 @@ export class UploadService implements OnModuleInit {
     }
   }
 
-  //  สร้างลิงก์สำหรับเข้าถึงไฟล์สาธารณะ (Public URL)   
+  //  สร้างลิงก์สำหรับเข้าถึงไฟล์สาธารณะ (Public URL)
   private constructFileUrl(bucketName: string, objectKey: string): string {
     // ถ้ามีการระบุ Public URL ใน .env ให้ใช้งานได้เลย (เหมาะกับ Supabase)
     const publicUrl = process.env.MINIO_PUBLIC_URL;
@@ -137,18 +139,18 @@ export class UploadService implements OnModuleInit {
     }
 
     // กรณีไม่มี Public URL จะทำการสร้าง URL สดๆ จาก Endpoint
-    const endpoint = process.env.MINIO_ENDPOINT as string;
-    
+    const endpoint = process.env.MINIO_ENDPOINT;
+
     // ถ้าใส่มาเป็น URL เต็มๆ แล้ว
     if (endpoint.startsWith('http')) {
       return `${endpoint.replace(/\/$/, '')}/${bucketName}/${objectKey}`;
     }
 
     // ถ้าใส่มาแค่ชื่อโดเมน/IP
-    const port = parseInt(process.env.MINIO_PORT as string, 10);
+    const port = parseInt(process.env.MINIO_PORT, 10);
     const useSsl = process.env.MINIO_USE_SSL === 'true';
     const protocol = useSsl ? 'https' : 'http';
-    const host = (port === 80 || port === 443) ? endpoint : `${endpoint}:${port}`;
+    const host = port === 80 || port === 443 ? endpoint : `${endpoint}:${port}`;
 
     return `${protocol}://${host}/${bucketName}/${objectKey}`;
   }

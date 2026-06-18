@@ -18,7 +18,7 @@ export class PrismaService
     super({
       datasources: {
         db: {
-          url: process.env.DATABASE_URL as string,
+          url: process.env.DATABASE_URL,
         },
       },
       log: [

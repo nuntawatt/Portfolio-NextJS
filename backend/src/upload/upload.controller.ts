@@ -45,11 +45,12 @@ export class UploadController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     // ใช้ ParseFilePipe จัดการ Validate ไฟล์แทนการเขียน if(!file) ในฟังก์ชัน
-    @UploadedFile(new ParseFilePipe({ fileIsRequired: true })) file: UploadedFileDto,
+    @UploadedFile(new ParseFilePipe({ fileIsRequired: true }))
+    file: UploadedFileDto,
     @Query('folder') folder = 'uploads',
   ) {
     const result = await this.uploadService.uploadFile(file, folder);
-    
+
     return {
       success: true,
       data: result,
