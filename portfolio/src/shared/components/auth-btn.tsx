@@ -42,7 +42,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
         <button
           disabled={isLoading}
           onClick={() => setIsProfileOpen(!isProfileOpen)}
-          className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 transition duration-300 ease-out hover:scale-[1.02] hover:-translate-y-1 hover:shadow-lg focus:outline-none overflow-hidden bg-white dark:bg-neutral-800 disabled:opacity-50"
+          className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 transition duration-200 ease-out hover:shadow-md focus:outline-none overflow-hidden bg-white dark:bg-neutral-800 disabled:opacity-50"
           aria-expanded={isProfileOpen}
         >
           {userImage ? (
@@ -81,7 +81,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
       {/* Sign In Button: Sleek primary gradient (Swapped) */}
       <Link
         href={routes.auth.signin}
-        className="flex-1 lg:flex-none transition-all duration-500 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30 whitespace-nowrap"
+        className="flex-1 lg:flex-none transition-all duration-200 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl shadow-md hover:shadow-orange-500/10 whitespace-nowrap"
       >
         {t('nav.signin')}
       </Link>
@@ -89,7 +89,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
       {/* Sign Up Button: Premium Dark Solid to match theme */}
       <Link
         href={routes.auth.signup}
-        className="flex-1 lg:flex-none transition-all duration-500 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md shadow-gray-900/20 dark:shadow-white/20 whitespace-nowrap"
+        className="flex-1 lg:flex-none transition-all duration-200 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl shadow-md shadow-gray-900/10 dark:shadow-white/10 whitespace-nowrap"
       >
         {t('nav.signup')}
       </Link>

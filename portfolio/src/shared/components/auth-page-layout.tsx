@@ -27,8 +27,8 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
       {/* ── Left branding panel (hidden on mobile) ── */}
       <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center bg-gradient-to-br from-[#0a0a0a] via-[#111] to-[#0a0a0a] overflow-hidden">
         {/* Animated gradient orbs */}
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-orange-500/20 rounded-full blur-[120px] animate-pulse pointer-events-none" />
-        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-orange-600/15 rounded-full blur-[100px] animate-pulse pointer-events-none" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-orange-50/20 dark:bg-orange-500/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-orange-600/15 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-400/10 rounded-full blur-[150px] pointer-events-none" />
 
         {/* Grid overlay */}
@@ -93,8 +93,8 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
       {/* ── Right form panel ── */}
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-b from-gray-50/50 to-white dark:from-[#0a0a0a] dark:to-[#0a0a0a] relative">
         {/* Subtle background orbs */}
-        <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-orange-50/5 dark:bg-orange-50/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-blue-50/5 dark:bg-blue-50/5 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-orange-50/5 dark:bg-orange-50/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-blue-50/5 dark:bg-blue-50/5 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="w-full max-w-[480px] px-6 sm:px-8 pt-20 pb-8 sm:py-12 relative z-10">
           {/* Mobile logo (visible only on small screens) */}
