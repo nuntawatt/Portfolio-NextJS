@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+
 import {
   S3Client,
   PutObjectCommand,
@@ -28,16 +28,16 @@ export class UploadService implements OnModuleInit {
   private s3Client: S3Client;
   private defaultBucket: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor() {
     // ดึงค่าคอนฟิกของ S3/Supabase Storage จาก .env
-    const endpoint = this.configService.getOrThrow<string>('minio.endpoint');
-    const port = this.configService.get<number>('minio.port', 9000);
-    const useSsl = this.configService.get<boolean>('minio.useSsl', false);
-    const accessKey = this.configService.getOrThrow<string>('minio.accessKey');
-    const secretKey = this.configService.getOrThrow<string>('minio.secretKey');
+    const endpoint = process.env.MINIO_ENDPOINT as string;
+    const port = parseInt(process.env.MINIO_PORT as string, 10);
+    const useSsl = process.env.MINIO_USE_SSL === 'true';
+    const accessKey = process.env.MINIO_ACCESS_KEY as string;
+    const secretKey = process.env.MINIO_SECRET_KEY as string;
 
-    // ชื่อ Bucket หลัก (ค่าเริ่มต้นคือ 'portfolio')
-    this.defaultBucket = this.configService.get<string>('minio.bucketName', 'portfolio');
+    // ชื่อ Bucket หลัก
+    this.defaultBucket = process.env.MINIO_BUCKET_NAME as string;
 
     // จัดการจัดรูปแบบ Endpoint ให้ถูกต้อง
     let s3Endpoint = endpoint;
@@ -131,13 +131,13 @@ export class UploadService implements OnModuleInit {
   //  สร้างลิงก์สำหรับเข้าถึงไฟล์สาธารณะ (Public URL)   
   private constructFileUrl(bucketName: string, objectKey: string): string {
     // ถ้ามีการระบุ Public URL ใน .env ให้ใช้งานได้เลย (เหมาะกับ Supabase)
-    const publicUrl = this.configService.get<string>('minio.publicUrl');
+    const publicUrl = process.env.MINIO_PUBLIC_URL;
     if (publicUrl) {
       return `${publicUrl.replace(/\/$/, '')}/${bucketName}/${objectKey}`;
     }
 
     // กรณีไม่มี Public URL จะทำการสร้าง URL สดๆ จาก Endpoint
-    const endpoint = this.configService.getOrThrow<string>('minio.endpoint');
+    const endpoint = process.env.MINIO_ENDPOINT as string;
     
     // ถ้าใส่มาเป็น URL เต็มๆ แล้ว
     if (endpoint.startsWith('http')) {
@@ -145,8 +145,8 @@ export class UploadService implements OnModuleInit {
     }
 
     // ถ้าใส่มาแค่ชื่อโดเมน/IP
-    const port = this.configService.get<number>('minio.port', 9000);
-    const useSsl = this.configService.get<boolean>('minio.useSsl', false);
+    const port = parseInt(process.env.MINIO_PORT as string, 10);
+    const useSsl = process.env.MINIO_USE_SSL === 'true';
     const protocol = useSsl ? 'https' : 'http';
     const host = (port === 80 || port === 443) ? endpoint : `${endpoint}:${port}`;
 

@@ -16,9 +16,9 @@ export class MailService {
   private readonly resend: Resend;
   private readonly mailFrom: string;
 
-  constructor(private readonly configService: ConfigService) {
-    const apiKey = this.configService.getOrThrow<string>('RESEND_API_KEY');
-    const mailFrom = this.configService.getOrThrow<string>('MAIL_FROM');
+  constructor() {
+    const apiKey = process.env.RESEND_API_KEY as string;
+    const mailFrom = process.env.MAIL_FROM as string;
 
     this.resend = new Resend(apiKey);
     this.mailFrom = mailFrom;

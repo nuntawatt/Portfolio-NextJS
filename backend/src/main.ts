@@ -11,13 +11,9 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
 
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('PORT', 3001);
-  const frontendUrl = configService.get<string>(
-    'FRONTEND_URL',
-    'http://localhost:3000',
-  );
-  const nodeEnv = configService.get<string>('NODE_ENV', 'development');
+  const port = parseInt(process.env.PORT as string, 10);
+  const frontendUrl = process.env.FRONTEND_URL as string;
+  const nodeEnv = process.env.NODE_ENV as string;
 
   // Global prefix
   app.setGlobalPrefix('api');
@@ -43,7 +39,7 @@ async function bootstrap() {
   });
 
   // Swagger
-  const apiUrl = configService.get<string>('API_URL') || `http://localhost:${port}`;
+  const apiUrl = process.env.API_URL as string;
 
   const configBuilder = new DocumentBuilder()
     .setTitle('Portfolio Platform API')

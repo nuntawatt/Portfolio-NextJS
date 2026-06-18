@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+
 import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
@@ -24,7 +24,6 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
     private readonly mailService: MailService,
     private readonly authTokenService: AuthTokenService,
   ) {}
@@ -42,7 +41,7 @@ export class AuthService {
         isEmailVerified: user.isEmailVerified,
       },
       {
-        secret: this.configService.getOrThrow<string>('JWT_SECRET'),
+        secret: process.env.JWT_SECRET as string,
         expiresIn: '15m',
       },
     );
@@ -59,7 +58,7 @@ export class AuthService {
         isEmailVerified: user.isEmailVerified,
       },
       {
-        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        secret: process.env.JWT_REFRESH_SECRET as string,
         expiresIn: '7d',
       },
     );
@@ -174,7 +173,7 @@ export class AuthService {
       expiresAt,
     );
 
-    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    const frontendUrl = process.env.FRONTEND_URL as string;
     const verifyUrl = `${frontendUrl}/verify-email?token=${rawToken}`;
 
     // Send email asynchronously
@@ -284,7 +283,7 @@ export class AuthService {
 
     try {
       payload = this.jwtService.verify(refreshToken, {
-        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        secret: process.env.JWT_REFRESH_SECRET as string,
       });
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
@@ -378,7 +377,7 @@ export class AuthService {
       expiresAt,
     );
 
-    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    const frontendUrl = process.env.FRONTEND_URL as string;
     const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
 
     this.mailService

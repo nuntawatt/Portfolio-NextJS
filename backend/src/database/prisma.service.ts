@@ -15,11 +15,11 @@ export class PrismaService
 {
   private readonly logger = new Logger(PrismaService.name);
 
-  constructor(private readonly configService: ConfigService) {
+  constructor() {
     super({
       datasources: {
         db: {
-          url: configService.getOrThrow<string>('database.url'),
+          url: process.env.DATABASE_URL as string,
         },
       },
       log: [
