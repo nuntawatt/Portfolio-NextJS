@@ -4,7 +4,6 @@ import {
   OnModuleDestroy,
   Logger,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
 // Prisma database client and lifecycle service.
