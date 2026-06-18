@@ -5,6 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { Loader2, Eye } from 'lucide-react';
 import { SignInData } from '../core/types';
 import { AuthInput, CustomEyeOff } from '@/shared/components/auth-in';
+import Link from 'next/link';
 
 interface SignInFormProps {
     form: UseFormReturn<SignInData>;
@@ -49,12 +50,12 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                 {/* Remember me + Forgot password */}
                 <div className="flex items-center justify-between mt-3">
                     <label className="flex items-center gap-2 cursor-pointer group">
-                        <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-orange-500 focus:ring-orange-500/30 bg-gray-50 dark:bg-white/5 transition-colors" />
+                        <input type="checkbox" {...register('rememberMe')} className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-orange-500 focus:ring-orange-500/30 bg-gray-50 dark:bg-white/5 transition-colors" />
                         <span className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors font-medium">Remember me</span>
                     </label>
-                    <button type="button" className="text-xs font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    <Link href="/auth/forgot-password" className="text-xs font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
                         Forgot password?
-                    </button>
+                    </Link>
                 </div>
             </div>
 

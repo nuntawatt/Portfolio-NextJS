@@ -24,7 +24,7 @@ export function AuthFormLayout({
   successMsg,
 }: AuthFormLayoutProps) {
   return (
-    <div className="w-full max-w-md mx-auto relative">
+    <div className="w-full max-w-[480px] mx-auto relative">
       {/* Main card */}
       <div className="relative p-8 sm:p-10 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-100 dark:border-white/10 transition-all duration-500 overflow-hidden">
 
@@ -36,7 +36,7 @@ export function AuthFormLayout({
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-60" />
 
         <div className="text-center mb-8 relative z-10 space-y-2">
-          <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-white dark:to-gray-200 bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-white dark:to-gray-200 bg-clip-text text-transparent">
             {title}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm font-medium leading-relaxed">

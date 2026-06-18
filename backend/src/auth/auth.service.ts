@@ -174,7 +174,7 @@ export class AuthService {
     );
 
     const frontendUrl = process.env.FRONTEND_URL as string;
-    const verifyUrl = `${frontendUrl}/verify-email?token=${rawToken}`;
+    const verifyUrl = `${frontendUrl}/auth/verify-email?token=${rawToken}`;
 
     // Send email asynchronously
     this.mailService
@@ -378,7 +378,7 @@ export class AuthService {
     );
 
     const frontendUrl = process.env.FRONTEND_URL as string;
-    const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
+    const resetUrl = `${frontendUrl}/auth/reset-password?token=${rawToken}`;
 
     this.mailService
       .sendEmail(

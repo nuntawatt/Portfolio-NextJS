@@ -69,6 +69,21 @@ export const authApi = {
   getProfile: async (): Promise<any> => {
     const response = await apiClient.get('/user/profile');
     return response.data.data;
+  },
+
+  verifyEmail: async (token: string): Promise<{ message: string }> => {
+    const response = await apiClient.post('/auth/verify-email', { token });
+    return response.data;
+  },
+
+  forgotPassword: async (email: string): Promise<{ message: string }> => {
+    const response = await apiClient.post('/auth/forgot-password', { email });
+    return response.data;
+  },
+
+  resetPassword: async (data: any): Promise<{ message: string }> => {
+    const response = await apiClient.post('/auth/reset-password', data);
+    return response.data;
   }
 };
 
@@ -82,8 +97,20 @@ export class AuthService {
 
   static async register(data: SignUpData): Promise<AuthResponse> {
     const response = await authApi.register(data);
-    setAuthToken(response.user.token);
+    // Don't set auth token here yet because they need to verify email first.
     return response;
+  }
+
+  static async verifyEmail(token: string): Promise<{ message: string }> {
+    return authApi.verifyEmail(token);
+  }
+
+  static async forgotPassword(email: string): Promise<{ message: string }> {
+    return authApi.forgotPassword(email);
+  }
+
+  static async resetPassword(data: any): Promise<{ message: string }> {
+    return authApi.resetPassword(data);
   }
 
   static logout(): void {

@@ -1,0 +1,96 @@
+'use client';
+
+import React, { useEffect, useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { AuthService } from '../core/lib';
+import { AuthPageLayout } from '@/shared/components/auth-page-layout';
+import { routes } from '@/config/routes';
+import Link from 'next/link';
+
+export function VerifyEmailContainer() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+  const router = useRouter();
+
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [message, setMessage] = useState('Verifying your email address...');
+  const hasVerified = useRef(false);
+
+  useEffect(() => {
+    if (!token) {
+      setStatus('error');
+      setMessage('No verification token provided.');
+      return;
+    }
+
+    if (hasVerified.current) return;
+    hasVerified.current = true;
+
+    AuthService.verifyEmail(token)
+      .then((res) => {
+        setStatus('success');
+        setMessage(res.message || 'Email verified successfully!');
+      })
+      .catch((err) => {
+        setStatus('error');
+        setMessage(err.message || 'Invalid or expired verification token.');
+      });
+  }, [token]);
+
+  return (
+    <AuthPageLayout>
+      <div className="w-full max-w-[480px] p-8 bg-white dark:bg-[#1a1a1a] rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-100 dark:border-white/10 text-center relative overflow-hidden">
+        
+        {/* Glow effect */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-orange-500/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col items-center">
+          {status === 'loading' && (
+            <>
+              <div className="w-16 h-16 rounded-full bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center mb-6">
+                <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Verifying Email</h2>
+              <p className="text-gray-500 dark:text-gray-400">{message}</p>
+            </>
+          )}
+
+          {status === 'success' && (
+            <>
+              <div className="w-16 h-16 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center mb-6">
+                <CheckCircle2 className="w-8 h-8 text-green-500" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Email Verified!</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8">{message}</p>
+              
+              <Link 
+                href={routes.auth.signin}
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-all duration-200"
+              >
+                Go to Sign In
+              </Link>
+            </>
+          )}
+
+          {status === 'error' && (
+            <>
+              <div className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center mb-6">
+                <XCircle className="w-8 h-8 text-red-500" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Verification Failed</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8">{message}</p>
+              
+              <Link 
+                href={routes.auth.signup}
+                className="text-sm font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+              >
+                Back to Sign Up
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+    </AuthPageLayout>
+  );
+}

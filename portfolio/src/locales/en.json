@@ -8,7 +8,7 @@
   "nav.logout": "Log Out",
   "hero.greeting": "Hello, Welcome",
   "hero.name": "Nuntawat Saehuam",
-  "hero.roles": ["Full Stack Developer"],
+  "hero.roles": ["FullStack Developer"],
   "hero.description": "I architect highly scalable backend services and responsive frontend applications, focusing on clean code, robust system design, and delivering production software.",
   "hero.cta.projects": "View Project",
   "hero.cta.cv": "Download CV",
