@@ -8,10 +8,12 @@ import { SectionLabel } from './label';
 import { useInView } from '../hooks/useInView';
 import { STATS } from '../constants/data';
 import { motion } from 'motion/react';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export function AboutSection() {
     const [headerRef, headerInView] = useInView<HTMLDivElement>(0.2);
+    const { t } = useTranslation();
 
     return (
         <>
@@ -76,18 +78,18 @@ export function AboutSection() {
                                 style={{ letterSpacing: '0.2em' }}
                             >
                                 <span className="block w-6 sm:w-8 h-px bg-orange-500" />
-                                Who I Am
+                                {t('about.eyebrow')}
                             </p>
                             <h2
-                                className="font-black leading-[1.1] tracking-tight text-foreground"
+                                className="font-black leading-tight tracking-tight text-foreground"
                                 style={{
                                     fontSize: 'clamp(2.5rem, 8vw, 5.5rem)',
                                     letterSpacing: '-0.03em',
                                 }}
                             >
-                                About{' '}
+                                {t('about.title_prefix')}
                                 <em className="not-italic text-orange-500">
-                                    Me.
+                                    {t('about.title_highlight')}
                                 </em>
                             </h2>
                         </div>
@@ -106,11 +108,11 @@ export function AboutSection() {
                             className="w-full relative border-l-2 border-orange-500 pl-6 sm:pl-8"
                         >
                             <p className="text-xl md:text-2xl font-light text-foreground/95 leading-relaxed">
-                                I believe in writing clean code, architecting robust systems, and developing software that solves real-world problems.
+                                {t('about.pull_quote')}
                             </p>
                             <div className="mt-6 flex items-center gap-3">
                                 <span className="w-8 h-px bg-border" />
-                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground" style={{ letterSpacing: '0.12em' }}>Philosophy</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground" style={{ letterSpacing: '0.12em' }}>{t('about.philosophy')}</p>
                             </div>
                         </motion.div>
                     </div>

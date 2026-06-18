@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { GraduationCap } from '../icons/Icon';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 export function EducationCard() {
     const [coords, setCoords] = useState({ x: 0, y: 0 });
     const [hovered, setHovered] = useState(false);
+    const { t } = useTranslation();
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -42,13 +44,13 @@ export function EducationCard() {
                     <p className="text-xs font-bold uppercase tracking-widest mb-0.5 text-orange-500"
                         style={{ letterSpacing: '0.12em' }}
                     >
-                        Education
+                        {t('about.education.title')}
                     </p>
                     <p className="font-bold text-sm text-foreground leading-snug transition-colors">
-                        B.Sc. Computer &amp; Information Science
+                        {t('about.education.degree')}
                     </p>
                     <p className="text-xs mt-0.5 text-muted-foreground transition-colors">
-                        Khon Kaen University · GPAX 3.26 · May 2026
+                        {t('about.education.university')}
                     </p>
                 </div>
             </div>

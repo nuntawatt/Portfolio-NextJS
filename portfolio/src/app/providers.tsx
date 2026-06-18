@@ -7,6 +7,7 @@ import { authApi } from "../feature/auth/core/lib";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
 import { AudioProvider } from "@/feature/audio";
 import { ThemeProvider } from "next-themes";
+import { LanguageProvider } from "@/shared/providers/LanguageProvider";
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -53,13 +54,15 @@ export default function Providers({ children }: { children: ReactNode }) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <AudioProvider>
-            {children}
-          </AudioProvider>
-        </AuthProvider>
-      </QueryClientProvider>
+      <LanguageProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <AudioProvider>
+              {children}
+            </AudioProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

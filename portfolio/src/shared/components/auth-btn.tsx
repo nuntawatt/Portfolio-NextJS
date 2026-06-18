@@ -5,11 +5,13 @@ import { useSession, signOut } from 'next-auth/react';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 export function AuthButton() {
   const { data: session, status: nextAuthStatus } = useSession();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   // Close profile dropdown if clicked outside
   useEffect(() => {
@@ -66,7 +68,7 @@ export function AuthButton() {
               className="w-full flex items-center justify-start gap-3 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors duration-300 ease-out active:scale-95"
             >
               <LogOut className="w-4 h-4" />
-              Sign Out
+              {t('nav.logout')}
             </button>
           </div>
         )}
@@ -81,7 +83,7 @@ export function AuthButton() {
         href={routes.auth.signin}
         className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30"
       >
-        Sign In
+        {t('nav.signin')}
       </Link>
 
       {/* Sign Up Button: Premium Dark Solid to match theme */}
@@ -89,7 +91,7 @@ export function AuthButton() {
         href={routes.auth.signup}
         className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md shadow-gray-900/20 dark:shadow-white/20"
       >
-        Sign Up
+        {t('nav.signup')}
       </Link>
     </div>
   );

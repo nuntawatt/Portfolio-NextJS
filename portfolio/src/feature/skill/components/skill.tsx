@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // Reusable card shell — spotlight hover stays, but icon treatment now varies
 // per card below instead of every card sharing the same boxed-icon container.
@@ -19,7 +20,7 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
 
   return (
     <div
-      className="relative bg-card/60 border border-border rounded-[24px] p-6 overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-orange-500/5 group cursor-pointer flex flex-col justify-between"
+      className="relative bg-card/40 border border-border rounded-[24px] p-6 overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-orange-500/5 group cursor-pointer flex flex-col justify-between"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -74,6 +75,8 @@ function TagRow({ items }: { items: string[] }) {
 }
 
 export function SkillsSection() {
+  const { t } = useTranslation();
+
   return (
     <section id="skills" className="scroll-mt-24 py-16 md:py-24 lg:py-28 bg-transparent transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -84,11 +87,11 @@ export function SkillsSection() {
           {/* Headline */}
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4 transition-colors font-heading tracking-tight">
-              Technical <span className="text-orange-500">Expertise</span>
+              {t('skills.title_prefix')} <span className="text-orange-500">{t('skills.title_highlight')}</span>
             </h2>
             <div className="w-20 h-0.5 bg-orange-500 mx-auto rounded-full"></div>
             <p className="mt-4 text-sm text-muted-foreground max-w-md mx-auto">
-              A breakdown of languages, systems, and toolkits I use to design high-performance applications.
+              {t('skills.description')}
             </p>
           </div>
 
@@ -98,8 +101,8 @@ export function SkillsSection() {
 
             {/* 1. Backend — request flow diagram */}
             <SkillCard
-              title="Backend Development"
-              subtitle="BACKEND SERVICES"
+              title={t('skills.cat1.title') as string}
+              subtitle={t('skills.cat1.subtitle') as string}
               icon={<Cpu className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
             >
               <div className="flex flex-col h-full justify-between">
@@ -126,8 +129,8 @@ export function SkillsSection() {
 
             {/* 2. Frontend — component tree, not code */}
             <SkillCard
-              title="Frontend Development"
-              subtitle="FRONTEND INTERFACES"
+              title={t('skills.cat2.title') as string}
+              subtitle={t('skills.cat2.subtitle') as string}
               icon={<Monitor className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
             >
               <div className="flex flex-col h-full justify-between">
@@ -159,8 +162,8 @@ export function SkillsSection() {
 
             {/* 3. Database — comparative mini bar chart */}
             <SkillCard
-              title="Databases & Caching"
-              subtitle="DATA SYSTEMS"
+              title={t('skills.cat3.title') as string}
+              subtitle={t('skills.cat3.subtitle') as string}
               icon={<Database className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
             >
               <div className="flex flex-col h-full justify-between">
@@ -190,8 +193,8 @@ export function SkillsSection() {
 
             {/* 4. DevOps — pipeline stepper, dots not fake-log */}
             <SkillCard
-              title="DevOps & Deployment"
-              subtitle="INFRASTRUCTURE"
+              title={t('skills.cat4.title') as string}
+              subtitle={t('skills.cat4.subtitle') as string}
               icon={<Wrench className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
             >
               <div className="flex flex-col h-full justify-between">
@@ -219,8 +222,8 @@ export function SkillsSection() {
 
             {/* 5. Tools — grid mockup kept, it's already not code */}
             <SkillCard
-              title="Workbench Tools"
-              subtitle="DEVELOPMENT TOOLKIT"
+              title={t('skills.cat5.title') as string}
+              subtitle={t('skills.cat5.subtitle') as string}
               icon={<Palette className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
             >
               <div className="flex flex-col h-full justify-between">
@@ -244,8 +247,8 @@ export function SkillsSection() {
 
             {/* 6. Languages & soft skills — one orange accent, on Native only */}
             <SkillCard
-              title="Languages & Soft Skills"
-              subtitle="COMMUNICATION & LEARNING"
+              title={t('skills.cat6.title') as string}
+              subtitle={t('skills.cat6.subtitle') as string}
               icon={<Users className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />}
             >
               <div className="flex flex-col h-full justify-between">

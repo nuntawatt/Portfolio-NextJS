@@ -2,18 +2,21 @@
 
 import { useState } from 'react';
 import { GitHub, MapPin, Phone } from '../icons/Icon';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
 ] as const;
 
-const PROFILE_META = [
-    { icon: <MapPin />, text: 'Khon Kaen, Thailand' },
-    { icon: <Phone />, text: '062-520-6392' },
-] as const;
 export function BioCard() {
     const [coords, setCoords] = useState({ x: 0, y: 0 });
     const [hovered, setHovered] = useState(false);
+    const { t } = useTranslation();
+
+    const PROFILE_META = [
+        { icon: <MapPin />, text: t('about.location') },
+        { icon: <Phone />, text: t('about.phone') },
+    ] as const;
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -68,14 +71,14 @@ export function BioCard() {
 
                 <div>
                     <h3 className="text-2xl font-black text-foreground tracking-tight leading-tight transition-colors">
-                        Nuntawat Saehuam
+                        {t('about.name')}
                     </h3>
                     <p className="text-sm font-semibold mt-1 text-orange-500">
-                        Full-Stack Engineer · AI Enthusiast
+                        {t('about.role')}
                     </p>
                     <div className="flex items-center gap-4 mt-2 flex-wrap">
                         {PROFILE_META.map(({ icon, text }) => (
-                            <span key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground transition-colors">
+                            <span key={text as string} className="flex items-center gap-1.5 text-xs text-muted-foreground transition-colors">
                                 {icon}
                                 {text}
                             </span>
@@ -91,16 +94,10 @@ export function BioCard() {
 
             {/* bio copy */}
             <p className="leading-loose mb-4 text-[0.9375rem] text-foreground/90 transition-colors">
-                Computer and Information Science student at{' '}
-                <span className="text-foreground font-bold">Khon Kaen University</span>{' '}
-                (Expected May 2026, GPAX 3.26), focused on architecting scalable backend systems,
-                full-stack web applications, and machine learning–driven solutions.
+                {t('about.bio1')}
             </p>
             <p className="leading-loose mb-7 text-sm text-muted-foreground transition-colors">
-                From building real-time CCTV detection pipelines with{' '}
-                <span className="text-orange-500 font-medium">YOLOv8</span> to shipping e-commerce platforms—I
-                obsess over clean architecture, performance, and code that is maintainable long after
-                handoff. Fluent in Thai, conversational in English.
+                {t('about.bio2')}
             </p>
 
             {/* CTA buttons */}

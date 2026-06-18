@@ -6,18 +6,21 @@ import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/shared/components/theme';
 import { AuthButton } from '@/shared/components/auth-btn';
 import { AudioToggle } from '@/feature/audio';
+import { LanguageToggle } from '@/shared/components/LanguageToggle';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/config/routes';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeHash, setActiveHash] = useState<string>('');
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   const navLinks = [
-    { name: 'Home', href: routes.home },
-    { name: 'About', href: routes.about },
-    { name: 'Skills', href: routes.skills },
-    { name: 'Contact', href: routes.contact },
+    { name: t('nav.home'), href: routes.home },
+    { name: t('nav.about'), href: routes.about },
+    { name: t('nav.skills'), href: routes.skills },
+    { name: t('nav.contact'), href: routes.contact },
   ];
 
   // Prevent background scrolling when mobile menu is open
@@ -82,7 +85,7 @@ export function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <a href={routes.home} className="text-2xl font-bold text-foreground tracking-tighter transition-colors">
+              <a href={routes.home} className="text-2xl font-bold text-foreground tracking-tighter transition-colors" style={{ fontFamily: 'var(--font-logo)' }}>
                 Mor<span className="text-orange-500">gorn</span>
               </a>
             </div>
@@ -92,7 +95,7 @@ export function Navbar() {
               <div className="flex items-baseline space-x-8">
                 {navLinks.map((link) => (
                   <a
-                    key={link.name}
+                    key={link.name as string}
                     href={link.href}
                     onClick={() => setActiveHash(link.href)}
                     className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${activeHash === link.href
@@ -118,6 +121,7 @@ export function Navbar() {
               <AudioToggle />
               <ThemeToggle />
               <AuthButton />
+              <LanguageToggle />
             </div>
 
             {/* Mobile Menu Trigger */}
@@ -155,7 +159,7 @@ export function Navbar() {
         aria-label="Mobile Navigation Drawer"
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <span className="text-2xl font-bold text-foreground tracking-tighter">
+          <span className="text-2xl font-bold text-foreground tracking-tighter" style={{ fontFamily: 'var(--font-logo)' }}>
             Mor<span className="text-orange-500">gorn</span>
           </span>
           <button
@@ -174,7 +178,7 @@ export function Navbar() {
             </span>
             {navLinks.map((link) => (
                <a
-                key={link.name}
+                key={link.name as string}
                 href={link.href}
                 className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${activeHash === link.href
                     ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 font-semibold'
@@ -188,6 +192,11 @@ export function Navbar() {
           </div>
 
           <div className="pt-8 mt-8 border-t border-border flex flex-col gap-6">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-sm font-semibold text-muted-foreground">Language</span>
+              <LanguageToggle />
+            </div>
+
             <div className="flex items-center justify-between px-2">
               <span className="text-sm font-semibold text-muted-foreground">Background Music</span>
               <AudioToggle />

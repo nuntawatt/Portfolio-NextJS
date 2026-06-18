@@ -1,9 +1,13 @@
+'use client';
+
 import { Facebook, Github, Linkedin } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { routes } from '@/config/routes';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
 
   return (
     <footer className="border-t border-border bg-transparent pt-12 pb-8 transition-colors duration-300">
@@ -35,10 +39,10 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left transition-colors">
           <p className="text-muted-foreground text-sm">
-            &copy; {currentYear} Morgorn. All rights reserved.
+            &copy; {currentYear} Morgorn. {t('footer.rights')}
           </p>
           <p className="text-muted-foreground text-sm flex items-center justify-center gap-1">
-            Crafted with <span className="text-orange-500">Next.js</span> & Tailwind CSS
+            {t('footer.built_with')}
           </p>
         </div>
       </div>
