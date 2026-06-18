@@ -97,7 +97,7 @@ export class AuthService {
 
   // Auth Core
 
-  /** Validate user credentials. */
+  // Validate user credentials (email/password)
   async validateUserCredentials(
     email: string,
     pass: string,
@@ -115,7 +115,7 @@ export class AuthService {
     return user;
   }
 
-  /** Log in user. */
+  // Login user with email/password
   async login(loginData: LoginDto) {
     const email = loginData.email.toLowerCase().trim();
     const user = await this.validateUserCredentials(email, loginData.password);
@@ -143,7 +143,7 @@ export class AuthService {
     };
   }
 
-  /** Register user. */
+  // Register user
   async register(userData: RegisterDto) {
     const email = userData.email.toLowerCase().trim();
 
@@ -212,7 +212,7 @@ export class AuthService {
     };
   }
 
-  /** OAuth login. */
+  // OAuth login
   async oauthLogin(oauthUser: OAuthUser) {
     if (!oauthUser.email) {
       throw new UnauthorizedException('Email is required from OAuth provider');
@@ -273,7 +273,7 @@ export class AuthService {
     };
   }
 
-  /** Refresh access token. */
+  // Refresh access token
   async refreshToken(refreshToken: string) {
     let payload: {
       userId: string;
@@ -317,7 +317,7 @@ export class AuthService {
     };
   }
 
-  /** Log out user. */
+  // Log out user
   async logout(userId: string) {
     await this.authTokenService.revokeUserTokens(
       userId,
@@ -330,7 +330,7 @@ export class AuthService {
     };
   }
 
-  /** Verify user email. */
+  // Verify user email
   async verifyEmail(token: string): Promise<{ message: string }> {
     const tokenHash = sha256(token);
 
@@ -354,7 +354,7 @@ export class AuthService {
     return { message: 'Email verified successfully' };
   }
 
-  /** Request password reset. */
+  // Request password reset
   async forgotPassword(email: string) {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await this.usersService.findByEmail(normalizedEmail);
@@ -406,7 +406,7 @@ export class AuthService {
     };
   }
 
-  /** Reset password. */
+  // Reset password
   async resetPassword(token: string, newPassword: string) {
     const tokenHash = sha256(token);
 
