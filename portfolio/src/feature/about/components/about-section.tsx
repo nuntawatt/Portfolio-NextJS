@@ -1,11 +1,10 @@
 'use client';
 
-import { ParticleCanvas } from './canvas';
-import { BioCard } from './bio';
-import { EducationCard } from './edu';
-import { StatCard } from './stat';
-import { SectionLabel } from './label';
-import { useInView } from '../hooks/useInView';
+import { ParticleCanvas } from './particle-canvas';
+import { BioCard } from './bio-card';
+import { EducationCard } from './education-card';
+import { StatCard } from './stat-card';
+import { useInView } from '../hooks/use-in-view';
 import { STATS } from '../constants/data';
 import { motion } from 'motion/react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';

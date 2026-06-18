@@ -49,6 +49,7 @@ export function ParticleCanvas() {
         const particles = createParticles();
         const mouse = { x: 0.5, y: 0.5 };
         let rafId = 0;
+        let isIntersecting = false;
 
         const resize = () => {
             canvas.width = canvas.offsetWidth;
@@ -67,6 +68,7 @@ export function ParticleCanvas() {
         window.addEventListener('mousemove', onMouseMove);
 
         const frame = () => {
+            if (!isIntersecting) return;
             const { width: w, height: h } = canvas;
             ctx.clearRect(0, 0, w, h);
 
@@ -111,11 +113,22 @@ export function ParticleCanvas() {
             rafId = requestAnimationFrame(frame);
         };
 
-        frame();
+        const observer = new IntersectionObserver(([entry]) => {
+            isIntersecting = entry.isIntersecting;
+            if (isIntersecting) {
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(frame);
+            } else {
+                cancelAnimationFrame(rafId);
+            }
+        }, { threshold: 0.01 });
+
+        observer.observe(canvas);
 
         return () => {
             cancelAnimationFrame(rafId);
             ro.disconnect();
+            observer.disconnect();
             window.removeEventListener('mousemove', onMouseMove);
         };
     }, []);

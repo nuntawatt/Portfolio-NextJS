@@ -1,41 +1,26 @@
 'use client';
 
-import { useState } from 'react';
-import { GitHub, MapPin, Phone } from '../icons/Icon';
+import { GitHub, MapPin, Phone } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useSpotlight } from '@/shared/hooks/use-spotlight';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
 ] as const;
 
 export function BioCard() {
-    const [coords, setCoords] = useState({ x: 0, y: 0 });
-    const [hovered, setHovered] = useState(false);
     const { t } = useTranslation();
+    const { coords, hovered, spotlightHandlers } = useSpotlight();
 
     const PROFILE_META = [
         { icon: <MapPin />, text: t('about.location') },
         { icon: <Phone />, text: t('about.phone') },
     ] as const;
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        setCoords({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-        });
-        if (!hovered) setHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-        setHovered(false);
-    };
-
     return (
         <div
             className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-card/80 border border-border backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
+            {...spotlightHandlers}
         >
             {/* spotlight overlay */}
             <div

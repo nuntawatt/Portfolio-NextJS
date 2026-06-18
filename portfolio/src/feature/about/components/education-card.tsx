@@ -1,30 +1,16 @@
-import React, { useState } from 'react';
-import { GraduationCap } from '../icons/Icon';
+import React from 'react';
+import { GraduationCap } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useSpotlight } from '@/shared/hooks/use-spotlight';
 
 export function EducationCard() {
-    const [coords, setCoords] = useState({ x: 0, y: 0 });
-    const [hovered, setHovered] = useState(false);
     const { t } = useTranslation();
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        setCoords({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-        });
-        if (!hovered) setHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-        setHovered(false);
-    };
+    const { coords, hovered, spotlightHandlers } = useSpotlight();
 
     return (
         <div
             className="relative rounded-[20px] p-5 overflow-hidden bg-card/60 border border-border backdrop-blur-xl transition-all duration-300 group cursor-pointer"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
+            {...spotlightHandlers}
         >
             {/* spotlight overlay */}
             <div
