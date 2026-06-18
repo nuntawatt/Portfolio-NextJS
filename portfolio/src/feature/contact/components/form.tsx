@@ -159,7 +159,7 @@ export function ContactForm() {
               title="Click to copy email address"
             >
               <span>
-                {t('contact.copy')} <span className="underline underline-offset-1">{siteConfig.contact.email}</span>
+                <span className="underline underline-offset-1">{siteConfig.contact.email}</span>
               </span>
               
               <svg
