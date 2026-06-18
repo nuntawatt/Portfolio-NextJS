@@ -1,30 +1,18 @@
 'use client';
 
-import { ParticleCanvas } from './particle-canvas';
 import { BioCard } from './bio-card';
 import { EducationCard } from './education-card';
 import { StatCard } from './stat-card';
-import { useInView } from '../hooks/use-in-view';
 import { STATS } from '../constants/data';
-import { motion } from 'motion/react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export function AboutSection() {
-    const [headerRef, headerInView] = useInView<HTMLDivElement>(0.2);
     const { t } = useTranslation();
 
     return (
         <>
             <style>{`
-        @keyframes slide-up {
-            from { opacity: 0; transform: translateY(32px); }
-            to   { opacity: 1; transform: translateY(0);    }
-        }
-        .about-slide-up {
-            animation: slide-up 0.75s cubic-bezier(0.22,1,0.36,1) both;
-        }
-
         /* Static grain texture — replaces the animated floating orbs.
            A single fixed noise layer keeps the section calm and tactile
            instead of "alive", matching the rest of the page's quiet motion budget. */
@@ -60,18 +48,14 @@ export function AboutSection() {
             >
                 {/* ── Background: static texture, no motion ── */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-                    <ParticleCanvas />
                     <div className="about-wash" />
                     <div className="about-grain" />
                 </div>
 
                 {/* ── Content ── */}
-                <div
-                    className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 about-slide-up"
-                    style={{ opacity: headerInView ? undefined : 0 }}
-                >
+                <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header Row: Title + Pull Quote */}
-                    <div ref={headerRef} className="grid lg:grid-cols-[1fr_480px] gap-10 lg:gap-16 items-center mb-12 lg:mb-20">
+                    <div className="grid lg:grid-cols-[1fr_480px] gap-10 lg:gap-16 items-center mb-12 lg:mb-20">
                         <div>
                             <p className="text-xs font-bold uppercase tracking-widest mb-4 sm:mb-5 flex items-center gap-3 text-muted-foreground"
                                 style={{ letterSpacing: '0.2em' }}
@@ -95,17 +79,7 @@ export function AboutSection() {
 
                         {/* Editorial pull-quote — replaces the fake-terminal/macOS-window mockup.
                             Large-set serif-weight statement, single rule, no chrome. */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 40 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{
-                                delay: 0.3,
-                                duration: 0.7,
-                                ease: [0.16, 1, 0.3, 1]
-                            }}
-                            viewport={{ once: true }}
-                            className="w-full relative border-l-2 border-orange-500 pl-6 sm:pl-8"
-                        >
+                        <div className="w-full relative border-l-2 border-orange-500 pl-6 sm:pl-8">
                             <p className="text-xl md:text-2xl font-light text-foreground/95 leading-relaxed">
                                 {t('about.pull_quote')}
                             </p>
@@ -113,7 +87,7 @@ export function AboutSection() {
                                 <span className="w-8 h-px bg-border" />
                                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground" style={{ letterSpacing: '0.12em' }}>{t('about.philosophy')}</p>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
 
                     {/* Content Row: Bio + Stats */}
@@ -129,8 +103,6 @@ export function AboutSection() {
                             <EducationCard />
                         </div>
                     </div>
-
-
                 </div>
             </section>
         </>

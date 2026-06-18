@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { GraduationCap } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
