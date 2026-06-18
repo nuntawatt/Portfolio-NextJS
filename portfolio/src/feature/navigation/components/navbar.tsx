@@ -46,32 +46,34 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handleEsc);
   }, [isOpen]);
 
-  // Handle active hash detection dynamically on homepage scroll
+  // Handle active section detection using IntersectionObserver to prevent layout thrashing
   useEffect(() => {
     if (pathname === '/contact') {
       return;
     }
 
     const sections = ['home', 'about', 'skills'];
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 250; // offset for better detection
-
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveHash(`/#${sectionId}`);
-            break;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveHash(`/#${entry.target.id}`);
           }
-        }
+        });
+      },
+      {
+        // Highlight active link when section occupies the upper-middle region of the viewport
+        rootMargin: '-30% 0px -65% 0px',
+        threshold: 0,
       }
-    };
+    );
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // initial check
-    return () => window.removeEventListener('scroll', handleScroll);
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, [pathname]);
 
   const handleLinkClick = (href: string) => {
