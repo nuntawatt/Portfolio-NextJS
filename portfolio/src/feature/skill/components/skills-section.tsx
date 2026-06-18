@@ -1,29 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useSpotlight } from '@/shared/hooks/use-spotlight';
 
 // Reusable card shell — spotlight hover stays, but icon treatment now varies
 // per card below instead of every card sharing the same boxed-icon container.
 function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCoords({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
+  const { coords, hovered, spotlightHandlers } = useSpotlight();
 
   return (
     <div
       className="relative bg-card/40 border border-border rounded-[24px] p-6 overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-orange-500/5 group cursor-pointer flex flex-col justify-between"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      {...spotlightHandlers}
     >
       {/* spotlight cursor glow */}
       <div
