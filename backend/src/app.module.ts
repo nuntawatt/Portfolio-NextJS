@@ -13,6 +13,7 @@ import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter'
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { validationSchema } from './common/config/validation.schema';
+import { AppController } from './app.controller';
 
 import {
   appConfig,
@@ -60,6 +61,8 @@ import {
     UsersModule,
     UploadModule,
   ],
+
+  controllers: [AppController],
 
   providers: [
     // Global Guards
