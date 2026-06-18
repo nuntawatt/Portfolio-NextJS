@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
-export function AuthButton() {
+export function AuthButton({ className = "" }: { className?: string }) {
   const { data: session, status: nextAuthStatus } = useSession();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -38,7 +38,7 @@ export function AuthButton() {
 
   if (isAuthenticated && session?.user) {
     return (
-      <div className="relative" ref={profileRef}>
+      <div className={`relative ${className}`} ref={profileRef}>
         <button
           disabled={isLoading}
           onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -77,11 +77,11 @@ export function AuthButton() {
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className={`flex items-stretch lg:items-center gap-3 w-full lg:w-auto ${className}`}>
       {/* Sign In Button: Sleek primary gradient (Swapped) */}
       <Link
         href={routes.auth.signin}
-        className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30"
+        className="flex-1 lg:flex-none transition-all duration-500 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30 whitespace-nowrap"
       >
         {t('nav.signin')}
       </Link>
@@ -89,7 +89,7 @@ export function AuthButton() {
       {/* Sign Up Button: Premium Dark Solid to match theme */}
       <Link
         href={routes.auth.signup}
-        className="transition-all duration-500 ease-out flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md shadow-gray-900/20 dark:shadow-white/20"
+        className="flex-1 lg:flex-none transition-all duration-500 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md shadow-gray-900/20 dark:shadow-white/20 whitespace-nowrap"
       >
         {t('nav.signup')}
       </Link>

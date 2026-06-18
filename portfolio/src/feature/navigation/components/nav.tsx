@@ -149,10 +149,10 @@ export function Navbar() {
         aria-hidden="true"
       />
 
-      {/* Mobile Menu Drawer (Slide-in from left) */}
+      {/* Mobile Menu Drawer (Slide-in from right) */}
       <div
         id="mobile-menu-drawer"
-        className={`fixed top-0 left-0 h-full w-[280px] bg-card border-r border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         role="dialog"
         aria-modal="true"
@@ -209,7 +209,7 @@ export function Navbar() {
 
             {/* Highlighted Mobile CTA Wrapper */}
             <div className="mt-2" onClick={() => setIsOpen(false)}>
-              <AuthButton />
+              <AuthButton className="flex-col" />
             </div>
           </div>
         </div>

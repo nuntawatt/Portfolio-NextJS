@@ -93,11 +93,8 @@ export function BioCard() {
             />
 
             {/* bio copy */}
-            <p className="leading-loose mb-4 text-[0.9375rem] text-foreground/90 transition-colors">
+            <p className="leading-loose mb-7 text-[0.9375rem] text-foreground/90 transition-colors">
                 {t('about.bio1')}
-            </p>
-            <p className="leading-loose mb-7 text-sm text-muted-foreground transition-colors">
-                {t('about.bio2')}
             </p>
 
             {/* CTA buttons */}
