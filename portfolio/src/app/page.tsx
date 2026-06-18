@@ -1,7 +1,14 @@
+import dynamic from 'next/dynamic';
 import { Navbar, Footer } from '@/feature/navigation';
 import { HeroSection } from '@/feature/hero';
-import { AboutSection } from '@/feature/about';
-import { SkillsSection } from '@/feature/skill';
+
+const AboutSection = dynamic(
+  () => import('@/feature/about').then((mod) => mod.AboutSection)
+);
+
+const SkillsSection = dynamic(
+  () => import('@/feature/skill').then((mod) => mod.SkillsSection)
+);
 
 export default async function Home() {
   return (
