@@ -29,49 +29,46 @@ export class UploadService implements OnModuleInit {
   private defaultBucket: string;
 
   constructor(private readonly configService: ConfigService) {
+    // ดึงค่าคอนฟิกของ S3/Supabase Storage จาก .env
     const endpoint = this.configService.getOrThrow<string>('minio.endpoint');
     const port = this.configService.get<number>('minio.port', 9000);
     const useSsl = this.configService.get<boolean>('minio.useSsl', false);
     const accessKey = this.configService.getOrThrow<string>('minio.accessKey');
     const secretKey = this.configService.getOrThrow<string>('minio.secretKey');
 
-    this.defaultBucket = this.configService.get<string>(
-      'minio.bucketName',
-      'portfolio',
-    );
+    // ชื่อ Bucket หลัก (ค่าเริ่มต้นคือ 'portfolio')
+    this.defaultBucket = this.configService.get<string>('minio.bucketName', 'portfolio');
 
-    // Parse endpoint URL
-    let s3Endpoint: string;
-    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
-      s3Endpoint = endpoint;
-    } else {
+    // จัดการจัดรูปแบบ Endpoint ให้ถูกต้อง
+    let s3Endpoint = endpoint;
+    if (!endpoint.startsWith('http')) {
       const protocol = useSsl ? 'https' : 'http';
-      // For local MinIO, port is usually required unless using standard 80/443
-      s3Endpoint = port === 80 || port === 443 ? `${protocol}://${endpoint}` : `${protocol}://${endpoint}:${port}`;
+      const isStandardPort = port === 80 || port === 443;
+      s3Endpoint = isStandardPort ? `${protocol}://${endpoint}` : `${protocol}://${endpoint}:${port}`;
     }
 
+    // สร้างการเชื่อมต่อ S3 Client
     this.s3Client = new S3Client({
       endpoint: s3Endpoint,
       credentials: {
         accessKeyId: accessKey,
         secretAccessKey: secretKey,
       },
-      region: 'us-east-1', // Default region
-      forcePathStyle: true, // Required for local MinIO and Supabase Storage
+      region: 'us-east-1', // อนุโลมใช้ us-east-1 ได้เลยสำหรับ Supabase/MinIO
+      forcePathStyle: true, // บังคับเพื่อรองรับ S3-Compatible API นอกเหนือจาก AWS
     });
 
-    this.logger.log(`Initialized S3 Storage Client pointing to endpoint: ${s3Endpoint}`);
+    this.logger.log(`เชื่อมต่อ S3 Storage เรียบร้อยที่: ${s3Endpoint}`);
   }
 
   async onModuleInit(): Promise<void> {
-    // In production S3-compatible systems like Supabase/R2, we don't auto-create buckets
-    // because permissions might be restricted and buckets are created via dashboard.
-    // We just log that the upload service is ready.
-    this.logger.log('Upload Service initialized successfully');
+    this.logger.log('Upload Service พร้อมใช้งาน');
   }
 
   /**
-   * Uploads a file to S3 and returns the public URL.
+   * อัพโหลดไฟล์ขึ้น S3 / Supabase Storage
+   * @param file ข้อมูลไฟล์ที่ต้องการอัพโหลด
+   * @param folder โฟลเดอร์ปลายทาง (ค่าเริ่มต้น: uploads)
    */
   async uploadFile(
     file: UploadedFileDto,
@@ -83,76 +80,76 @@ export class UploadService implements OnModuleInit {
     }
 
     try {
+      // สุ่มชื่อไฟล์ใหม่ด้วยความยาว 8 ตัวอักษร (Hex) ป้องกันชื่อซ้ำ
       const fileExtension = file.originalname.split('.').pop() || '';
-      const randomString = crypto.randomBytes(8).toString('hex');
-      const uniqueName = `${Date.now()}-${randomString}.${fileExtension}`;
-      const objectName = folder ? `${folder}/${uniqueName}` : uniqueName;
+      const uniqueName = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}.${fileExtension}`;
+      const objectKey = folder ? `${folder}/${uniqueName}` : uniqueName;
 
-      // Upload using AWS SDK S3Client
-      const command = new PutObjectCommand({
-        Bucket: bucketName,
-        Key: objectName,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      });
+      // ส่งคำสั่ง Upload ไปที่ S3
+      await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: bucketName,
+          Key: objectKey,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        }),
+      );
 
-      await this.s3Client.send(command);
-      this.logger.log(`Uploaded object: ${objectName} to bucket: ${bucketName}`);
+      this.logger.log(`อัพโหลดไฟล์สำเร็จ: ${objectKey}`);
 
-      const url = this.constructFileUrl(bucketName, objectName);
-      return { url, key: objectName };
+      // คืนค่า URL และ Key ของไฟล์นำไปบันทึกลง Database
+      const url = this.constructFileUrl(bucketName, objectKey);
+      return { url, key: objectKey };
     } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      this.logger.error(`File upload failed: ${msg}`);
-      throw new InternalServerErrorException('Failed to upload file');
+      this.logger.error(`เกิดข้อผิดพลาดในการอัพโหลด: ${error}`);
+      throw new InternalServerErrorException('ไม่สามารถอัพโหลดไฟล์ได้');
     }
   }
 
   /**
-   * Deletes a file from S3.
+   * ลบไฟล์ออกจาก S3 / Supabase Storage
+   * @param objectKey ตำแหน่งของไฟล์ (เช่น uploads/12345.png)
    */
   async deleteFile(
-    objectName: string,
+    objectKey: string,
     bucketName = this.defaultBucket,
   ): Promise<void> {
     try {
-      const command = new DeleteObjectCommand({
-        Bucket: bucketName,
-        Key: objectName,
-      });
-
-      await this.s3Client.send(command);
-      this.logger.log(
-        `Deleted object: ${objectName} from bucket: ${bucketName}`,
+      await this.s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: bucketName,
+          Key: objectKey,
+        }),
       );
+      this.logger.log(`ลบไฟล์สำเร็จ: ${objectKey}`);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      this.logger.error(`File deletion failed: ${msg}`);
-      throw new InternalServerErrorException('Failed to delete file');
+      this.logger.error(`เกิดข้อผิดพลาดในการลบไฟล์: ${error}`);
+      throw new InternalServerErrorException('ไม่สามารถลบไฟล์ได้');
     }
   }
 
-  /**
-   * Constructs the public access URL for a file.
-   */
-  private constructFileUrl(bucketName: string, objectName: string): string {
+  //  สร้างลิงก์สำหรับเข้าถึงไฟล์สาธารณะ (Public URL)   
+  private constructFileUrl(bucketName: string, objectKey: string): string {
+    // ถ้ามีการระบุ Public URL ใน .env ให้ใช้งานได้เลย (เหมาะกับ Supabase)
     const publicUrl = this.configService.get<string>('minio.publicUrl');
     if (publicUrl) {
-      return `${publicUrl.replace(/\/$/, '')}/${bucketName}/${objectName}`;
+      return `${publicUrl.replace(/\/$/, '')}/${bucketName}/${objectKey}`;
     }
 
+    // กรณีไม่มี Public URL จะทำการสร้าง URL สดๆ จาก Endpoint
     const endpoint = this.configService.getOrThrow<string>('minio.endpoint');
+    
+    // ถ้าใส่มาเป็น URL เต็มๆ แล้ว
+    if (endpoint.startsWith('http')) {
+      return `${endpoint.replace(/\/$/, '')}/${bucketName}/${objectKey}`;
+    }
+
+    // ถ้าใส่มาแค่ชื่อโดเมน/IP
     const port = this.configService.get<number>('minio.port', 9000);
     const useSsl = this.configService.get<boolean>('minio.useSsl', false);
-
-    // If endpoint is a full URL (like Supabase), we construct URL relative to it
-    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
-      return `${endpoint.replace(/\/$/, '')}/${bucketName}/${objectName}`;
-    }
-
     const protocol = useSsl ? 'https' : 'http';
-    const host = port === 80 || port === 443 ? endpoint : `${endpoint}:${port}`;
+    const host = (port === 80 || port === 443) ? endpoint : `${endpoint}:${port}`;
 
-    return `${protocol}://${host}/${bucketName}/${objectName}`;
+    return `${protocol}://${host}/${bucketName}/${objectKey}`;
   }
 }

@@ -3,9 +3,9 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
-  BadRequestException,
   UseGuards,
   Query,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -16,6 +16,7 @@ import {
   ApiOperation,
   ApiConsumes,
   ApiBody,
+  ApiResponse,
 } from '@nestjs/swagger';
 
 @ApiTags('Uploads')
@@ -39,16 +40,16 @@ export class UploadController {
       },
     },
   })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @UploadedFile() file: UploadedFileDto,
+    // ใช้ ParseFilePipe จัดการ Validate ไฟล์แทนการเขียน if(!file) ในฟังก์ชัน
+    @UploadedFile(new ParseFilePipe({ fileIsRequired: true })) file: UploadedFileDto,
     @Query('folder') folder = 'uploads',
   ) {
-    if (!file) {
-      throw new BadRequestException('No file provided');
-    }
-
     const result = await this.uploadService.uploadFile(file, folder);
+    
     return {
       success: true,
       data: result,

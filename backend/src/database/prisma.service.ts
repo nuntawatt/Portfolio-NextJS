@@ -7,9 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
-/**
- * Prisma database client and lifecycle service.
- */
+// Prisma database client and lifecycle service.
 @Injectable()
 export class PrismaService
   extends PrismaClient
@@ -43,9 +41,7 @@ export class PrismaService
     this.logger.log('Prisma disconnected from database');
   }
 
-  /**
-   * Cleans all tables in the database (Testing only).
-   */
+  // Clean the database by deleting all records from all models.
   async cleanDatabase(): Promise<void> {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('cleanDatabase is not allowed in production');
