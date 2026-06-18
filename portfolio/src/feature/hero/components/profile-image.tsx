@@ -13,7 +13,7 @@ export function ProfileImage() {
             alt="Morgorn profile" 
             fill
             priority
-            sizes="(max-w-768px) 224px, (max-w-1024px) 288px, (max-w-1200px) 320px, 400px"
+            sizes="(max-width: 768px) 224px, (max-width: 1024px) 288px, (max-width: 1200px) 320px, 400px"
             className="object-cover transition-transform duration-300 ease-out hover:scale-[1.02]"
           />
         </div>
