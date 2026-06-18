@@ -78,8 +78,8 @@ export function SkillsSection() {
   const { t } = useTranslation();
 
   return (
-    <section id="skills" className="scroll-mt-24 py-16 md:py-24 lg:py-28 bg-transparent transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="scroll-mt-20 py-12 md:py-20 min-h-[calc(100vh-5rem)] flex items-center bg-transparent transition-colors duration-300">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
 
         {/* Main Grid Wrapper */}
         <div className="relative">
@@ -178,11 +178,8 @@ export function SkillsSection() {
                         <span className="text-xs font-semibold text-foreground/85">{row.name}</span>
                         <span className="text-[10px] text-muted-foreground">{row.note}</span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-foreground/30"
-                          style={{ width: row.width }}
-                        />
+                      <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
+                        <div className="h-full bg-orange-500 rounded-full transition-all duration-1000 ease-out" style={{ width: row.width }} />
                       </div>
                     </div>
                   ))}
