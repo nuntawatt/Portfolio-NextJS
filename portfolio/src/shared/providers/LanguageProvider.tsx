@@ -21,15 +21,19 @@ const translations: Record<Language, Translations> = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const savedLang = localStorage.getItem('language') as Language;
+      if (savedLang && (savedLang === 'en' || savedLang === 'th')) {
+        return savedLang;
+      }
+    }
+    return 'en';
+  });
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check localStorage for saved language preference
-    const savedLang = localStorage.getItem('language') as Language;
-    if (savedLang && (savedLang === 'en' || savedLang === 'th')) {
-      setLanguageState(savedLang);
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

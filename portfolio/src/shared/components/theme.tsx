@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../hooks/use-theme';
 import { Switch } from '@/animation/components/switch';
 import { Moon, Sun } from 'lucide-react';
 
