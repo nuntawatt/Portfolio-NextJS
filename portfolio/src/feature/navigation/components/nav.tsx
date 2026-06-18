@@ -175,7 +175,7 @@ export function Navbar() {
         <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col">
           <div className="flex flex-col space-y-1.5 mb-auto">
             <span className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider mb-2 px-3">
-              Navigation
+              {t('nav.navigation')}
             </span>
             {navLinks.map((link) => (
                <a
@@ -194,17 +194,17 @@ export function Navbar() {
 
           <div className="pt-8 mt-8 border-t border-border flex flex-col gap-6">
             <div className="flex items-center justify-between px-2">
-              <span className="text-sm font-semibold text-muted-foreground">Language</span>
+              <span className="text-sm font-semibold text-muted-foreground">{t('nav.language')}</span>
               <LanguageToggle />
             </div>
 
             <div className="flex items-center justify-between px-2">
-              <span className="text-sm font-semibold text-muted-foreground">Background Music</span>
+              <span className="text-sm font-semibold text-muted-foreground">{t('nav.music')}</span>
               <AudioToggle />
             </div>
             
             <div className="flex items-center justify-between px-2">
-              <span className="text-sm font-semibold text-muted-foreground">Theme Preference</span>
+              <span className="text-sm font-semibold text-muted-foreground">{t('nav.theme')}</span>
               <ThemeToggle />
             </div>
 
