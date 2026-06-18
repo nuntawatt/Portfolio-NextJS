@@ -19,15 +19,19 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
-  const [volume, setVolumeState] = useState(DEFAULT_VOLUME);
+  const [volume, setVolumeState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedVolume = localStorage.getItem('audio_volume');
+      return savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
+    }
+    return DEFAULT_VOLUME;
+  });
 
   // Initialize audio only on mount to avoid SSR issues
   useEffect(() => {
     const savedPlaying = localStorage.getItem('audio_playing') === 'true';
     const savedVolume = localStorage.getItem('audio_volume');
     const initialVolume = savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
-
-    setVolumeState(initialVolume);
 
     const audio = new Audio(AUDIO_SRC);
     audio.loop = true;

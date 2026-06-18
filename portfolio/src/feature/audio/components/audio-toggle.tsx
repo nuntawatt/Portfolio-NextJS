@@ -1,7 +1,7 @@
 'use client';
 
 import { Play, Pause } from 'lucide-react';
-import { useAudio } from '../hooks/audio';
+import { useAudio } from '../hooks/use-audio';
 
 export function AudioToggle() {
   const { playing, ready, toggle } = useAudio();

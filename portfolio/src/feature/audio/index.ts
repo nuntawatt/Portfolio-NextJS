@@ -1,3 +1,3 @@
-export * from './components/audio';
-export * from './providers/audio';
-export * from './hooks/audio';
+export * from './components/audio-toggle';
+export * from './providers/audio-provider';
+export * from './hooks/use-audio';
