@@ -1,27 +1,29 @@
-/** Standard success response structure. */
+// Standard success response structure.
 export type ApiSuccessResponse<T> = {
-  /** Always `true` for successful responses */
+  // Always `true` for successful responses
   success: true;
-  /** The response payload */
+  // The response payload
   data: T;
-  /** Optional metadata (e.g. pagination info) */
+  // Optional metadata (e.g. pagination info)
   meta?: unknown;
-  /** ISO 8601 timestamp of the response */
+  // ISO 8601 timestamp of the response
   timestamp: string;
 };
 
-/** Standard error response structure. */
+// Standard error response structure.
 export type ApiErrorResponse = {
-  /** Always `false` for error responses */
+  // Always `false` for error responses
   success: false;
-  /** HTTP status code */
+  // HTTP status code
   statusCode: number;
-  /** Human-readable error message(s) */
+  // Error message(s)
   message: string | string[];
-  /** Error category name (e.g. 'Not Found', 'Conflict') */
+  // Optional error code for programmatic handling
   error: string;
-  /** ISO 8601 timestamp of the error */
+  // ISO 8601
   timestamp: string;
-  /** The request path that triggered the error */
+  /// Optional stack trace (only in development mode)
+  stack?: string;
+  // Request path that triggered the error
   path: string;
 };
