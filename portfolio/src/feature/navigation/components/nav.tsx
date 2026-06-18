@@ -82,17 +82,17 @@ export function Navbar() {
     <>
       <nav className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-20 gap-4 lg:gap-8">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex items-center">
               <a href={routes.home} className="text-2xl font-bold text-foreground tracking-tighter transition-colors" style={{ fontFamily: 'var(--font-logo)' }}>
                 Mor<span className="text-orange-500">gorn</span>
               </a>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center ml-10 space-x-8">
-              <div className="flex items-baseline space-x-8">
+            <div className="hidden lg:flex flex-1 items-center justify-center">
+              <div className="flex items-center justify-center space-x-6 xl:space-x-8">
                 {navLinks.map((link) => (
                   <a
                     key={link.name as string}
@@ -116,26 +116,27 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-4">
-              <AudioToggle />
-              <ThemeToggle />
-              <AuthButton />
-              <LanguageToggle />
-            </div>
+            {/* Actions & Mobile Menu Trigger */}
+            <div className="flex-shrink-0 flex justify-end items-center gap-3 xl:gap-4">
+              <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+                <AudioToggle />
+                <ThemeToggle />
+                <AuthButton />
+                <LanguageToggle />
+              </div>
 
-            {/* Mobile Menu Trigger */}
-            <div className="-mr-2 flex items-center lg:hidden">
-              <button
-                onClick={() => setIsOpen(true)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none transition-all duration-200 active:scale-95"
-                aria-expanded={isOpen}
-                aria-controls="mobile-menu-drawer"
-                aria-label={isOpen ? "Close main menu" : "Open main menu"}
-              >
-                <span className="sr-only">Open main menu</span>
-                <Menu className="block h-6 w-6" />
-              </button>
+              <div className="-mr-2 flex items-center lg:hidden">
+                <button
+                  onClick={() => setIsOpen(true)}
+                  className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none transition-all duration-200 active:scale-95"
+                  aria-expanded={isOpen}
+                  aria-controls="mobile-menu-drawer"
+                  aria-label={isOpen ? "Close main menu" : "Open main menu"}
+                >
+                  <span className="sr-only">Open main menu</span>
+                  <Menu className="block h-6 w-6" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
