@@ -1,48 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import React from 'react';
 import { Loader2 } from 'lucide-react';
-import { AuthService, getErrorMessage } from '../core/lib';
 import { AuthFormLayout } from '@/shared/components/auth';
 import { AuthPageLayout } from '@/shared/components/auth-page-layout';
 import { AuthInput } from '@/shared/components/auth-in';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
-
-const forgotPasswordSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
-});
-
-type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
+import { useForgotPassword } from '../hooks/use-forgot-password';
 
 export function ForgotPasswordContainer() {
   const router = useRouter();
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<ForgotPasswordData>({
-    resolver: zodResolver(forgotPasswordSchema),
-  });
-
-  const onSubmit = async (data: ForgotPasswordData) => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    try {
-      const res = await AuthService.forgotPassword(data.email);
-      setSuccessMsg(res.message || 'If an account exists, a reset link has been sent to your email.');
-      form.reset();
-    } catch (err) {
-      setErrorMsg(getErrorMessage(err));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { form, isLoading, errorMsg, successMsg, onSubmit } = useForgotPassword();
 
   return (
     <AuthPageLayout>

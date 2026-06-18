@@ -1,42 +1,14 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
-import { AuthService } from '../core/lib';
 import { AuthPageLayout } from '@/shared/components/auth-page-layout';
 import { routes } from '@/config/routes';
 import Link from 'next/link';
+import { useVerifyEmail } from '../hooks/use-verify-email';
 
 export function VerifyEmailContainer() {
-  const searchParams = useSearchParams();
-  const token = searchParams.get('token');
-  const router = useRouter();
-
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-  const [message, setMessage] = useState('Verifying your email address...');
-  const hasVerified = useRef(false);
-
-  useEffect(() => {
-    if (!token) {
-      setStatus('error');
-      setMessage('No verification token provided.');
-      return;
-    }
-
-    if (hasVerified.current) return;
-    hasVerified.current = true;
-
-    AuthService.verifyEmail(token)
-      .then((res) => {
-        setStatus('success');
-        setMessage(res.message || 'Email verified successfully!');
-      })
-      .catch((err) => {
-        setStatus('error');
-        setMessage(err.message || 'Invalid or expired verification token.');
-      });
-  }, [token]);
+  const { status, message } = useVerifyEmail();
 
   return (
     <AuthPageLayout>

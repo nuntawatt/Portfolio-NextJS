@@ -1,6 +1,20 @@
 import { apiClient } from '../../../lib/api-client';
 import { SignInData, SignUpData, AuthResponse } from './types';
 
+export interface ProfilePayload {
+  user: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  };
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+}
+
 // ========== Constants ==========
 export const AUTH_KEYS = {
   TOKEN_KEY: 'auth_token',
@@ -66,7 +80,7 @@ export const authApi = {
     };
   },
 
-  getProfile: async (): Promise<any> => {
+  getProfile: async (): Promise<ProfilePayload> => {
     const response = await apiClient.get('/user/profile');
     return response.data.data;
   },
@@ -81,7 +95,7 @@ export const authApi = {
     return response.data;
   },
 
-  resetPassword: async (data: any): Promise<{ message: string }> => {
+  resetPassword: async (data: ResetPasswordPayload): Promise<{ message: string }> => {
     const response = await apiClient.post('/auth/reset-password', data);
     return response.data;
   }
@@ -109,7 +123,7 @@ export class AuthService {
     return authApi.forgotPassword(email);
   }
 
-  static async resetPassword(data: any): Promise<{ message: string }> {
+  static async resetPassword(data: ResetPasswordPayload): Promise<{ message: string }> {
     return authApi.resetPassword(data);
   }
 
