@@ -2,6 +2,7 @@ export interface StatItem {
     value: number;
     suffix: string;
     label: string;
+    labelKey: string;
     iconKey: string;
 }
 export type ExperienceType = 'internship' | 'project';

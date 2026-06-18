@@ -4,12 +4,14 @@ import { ICON_MAP } from '../icons/Icon';
 import { useInView } from '../hooks/useInView';
 import { useCountUp } from '../hooks/useCountUp';
 import type { StatItem } from '../types/about';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 interface StatCardProps {
     stat: StatItem;
 }
 
 export function StatCard({ stat }: StatCardProps) {
+    const { t } = useTranslation();
     const [ref, inView] = useInView<HTMLDivElement>(0.4);
     const count = useCountUp(stat.value, inView);
     const Icon = ICON_MAP[stat.iconKey];
@@ -34,7 +36,7 @@ export function StatCard({ stat }: StatCardProps) {
                 <p className="text-xs font-semibold uppercase tracking-widest mt-1 text-muted-foreground transition-colors"
                     style={{ letterSpacing: '0.12em' }}
                 >
-                    {stat.label}
+                    {t(stat.labelKey) || stat.label}
                 </p>
             </div>
         </div>

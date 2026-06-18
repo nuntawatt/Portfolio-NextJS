@@ -1,10 +1,10 @@
 import type { StatItem, ExperienceItem } from '../types/about';
 
 export const STATS: StatItem[] = [
-    { value: 6, suffix: '+', label: 'Projects Built', iconKey: 'Rocket' },
-    { value: 3, suffix: '', label: 'Tech Stacks', iconKey: 'Layers' },
-    { value: 40, suffix: '%', label: 'Efficiency Gained', iconKey: 'TrendingUp' },
-    { value: 3, suffix: '', label: 'Languages', iconKey: 'Globe' },
+    { value: 6, suffix: '+', label: 'Projects Built', labelKey: 'about.stats.projects', iconKey: 'Rocket' },
+    { value: 3, suffix: '', label: 'Tech Stacks', labelKey: 'about.stats.tech', iconKey: 'Layers' },
+    { value: 40, suffix: '%', label: 'Efficiency Gained', labelKey: 'about.stats.efficiency', iconKey: 'TrendingUp' },
+    { value: 3, suffix: '', label: 'Languages', labelKey: 'about.stats.languages', iconKey: 'Globe' },
 ];
 
 export const EXPERIENCES: ExperienceItem[] = [
