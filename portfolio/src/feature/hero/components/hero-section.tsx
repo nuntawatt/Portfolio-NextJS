@@ -20,18 +20,18 @@ export function HeroSection() {
           {/* Left Column - Text */}
           <div className="z-10 order-2 lg:order-1 px-4 md:px-12 lg:px-0">
             <div className="text-center lg:text-left mb-8 lg:mb-10">
-              <h2 className="text-orange-500 font-semibold tracking-widest uppercase text-xs sm:text-sm flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4">
+              <p className="text-orange-500 font-semibold tracking-widest uppercase text-xs sm:text-sm flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4">
                 <span className="w-8 lg:w-12 h-[2px] bg-orange-500 inline-block drop-shadow-sm"></span>
                 {t('hero.greeting')}
-              </h2>
+              </p>
 
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-tight transition-colors mb-3">
                 {t('hero.name')}
               </h1>
 
-              <h3 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-tight transition-colors mb-6">
+              <h2 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-tight transition-colors mb-6">
                 {rolesText}
-              </h3>
+              </h2>
 
               <p className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-foreground/80 text-base md:text-lg lg:text-[1.125rem] font-normal leading-relaxed transition-colors">
                 {t('hero.description')}
