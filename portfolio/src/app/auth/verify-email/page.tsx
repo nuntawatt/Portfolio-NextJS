@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { VerifyEmailContainer } from '@/feature/auth/containers/verify-email';
+import { VerifyEmailContainer } from '@/feature/auth';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {

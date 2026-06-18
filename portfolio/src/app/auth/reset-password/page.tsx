@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { ResetPasswordContainer } from '@/feature/auth/containers/reset-password';
+import { ResetPasswordContainer } from '@/feature/auth';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {

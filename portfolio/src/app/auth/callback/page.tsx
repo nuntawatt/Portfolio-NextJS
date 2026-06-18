@@ -1,4 +1,4 @@
-import { AuthCallback } from '@/feature/auth/components/AuthCallback';
+import { AuthCallback } from '@/feature/auth';
 
 export const metadata = {
   title: 'Auth Callback - Morgorn Portfolio',

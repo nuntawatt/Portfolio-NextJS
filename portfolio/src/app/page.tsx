@@ -1,6 +1,6 @@
 import { Navbar, Footer } from '@/feature/navigation';
 import { HeroSection } from '@/feature/hero';
-import { AboutSection } from '@/feature/about/components/about';
+import { AboutSection } from '@/feature/about';
 import { SkillsSection } from '@/feature/skill';
 
 export default async function Home() {

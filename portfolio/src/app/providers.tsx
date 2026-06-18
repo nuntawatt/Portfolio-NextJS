@@ -42,7 +42,7 @@ export default function Providers({ children }: { children: ReactNode }) {
           lastName: payload.user.lastName || "",
           token: token,
         });
-      } catch (err) {
+      } catch {
         // If profile fetch fails (token invalid or expired), clear session
         localStorage.removeItem("auth_token");
         logout();

@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
             email: credentials.email,
             name: `${credentials.firstName || ''} ${credentials.lastName || ''}`.trim(),
             accessToken: credentials.token,
-          } as any;
+          };
         }
         return null;
       }
@@ -34,15 +34,15 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
-        token.accessToken = (user as any).accessToken;
+        token.accessToken = (user as { accessToken?: string }).accessToken;
       }
       return token;
     },
     async session({ session, token }) {
       // Send properties to the client
       if (session.user) {
-        (session.user as any).id = token.id;
-        (session.user as any).accessToken = token.accessToken;
+        (session.user as { id?: string }).id = token.id as string;
+        (session.user as { accessToken?: string }).accessToken = token.accessToken as string;
       }
       return session;
     }
