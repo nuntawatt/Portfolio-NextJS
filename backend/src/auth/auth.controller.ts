@@ -181,7 +181,7 @@ export class AuthController {
     return this.authService.resetPassword(dto.token, dto.password);
   }
 
-  // OAuth: Google
+  // OAuth Google
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -199,7 +199,7 @@ export class AuthController {
     res.redirect(`${frontendUrl}/auth/callback?${params}`);
   }
 
-  // OAuth: GitHub
+  // OAuth GitHub
 
   @Get('github')
   @UseGuards(AuthGuard('github'))
