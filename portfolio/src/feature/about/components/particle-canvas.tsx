@@ -75,19 +75,24 @@ export function ParticleCanvas() {
             const fx = (mouse.x - 0.5) * MOUSE_FORCE;
             const fy = (mouse.y - 0.5) * MOUSE_FORCE;
 
+            // 1. Update particle coordinates and precalculate projections once per frame
+            const projections = new Array(particles.length);
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i];
-
                 p.x = ((p.x + p.vx + fx) + 1) % 1;
                 p.y = ((p.y + p.vy + fy) + 1) % 1;
                 p.z = ((p.z + p.vz) + 1000) % 1000;
+                projections[i] = project(p.x, p.y, p.z, w, h);
+            }
 
-                const { px, py, scale } = project(p.x, p.y, p.z, w, h);
+            // 2. Render particles and their connection links using the cached projections
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                const { px, py, scale } = projections[i];
 
                 // draw connection lines
                 for (let j = i + 1; j < particles.length; j++) {
-                    const q = particles[j];
-                    const { px: qx, py: qy } = project(q.x, q.y, q.z, w, h);
+                    const { px: qx, py: qy } = projections[j];
                     const dist = Math.hypot(px - qx, py - qy);
 
                     if (dist < LINK_DIST) {
