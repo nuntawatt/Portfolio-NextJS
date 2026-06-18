@@ -60,7 +60,7 @@ export function ContactForm() {
 
         <div className="relative z-10 flex flex-col items-center justify-center space-y-6 py-8 text-center">
           <div className="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-full flex items-center justify-center border border-orange-500/20">
-            <CheckCircle2 className="w-8 h-8 animate-bounce" />
+            <CheckCircle2 className="w-8 h-8" />
           </div>
           <div className="select-none max-w-md">
             <h1 className="text-3xl font-black text-foreground tracking-tight font-heading">
@@ -73,7 +73,7 @@ export function ContactForm() {
           <button
             type="button"
             onClick={resetSuccess}
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30 transition-all duration-300 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl shadow-md hover:shadow-orange-500/10 transition-all duration-200 cursor-pointer"
           >
             {t('contact.send_another')}
           </button>
@@ -118,7 +118,7 @@ export function ContactForm() {
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
             <Link
               href="/auth/signin"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30 transition-all duration-300 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl shadow-md hover:shadow-orange-500/10 transition-all duration-200 cursor-pointer"
             >
               {t('nav.signin')}
             </Link>
