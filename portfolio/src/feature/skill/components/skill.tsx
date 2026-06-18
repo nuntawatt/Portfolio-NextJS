@@ -36,7 +36,7 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
 
       {/* Eyebrow Header */}
       <div className="relative z-10 flex items-center justify-between pb-3 mb-5 border-b border-border select-none">
-        <span className="font-mono text-[9px] text-muted-foreground/80 tracking-widest uppercase font-semibold">
+        <span className="font-mono text-xs text-muted-foreground tracking-wider uppercase font-semibold">
           {subtitle}
         </span>
       </div>
