@@ -82,7 +82,7 @@ export function SkillsSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Main Grid Wrapper */}
-        <div className="relative bg-card/40 border border-border rounded-[24px] p-6 sm:p-8 backdrop-blur-md">
+        <div className="relative">
 
           {/* Headline */}
           <div className="text-center mb-12 md:mb-16">
