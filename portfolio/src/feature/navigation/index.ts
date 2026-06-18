@@ -1,2 +1,2 @@
-export { Navbar } from './component/nav';
-export { Footer } from './component/footer';
+export { Navbar } from './components/nav';
+export { Footer } from './components/footer';

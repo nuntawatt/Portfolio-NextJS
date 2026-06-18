@@ -1,5 +1,5 @@
 import { apiClient } from '../../../lib/api-client';
-import { SignInData, SignUpData, AuthResponse } from './type';
+import { SignInData, SignUpData, AuthResponse } from './types';
 
 // ========== Constants ==========
 export const AUTH_KEYS = {

@@ -1,3 +1,3 @@
-export * from './component/audio';
-export * from './provider/audio';
-export * from './hook/audio';
+export * from './components/audio';
+export * from './providers/audio';
+export * from './hooks/audio';
