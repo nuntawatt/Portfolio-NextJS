@@ -44,8 +44,18 @@
     @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-600;
   }
 
-  /* Continuous warm mesh background */
+  /* Continuous warm mesh background - GPU Accelerated using a fixed pseudo-element
+     instead of background-attachment: fixed, preventing continuous viewport repaints on scroll. */
   .continuous-mesh-bg {
+    position: relative;
+  }
+  
+  .continuous-mesh-bg::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
     background: 
       radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.018) 0px, transparent 55%),
       radial-gradient(at 100% 0%, rgba(249, 115, 22, 0.012) 0px, transparent 45%),
@@ -53,7 +63,7 @@
       radial-gradient(at 0% 100%, rgba(249, 115, 22, 0.018) 0px, transparent 55%),
       radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.012) 0px, transparent 45%),
       var(--background);
-    background-attachment: fixed;
+    transform: translate3d(0, 0, 0); /* Force GPU composite layer */
   }
 
   /* Global subtle noise overlay */
