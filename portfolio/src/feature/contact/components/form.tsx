@@ -1,73 +1,29 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { siteConfig } from '@/config/site';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { apiClient } from '@/lib/api-client';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useClipboard } from '@/shared/hooks/use-clipboard';
+import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useContactForm } from '../hooks/use-contact-form';
 
 export function ContactForm() {
   const { t } = useTranslation();
-  const { data: session, status } = useSession();
-  const [name, setName] = useState('');
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
-  const [copied, setCopied] = useState(false);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
+  const {
+    formData: { name, subject, message },
+    formActions: { setName, setSubject, setMessage },
+    formState: { isSending, sendSuccess, sendError },
+    sessionState: { session, status },
+    handleSubmit,
+    resetSuccess,
+  } = useContactForm();
 
-  // Sending & status states
-  const [isSending, setIsSending] = useState(false);
-  const [sendSuccess, setSendSuccess] = useState<boolean | null>(null);
-  const [sendError, setSendError] = useState<string | null>(null);
+  const { copied, copyToClipboard } = useClipboard();
+  const { coords, hovered, spotlightHandlers } = useSpotlight();
 
-  useEffect(() => {
-    if (session?.user?.name && !name) {
-      setName(session.user.name);
-    }
-  }, [session, name]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCoords({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(siteConfig.contact.email).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const userEmail = session?.user?.email;
-    if (!name || !userEmail || !subject || !message) return;
-
-    setIsSending(true);
-    setSendError(null);
-
-    try {
-      await apiClient.post('/contact', {
-        name,
-        subject,
-        message,
-      });
-
-      setSendSuccess(true);
-      setSubject('');
-      setMessage('');
-    } catch (error: any) {
-      setSendError(error?.message || 'Failed to send message. Please try again.');
-    } finally {
-      setIsSending(false);
-    }
-  };
+  const handleCopy = () => copyToClipboard(siteConfig.contact.email);
 
   if (status === 'loading') {
     return (
@@ -84,9 +40,7 @@ export function ContactForm() {
     return (
       <div
         className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        {...spotlightHandlers}
       >
         {/* spotlight cursor glow */}
         <div
@@ -118,7 +72,7 @@ export function ContactForm() {
           </div>
           <button
             type="button"
-            onClick={() => setSendSuccess(null)}
+            onClick={resetSuccess}
             className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl transform hover:-translate-y-1 hover:scale-105 shadow-md hover:shadow-orange-500/30 transition-all duration-300 cursor-pointer"
           >
             {t('contact.send_another')}
@@ -132,9 +86,7 @@ export function ContactForm() {
     return (
       <div
         className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        {...spotlightHandlers}
       >
         {/* spotlight cursor glow */}
         <div
@@ -172,7 +124,7 @@ export function ContactForm() {
             </Link>
             <button
               type="button"
-              onClick={copyToClipboard}
+              onClick={handleCopy}
               className="w-full sm:w-auto inline-flex items-center justify-center text-foreground bg-transparent border border-border rounded-xl text-sm px-6 py-3 gap-2 cursor-pointer hover:bg-secondary transition-all duration-200 relative group font-semibold"
               title="Click to copy email address"
             >
@@ -210,9 +162,7 @@ export function ContactForm() {
   return (
     <div
       className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      {...spotlightHandlers}
     >
       {/* spotlight cursor glow */}
       <div
@@ -320,7 +270,7 @@ export function ContactForm() {
             {/* Clipboard Email Option */}
             <button
               type="button"
-              onClick={copyToClipboard}
+              onClick={handleCopy}
               className="w-full sm:w-auto inline-flex items-center justify-center text-foreground bg-transparent border border-border rounded-xl text-sm px-6 py-3 gap-2 cursor-pointer hover:bg-secondary transition-all duration-200 relative group font-semibold"
               title="Click to copy email address"
             >
