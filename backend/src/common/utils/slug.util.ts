@@ -1,4 +1,4 @@
-/** Generates a URL-safe slug from a title string. */
+// Utility functions for generating URL-friendly slugs from titles.
 export function generateSlug(title: string): string {
   return title
     .toLowerCase()
