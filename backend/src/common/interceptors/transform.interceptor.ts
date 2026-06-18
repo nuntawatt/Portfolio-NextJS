@@ -7,14 +7,14 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-/** Standard success response envelope. */
+// Standard structure for transformed successful responses.
 export interface TransformedResponse<T> {
   success: true;
   data: T;
   timestamp: string;
 }
 
-/** Interceptor to wrap successful responses in a standard envelope. */
+// Interceptor to transform all successful responses into a consistent format.
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<
   T,

@@ -20,7 +20,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url } = request;
     const startTime = Date.now();
 
-    this.logger.log(`[${method}] ${url} — Incoming request`);
+    this.logger.log(`[${method}] ${url} - Incoming request`);
 
     return next.handle().pipe(
       tap({
@@ -28,14 +28,14 @@ export class LoggingInterceptor implements NestInterceptor {
           const response = ctx.getResponse<Response>();
           const elapsed = Date.now() - startTime;
           this.logger.log(
-            `[${method}] ${url} — ${response.statusCode} — ${elapsed}ms`,
+            `[${method}] ${url} - ${response.statusCode} - ${elapsed}ms`,
           );
         },
         error: (error: Error & { status?: number }) => {
           const elapsed = Date.now() - startTime;
           const status = error.status ?? 500;
           this.logger.warn(
-            `[${method}] ${url} — ${status} — ${elapsed}ms — ${error.message}`,
+            `[${method}] ${url} - ${status} - ${elapsed}ms - ${error.message}`,
           );
         },
       }),
