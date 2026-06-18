@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { Navbar, Footer } from '@/feature/navigation';
 import { ContactSection } from '@/feature/contact';
 

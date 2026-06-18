@@ -4,6 +4,9 @@ import { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthStore } from "../feature/auth/stores/store";
 import { authApi } from "../feature/auth/core/lib";
+import { AuthProvider } from "@/shared/providers/AuthProvider";
+import { AudioProvider } from "@/feature/audio";
+import { ThemeProvider } from "next-themes";
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -49,8 +52,14 @@ export default function Providers({ children }: { children: ReactNode }) {
   }, [setAuth, logout]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AudioProvider>
+            {children}
+          </AudioProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
