@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface AuthPageLayoutProps {
   children: React.ReactNode;
@@ -7,6 +8,22 @@ interface AuthPageLayoutProps {
 export function AuthPageLayout({ children }: AuthPageLayoutProps) {
   return (
     <main className="min-h-screen flex overflow-hidden relative w-full">
+      {/* Absolute Back Button */}
+      <div className="absolute top-6 left-6 z-50">
+        <Link 
+          href="/" 
+          className="group flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md text-sm font-semibold transition-all duration-200 
+                     text-gray-700 bg-gray-100/80 hover:bg-gray-200 border border-gray-200/50 
+                     dark:text-gray-200 dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/10
+                     lg:text-white lg:bg-white/10 lg:hover:bg-white/20 lg:border-white/20 lg:dark:bg-white/10 lg:dark:hover:bg-white/20"
+        >
+          <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Home
+        </Link>
+      </div>
+
       {/* ── Left branding panel (hidden on mobile) ── */}
       <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center bg-gradient-to-br from-[#0a0a0a] via-[#111] to-[#0a0a0a] overflow-hidden">
         {/* Animated gradient orbs */}
@@ -29,13 +46,15 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
         {/* Content */}
         <div className="relative z-10 max-w-md px-12 text-center">
           {/* Logo */}
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl shadow-orange-500/40 mb-8">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m18 16 4-4-4-4" />
-              <path d="m6 8-4 4 4 4" />
-              <path d="m14.5 4-5 16" />
-            </svg>
-          </div>
+          <Link href="/" className="inline-block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-4 focus:ring-offset-[#0a0a0a] rounded-3xl mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl shadow-orange-500/40">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m18 16 4-4-4-4" />
+                <path d="m6 8-4 4 4 4" />
+                <path d="m14.5 4-5 16" />
+              </svg>
+            </div>
+          </Link>
 
           <h1 className="text-4xl font-black text-white mb-4 tracking-tight">
             Welcome to{' '}
@@ -66,7 +85,7 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
             <p className="text-sm text-gray-500 italic">
               &ldquo;Clean architecture, performance, and code that is maintainable long after handoff.&rdquo;
             </p>
-            <p className="text-xs text-orange-500/70 mt-2 font-semibold">Nuntawat Sae-Huam</p>
+            <p className="text-xs text-orange-500/70 mt-2 font-semibold">Nuntawat SaeHuam</p>
           </div>
         </div>
       </div>
@@ -80,13 +99,15 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
         <div className="w-full max-w-[480px] px-6 sm:px-8 py-12 relative z-10">
           {/* Mobile logo (visible only on small screens) */}
           <div className="lg:hidden text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30 mb-4">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m18 16 4-4-4-4" />
-                <path d="m6 8-4 4 4 4" />
-                <path d="m14.5 4-5 16" />
-              </svg>
-            </div>
+            <Link href="/" className="inline-block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-2xl mb-4">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m18 16 4-4-4-4" />
+                  <path d="m6 8-4 4 4 4" />
+                  <path d="m14.5 4-5 16" />
+                </svg>
+              </div>
+            </Link>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Morgorn <span className="text-orange-500">Portfolio</span>
             </h2>
