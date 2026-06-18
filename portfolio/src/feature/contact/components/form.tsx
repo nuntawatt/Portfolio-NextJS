@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
+import { useTranslation } from '@/shared/providers/LanguageProvider';
+
 export function ContactForm() {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
@@ -62,7 +65,7 @@ export function ContactForm() {
       {/* Eyebrow Header */}
       <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border select-none">
         <span className="font-mono text-[9px] text-muted-foreground/80 tracking-widest uppercase font-semibold">
-          Get In Touch
+          {t('contact.eyebrow')}
         </span>
       </div>
 
@@ -70,10 +73,10 @@ export function ContactForm() {
       <div className="relative z-10 space-y-6">
         <div className="text-left select-none">
           <h1 className="text-3xl font-black text-foreground tracking-tight font-heading">
-            Send a message.
+            {t('contact.title')}
           </h1>
           <p className="text-sm text-muted-foreground mt-2 font-medium">
-            Have a question, project, or opportunity? Compose below and it will send directly to my email.
+            {t('contact.subtitle')}
           </p>
         </div>
 
@@ -82,12 +85,12 @@ export function ContactForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
-                Your Name
+                {t('contact.name')}
               </label>
               <input
                 type="text"
                 required
-                placeholder="e.g. John Doe"
+                placeholder={t('contact.name_placeholder') as string}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-card/50 text-foreground placeholder-muted-foreground focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 transition-all text-sm font-medium"
@@ -95,12 +98,12 @@ export function ContactForm() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
-                Your Email
+                {t('contact.email')}
               </label>
               <input
                 type="email"
                 required
-                placeholder="e.g. john@example.com"
+                placeholder={t('contact.email_placeholder') as string}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-card/50 text-foreground placeholder-muted-foreground focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 transition-all text-sm font-medium"
@@ -111,12 +114,12 @@ export function ContactForm() {
           {/* Subject */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
-              Subject
+              {t('contact.subject')}
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Backend Opportunity"
+              placeholder={t('contact.subject_placeholder') as string}
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-border bg-card/50 text-foreground placeholder-muted-foreground focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 transition-all text-sm font-medium"
@@ -126,12 +129,12 @@ export function ContactForm() {
           {/* Message Body */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
-              Message Details
+              {t('contact.message')}
             </label>
             <textarea
               rows={5}
               required
-              placeholder="Tell me more details about your inquiry..."
+              placeholder={t('contact.message_placeholder') as string}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-border bg-card/50 text-foreground placeholder-muted-foreground focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 transition-all text-sm font-medium resize-none"
@@ -145,7 +148,7 @@ export function ContactForm() {
               type="submit"
               className="w-full sm:w-auto inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm px-6 py-3 hover:shadow-md hover:shadow-orange-500/10 transition-all duration-200 font-semibold gap-2 cursor-pointer"
             >
-              Send via Email <Send className="w-4 h-4" />
+              {t('contact.send')} <Send className="w-4 h-4" />
             </button>
 
             {/* Clipboard Email Option */}
@@ -156,7 +159,7 @@ export function ContactForm() {
               title="Click to copy email address"
             >
               <span>
-                Copy address: <span className="underline underline-offset-1">{siteConfig.contact.email}</span>
+                {t('contact.copy')} <span className="underline underline-offset-1">{siteConfig.contact.email}</span>
               </span>
               
               <svg
@@ -180,7 +183,7 @@ export function ContactForm() {
                   copied ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
                 }`}
               >
-                Copied!
+                {t('contact.copied')}
               </span>
             </button>
           </div>
