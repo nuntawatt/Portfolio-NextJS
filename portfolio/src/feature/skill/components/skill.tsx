@@ -95,11 +95,11 @@ export function SkillsSection() {
             </p>
           </div>
 
-          {/* Handcrafted Widgets Grid — each card gets a visual native to its
+          {/* Handcrafted Widgets Grid - each card gets a visual native to its
               own domain instead of all six reusing the same fake-terminal block. */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            {/* 1. Backend — request flow diagram */}
+            {/* 1. Backend - request flow diagram */}
             <SkillCard
               title={t('skills.cat1.title') as string}
               subtitle={t('skills.cat1.subtitle') as string}
@@ -120,14 +120,14 @@ export function SkillsSection() {
                     ))}
                   </div>
                   <p className="mt-3 text-[11px] text-muted-foreground text-center">
-                    Go runtime · p99 latency under 2ms
+                    Scalable Microservices Architecture
                   </p>
                 </div>
                 <TagRow items={['Node.js', 'NestJS', 'FastAPI', 'Go']} />
               </div>
             </SkillCard>
 
-            {/* 2. Frontend — component tree, not code */}
+            {/* 2. Frontend - component tree, not code */}
             <SkillCard
               title={t('skills.cat2.title') as string}
               subtitle={t('skills.cat2.subtitle') as string}
@@ -160,7 +160,7 @@ export function SkillsSection() {
               </div>
             </SkillCard>
 
-            {/* 3. Database — comparative mini bar chart */}
+            {/* 3. Database - comparative mini bar chart */}
             <SkillCard
               title={t('skills.cat3.title') as string}
               subtitle={t('skills.cat3.subtitle') as string}
@@ -191,7 +191,7 @@ export function SkillsSection() {
               </div>
             </SkillCard>
 
-            {/* 4. DevOps — pipeline stepper, dots not fake-log */}
+            {/* 4. DevOps - pipeline stepper, dots not fake-log */}
             <SkillCard
               title={t('skills.cat4.title') as string}
               subtitle={t('skills.cat4.subtitle') as string}
@@ -220,7 +220,7 @@ export function SkillsSection() {
               </div>
             </SkillCard>
 
-            {/* 5. Tools — grid mockup kept, it's already not code */}
+            {/* 5. Tools - grid mockup kept, it's already not code */}
             <SkillCard
               title={t('skills.cat5.title') as string}
               subtitle={t('skills.cat5.subtitle') as string}
@@ -229,7 +229,7 @@ export function SkillsSection() {
               <div className="flex flex-col h-full justify-between">
                 <div className="grid grid-cols-2 gap-2 mb-6 select-none text-center">
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
-                    GitHub / VCS
+                    Git / VCS
                   </div>
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
                     Postman / API
@@ -245,7 +245,7 @@ export function SkillsSection() {
               </div>
             </SkillCard>
 
-            {/* 6. Languages & soft skills — one orange accent, on Native only */}
+            {/* 6. Languages & soft skills - one orange accent, on Native only */}
             <SkillCard
               title={t('skills.cat6.title') as string}
               subtitle={t('skills.cat6.subtitle') as string}

@@ -9,10 +9,10 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
   return (
     <main className="min-h-screen flex overflow-hidden relative w-full">
       {/* Absolute Back Button */}
-      <div className="absolute top-6 left-6 z-50">
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50">
         <Link 
           href="/" 
-          className="group flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md text-sm font-semibold transition-all duration-200 
+          className="group flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full backdrop-blur-md text-xs sm:text-sm font-semibold transition-all duration-200 
                      text-gray-700 bg-gray-100/80 hover:bg-gray-200 border border-gray-200/50 
                      dark:text-gray-200 dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/10
                      lg:text-white lg:bg-white/10 lg:hover:bg-white/20 lg:border-white/20 lg:dark:bg-white/10 lg:dark:hover:bg-white/20"
@@ -96,7 +96,7 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
         <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-orange-50/5 dark:bg-orange-50/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
         <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-blue-50/5 dark:bg-blue-50/5 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
 
-        <div className="w-full max-w-[480px] px-6 sm:px-8 py-12 relative z-10">
+        <div className="w-full max-w-[480px] px-6 sm:px-8 pt-20 pb-8 sm:py-12 relative z-10">
           {/* Mobile logo (visible only on small screens) */}
           <div className="lg:hidden text-center mb-8">
             <Link href="/" className="inline-block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-2xl mb-4">
