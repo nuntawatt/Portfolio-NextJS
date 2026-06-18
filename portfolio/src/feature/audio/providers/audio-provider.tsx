@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useRef, useState } from 'react';
 
 interface AudioContextType {
   playing: boolean;
@@ -27,42 +27,55 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     return DEFAULT_VOLUME;
   });
 
-  // Initialize audio only on mount to avoid SSR issues
+  // Helper to lazily initialize the Audio object (pure: no synchronous React state updates)
+  const getOrInitAudio = useCallback((initialVol = volume) => {
+    if (audioRef.current) return audioRef.current;
+    if (typeof window === 'undefined') return null;
+
+    const audio = new Audio(AUDIO_SRC);
+    audio.loop = true;
+    audio.volume = initialVol;
+    
+    audioRef.current = audio;
+    return audio;
+  }, [volume]);
+
+  // Restore playback state dynamically on mount if previously playing
   useEffect(() => {
     const savedPlaying = localStorage.getItem('audio_playing') === 'true';
     const savedVolume = localStorage.getItem('audio_volume');
     const initialVolume = savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
 
-    const audio = new Audio(AUDIO_SRC);
-    audio.loop = true;
-    audio.volume = initialVolume;
-    
-    const handleCanPlayThrough = () => setReady(true);
-    audio.addEventListener('canplaythrough', handleCanPlayThrough);
-    
-    audioRef.current = audio;
-
-    // Attempt to restore playback state if previously playing
-    // Browsers might block this on first load without user interaction
     if (savedPlaying) {
-      audio.play().then(() => {
-        setPlaying(true);
-      }).catch(() => {
-        // Autoplay policy or missing file rejection — fail quietly, stay paused.
-        setPlaying(false);
-        localStorage.setItem('audio_playing', 'false');
-      });
+      const audio = getOrInitAudio(initialVolume);
+      if (audio) {
+        audio.play().then(() => {
+          setPlaying(true);
+          setReady(true); // Async setState within a promise resolve is safe
+        }).catch(() => {
+          // Autoplay block or error - fail silently and stay paused
+          setPlaying(false);
+          localStorage.setItem('audio_playing', 'false');
+        });
+      }
     }
 
     return () => {
-      audio.removeEventListener('canplaythrough', handleCanPlayThrough);
-      audio.pause();
-      audioRef.current = null;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
-  }, []);
+  }, [getOrInitAudio]);
 
   const toggle = () => {
-    const audio = audioRef.current;
+    if (typeof window === 'undefined') return;
+    
+    let audio = audioRef.current;
+    if (!audio) {
+      audio = getOrInitAudio(volume);
+      setReady(true);
+    }
     if (!audio) return;
     
     if (playing) {
@@ -81,8 +94,11 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setVolume = (v: number) => {
-    const audio = audioRef.current;
-    if (audio) {
+    let audio = audioRef.current;
+    if (!audio) {
+      audio = getOrInitAudio(v);
+      setReady(true);
+    } else {
       audio.volume = v;
     }
     setVolumeState(v);
