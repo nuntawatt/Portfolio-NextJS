@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight, Download } from 'lucide-react';
-import { Button } from '@/shared/components/Button';
-import { ProfileImage } from './img';
+import { Download } from 'lucide-react';
+import { Button } from '@/shared/components/button';
+import { ProfileImage } from './profile-image';
 import { siteConfig } from '@/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 

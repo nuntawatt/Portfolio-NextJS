@@ -1,3 +1,3 @@
-export { HeroSection } from './components/hero';
-export { ProfileImage } from './components/img';
-export { StatsCard } from './components/stat';
+export { HeroSection } from './components/hero-section';
+export { ProfileImage } from './components/profile-image';
+export { StatsCard } from './components/stats-card';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@/shared/components/Card';
+import { Card } from '@/shared/components/card';
 
 interface StatsCardProps {
   value: string;
