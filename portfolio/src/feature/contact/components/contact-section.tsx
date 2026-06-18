@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ContactForm } from './form';
+import { ContactForm } from './contact-form';
 
 export function ContactSection() {
   return (

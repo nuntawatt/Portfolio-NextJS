@@ -37,8 +37,9 @@ export function useContactForm() {
       setSendSuccess(true);
       setSubject('');
       setMessage('');
-    } catch (error: any) {
-      setSendError(error?.message || 'Failed to send message. Please try again.');
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : 'Failed to send message. Please try again.';
+      setSendError(errMsg);
     } finally {
       setIsSending(false);
     }
