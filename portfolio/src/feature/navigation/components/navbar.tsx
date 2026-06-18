@@ -6,7 +6,7 @@ import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/shared/components/theme';
 import { AuthButton } from '@/shared/components/auth-btn';
 import { AudioToggle } from '@/feature/audio';
-import { LanguageToggle } from '@/shared/components/LanguageToggle';
+import { LanguageToggle } from '@/shared/components/language-toggle';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/config/routes';
 
@@ -15,6 +15,8 @@ export function Navbar() {
   const [activeHash, setActiveHash] = useState<string>('');
   const pathname = usePathname();
   const { t } = useTranslation();
+
+  const activeLink = pathname === '/contact' ? routes.contact : activeHash;
 
   const navLinks = [
     { name: t('nav.home'), href: routes.home },
@@ -44,10 +46,9 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handleEsc);
   }, [isOpen]);
 
-  // Handle active hash detection dynamically on homepage scroll, and force active contact page state
+  // Handle active hash detection dynamically on homepage scroll
   useEffect(() => {
     if (pathname === '/contact') {
-      setActiveHash(routes.contact);
       return;
     }
 
@@ -98,7 +99,7 @@ export function Navbar() {
                     key={link.name as string}
                     href={link.href}
                     onClick={() => setActiveHash(link.href)}
-                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${activeHash === link.href
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${activeLink === link.href
                         ? 'text-orange-600 dark:text-orange-500'
                         : 'text-muted-foreground hover:text-foreground'
                       }`}
@@ -106,7 +107,7 @@ export function Navbar() {
                     {link.name}
                     {/* Animated Underline Effect */}
                     <span
-                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${activeHash === link.href
+                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${activeLink === link.href
                           ? 'opacity-100 scale-x-100'
                           : 'opacity-0 scale-x-0 group-hover:opacity-50 group-hover:scale-x-75'
                         }`}
@@ -181,7 +182,7 @@ export function Navbar() {
                <a
                 key={link.name as string}
                 href={link.href}
-                className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${activeHash === link.href
+                className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${activeLink === link.href
                     ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 font-semibold'
                     : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                   }`}
