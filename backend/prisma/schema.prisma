@@ -37,7 +37,7 @@ model User {
   password        String?
   firstName       String?
   lastName        String?
-  avatar          String?
+  avatar          String?   @default("https://hteelsogbgzpxbzrlmnb.supabase.co/storage/v1/object/public/portfolio/uploads/1781843852259-ca7d3610970e60ee.jpg")
   role            Role      @default(USER)
   isEmailVerified Boolean   @default(false)
   createdAt       DateTime  @default(now())
