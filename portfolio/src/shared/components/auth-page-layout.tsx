@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { siteConfig } from '@/config/site';
 
 interface AuthPageLayoutProps {
   children: React.ReactNode;
@@ -45,16 +47,17 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
 
         {/* Content */}
         <div className="relative z-10 max-w-md px-12 text-center">
-          {/* Logo */}
-          <Link href="/" className="inline-block transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-4 focus:ring-offset-[#0a0a0a] rounded-3xl mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl shadow-orange-500/40">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m18 16 4-4-4-4" />
-                <path d="m6 8-4 4 4 4" />
-                <path d="m14.5 4-5 16" />
-              </svg>
-            </div>
-          </Link>
+          {/* Mascot Welcome Gif */}
+          <div className="relative w-48 h-48 mx-auto overflow-hidden rounded-3xl border border-white/10 shadow-2xl mb-8 bg-zinc-900/50">
+            <Image
+              src={siteConfig.animations.welcome}
+              alt="Welcome Mascot"
+              fill
+              className="object-cover"
+              unoptimized
+              priority
+            />
+          </div>
 
           <h1 className="text-4xl font-black text-white mb-4 tracking-tight">
             Welcome to{' '}
