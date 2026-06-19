@@ -32,6 +32,7 @@ export function useAuthCallback() {
           firstName: user.firstName || '',
           lastName: user.lastName || '',
           token: token.accessToken,
+          avatar: user.avatar || '',
         });
 
         // Initialize NextAuth session using CredentialsProvider
@@ -42,6 +43,7 @@ export function useAuthCallback() {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
+          avatar: user.avatar,
         });
 
         if (result?.error) {

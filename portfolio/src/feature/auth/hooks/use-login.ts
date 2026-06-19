@@ -29,6 +29,7 @@ export const useLogin = () => {
         email: response.user.email,
         firstName: response.user.firstName,
         lastName: response.user.lastName,
+        avatar: response.user.avatar,
       });
 
       if (result?.error) {
