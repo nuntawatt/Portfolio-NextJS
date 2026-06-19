@@ -12,5 +12,10 @@ export const siteConfig = {
   },
   contact: {
     email: "morgorn.wk@gmail.com"
+  },
+  animations: {
+    loading: "/animation/anime-loading.gif",
+    success: "/animation/anime-succes.gif",
+    welcome: "/animation/anime-welcome.gif",
   }
 } as const;
