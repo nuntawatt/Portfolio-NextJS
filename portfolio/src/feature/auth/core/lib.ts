@@ -41,7 +41,8 @@ export const removeAuthToken = (): void => {
 // ========== API ==========
 export const authApi = {
   login: async (data: SignInData): Promise<AuthResponse> => {
-    const response = await apiClient.post('/auth/login', data);
+    const { email, password } = data;
+    const response = await apiClient.post('/auth/login', { email, password });
     const payload = response.data.data; // standard wrapper { success, data, timestamp }
     const { user, token } = payload;
     
@@ -52,6 +53,7 @@ export const authApi = {
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         token: token.accessToken,
+        avatar: user.avatar || '',
       },
       message: response.data.message || 'Successfully logged in',
     };
@@ -75,6 +77,7 @@ export const authApi = {
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         token: token.accessToken,
+        avatar: user.avatar || '',
       },
       message: response.data.message || 'Account created successfully',
     };

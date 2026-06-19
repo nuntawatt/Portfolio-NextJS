@@ -28,6 +28,7 @@ export interface AuthUser {
     firstName?: string;
     lastName?: string;
     token: string;
+    avatar?: string;
 }
 
 export interface AuthResponse {
