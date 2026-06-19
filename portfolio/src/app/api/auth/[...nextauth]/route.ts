@@ -11,16 +11,16 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         firstName: { label: "First Name", type: "text" },
         lastName: { label: "Last Name", type: "text" },
+        avatar: { label: "Avatar", type: "text" },
       },
       async authorize(credentials) {
         if (credentials?.token && credentials?.id && credentials?.email) {
-          // ตรวจสอบข้อมูลผู้ใช้ที่ได้รับจาก credentials และส่งกลับข้อมูลผู้ใช้ที่ถูกต้อง
-          // สามารถปรับแต่งการตรวจสอบนี้ตามความต้องการ เช่น การตรวจสอบกับฐานข้อมูลหรือ API ภายนอก
           return {
             id: credentials.id,
             email: credentials.email,
             name: `${credentials.firstName || ''} ${credentials.lastName || ''}`.trim(),
             accessToken: credentials.token,
+            image: credentials.avatar || null,
           };
         }
         return null;
@@ -34,6 +34,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+        token.image = user.image;
         token.accessToken = (user as { accessToken?: string }).accessToken;
       }
       return token;
@@ -43,6 +44,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         (session.user as { id?: string }).id = token.id as string;
         (session.user as { accessToken?: string }).accessToken = token.accessToken as string;
+        session.user.image = token.image as string || null;
       }
       return session;
     }
