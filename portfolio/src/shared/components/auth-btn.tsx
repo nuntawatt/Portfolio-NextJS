@@ -2,10 +2,55 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { LogOut, User as UserIcon } from 'lucide-react';
+import { User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+
+// Stepped/Pixelated clip-path for retro border styling
+const PIXEL_CLIP_PATH = "polygon(0px 4px, 4px 4px, 4px 0px, calc(100% - 4px) 0px, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0px calc(100% - 4px))";
+
+// Inline pixel-art sign out SVG icon
+function PixelSignOutIcon({ className }: { className?: string }) {
+  const width = 12;
+  const height = 11;
+  const grid = [
+    "bbbbbbb.....",
+    "b.....b.....",
+    "b.....b...a.",
+    "b.....b..aa.",
+    "b.....baaaaa",
+    "b.....aaaaaa",
+    "b.....baaaaa",
+    "b.....b..aa.",
+    "b.....b...a.",
+    "b.....b.....",
+    "bbbbbbb....."
+  ];
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className={className}
+      shapeRendering="crispEdges"
+    >
+      {grid.map((row, y) =>
+        row.split('').map((char, x) => {
+          if (char === '.') return null;
+          return (
+            <rect
+              key={`${x}-${y}`}
+              x={x}
+              y={y}
+              width={1}
+              height={1}
+              fill="currentColor"
+            />
+          );
+        })
+      )}
+    </svg>
+  );
+}
 
 export function AuthButton({ className = "" }: { className?: string }) {
   const { data: session, status: nextAuthStatus } = useSession();
@@ -13,15 +58,27 @@ export function AuthButton({ className = "" }: { className?: string }) {
   const profileRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
-  // Close profile dropdown if clicked outside
+  // Close profile dropdown if clicked outside or pressing Escape
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
       }
     }
+    
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsProfileOpen(false);
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const isLoading = nextAuthStatus === 'loading';
@@ -39,11 +96,17 @@ export function AuthButton({ className = "" }: { className?: string }) {
   if (isAuthenticated && session?.user) {
     return (
       <div className={`relative ${className}`} ref={profileRef}>
+        {/* Circular Avatar Button */}
         <button
           disabled={isLoading}
           onClick={() => setIsProfileOpen(!isProfileOpen)}
-          className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 transition duration-200 ease-out hover:shadow-md focus:outline-none overflow-hidden bg-white dark:bg-neutral-800 disabled:opacity-50"
+          aria-haspopup="menu"
           aria-expanded={isProfileOpen}
+          className={`relative w-10 h-10 rounded-full border transition-all duration-200 focus:outline-none overflow-hidden bg-white dark:bg-neutral-800 disabled:opacity-50 cursor-pointer flex items-center justify-center ${
+            isProfileOpen 
+              ? 'ring-2 ring-orange-500 border-transparent scale-105 shadow-md shadow-orange-500/20' 
+              : 'border-gray-200 dark:border-white/10 hover:border-orange-500/50 hover:scale-105'
+          }`}
         >
           {userImage ? (
             /* eslint-disable-next-line @next/next/no-img-element */
@@ -53,23 +116,47 @@ export function AuthButton({ className = "" }: { className?: string }) {
           )}
         </button>
 
+        {/* Pixel Dropdown Menu */}
         {isProfileOpen && (
-          <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-neutral-900 border border-gray-100 dark:border-white/10 rounded-xl shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="px-3 py-2 mb-2 border-b border-gray-100 dark:border-white/5 pb-3">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                {userName || 'User'}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
-                {userEmail}
-              </p>
-            </div>
-            <button
-              onClick={handleSignOut}
-              className="w-full flex items-center justify-start gap-3 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors duration-300 ease-out active:scale-95"
+          <div className="absolute right-0 mt-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+            {/* Retro Pixel-Style Arrow pointing to avatar */}
+            <svg 
+              width="10" 
+              height="5" 
+              viewBox="0 0 10 5" 
+              className="absolute right-[15px] -top-[5px] text-orange-500 select-none pointer-events-none"
+              shapeRendering="crispEdges"
             >
-              <LogOut className="w-4 h-4" />
-              {t('nav.logout')}
-            </button>
+              <path d="M4 0h2v1H4zm-1 1h4v1H3zm-1 1h6v1H2zm-1 1h8v1H1zm-1 1h10v1H0z" fill="currentColor" />
+            </svg>
+
+            <div
+              role="menu"
+              className="w-56 bg-orange-500 p-[3px] shadow-2xl"
+              style={{ clipPath: PIXEL_CLIP_PATH }}
+            >
+              <div
+                className="bg-card text-card-foreground p-4 flex flex-col space-y-3"
+                style={{ clipPath: PIXEL_CLIP_PATH }}
+              >
+                <div className="px-1 py-1 border-b border-dashed border-gray-200 dark:border-white/10 pb-3 select-none">
+                  <p className="text-sm font-bold text-gray-900 dark:text-white truncate font-mono uppercase tracking-tight">
+                    {userName || 'User'}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
+                    {userEmail}
+                  </p>
+                </div>
+                <button
+                  role="menuitem"
+                  onClick={handleSignOut}
+                  className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 rounded transition-colors duration-200 cursor-pointer"
+                >
+                  <PixelSignOutIcon className="w-4 h-[12px]" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
