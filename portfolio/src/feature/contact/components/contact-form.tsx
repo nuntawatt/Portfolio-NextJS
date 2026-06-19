@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Send, AlertCircle } from 'lucide-react';
+import Image from 'next/image';
 import { siteConfig } from '@/config/site';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
@@ -59,8 +60,14 @@ export function ContactForm() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center justify-center space-y-6 py-8 text-center">
-          <div className="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-full flex items-center justify-center border border-orange-500/20">
-            <CheckCircle2 className="w-8 h-8" />
+          <div className="relative w-40 h-40 overflow-hidden rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-100 dark:bg-zinc-800 shadow-md">
+            <Image
+              src={siteConfig.animations.success}
+              alt="Success!"
+              fill
+              className="object-cover"
+              unoptimized
+            />
           </div>
           <div className="select-none max-w-md">
             <h1 className="text-3xl font-black text-foreground tracking-tight font-heading">
