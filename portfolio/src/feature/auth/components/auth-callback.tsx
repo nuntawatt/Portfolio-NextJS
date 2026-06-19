@@ -1,7 +1,8 @@
 'use client';
 
 import { Suspense } from 'react';
-import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import { siteConfig } from '@/config/site';
 import { useAuthCallback } from '../hooks/use-auth-callback';
 
 function AuthCallbackContent() {
@@ -22,9 +23,28 @@ function AuthCallbackContent() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
-      <p className="text-gray-500 dark:text-gray-400 font-medium">Securing your session...</p>
+    <div className="relative p-8 rounded-3xl bg-white/80 dark:bg-zinc-900/80 border border-gray-100 dark:border-white/10 shadow-2xl backdrop-blur-xl max-w-sm w-full mx-4 flex flex-col items-center justify-center text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
+      {/* Animated outer ring */}
+      <div className="absolute inset-0 rounded-3xl border border-orange-500/10 pointer-events-none" />
+
+      <div className="relative w-48 h-48 overflow-hidden rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-100 dark:bg-zinc-800">
+        <Image
+          src={siteConfig.animations.loading}
+          alt="Securing session..."
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+      </div>
+      <div className="space-y-2 select-none">
+        <h3 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white animate-pulse">
+          Securing your session...
+        </h3>
+        <p className="text-xs text-orange-500 dark:text-orange-400 font-mono font-medium tracking-wide">
+          Connecting to account
+        </p>
+      </div>
     </div>
   );
 }
@@ -38,9 +58,26 @@ export function AuthCallback() {
       */}
       <Suspense
         fallback={
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
-            <p className="text-gray-500 dark:text-gray-400 font-medium">Loading...</p>
+          <div className="relative p-8 rounded-3xl bg-white/80 dark:bg-zinc-900/80 border border-gray-100 dark:border-white/10 shadow-2xl backdrop-blur-xl max-w-sm w-full mx-4 flex flex-col items-center justify-center text-center space-y-6">
+            <div className="absolute inset-0 rounded-3xl border border-orange-500/10 pointer-events-none" />
+            <div className="relative w-48 h-48 overflow-hidden rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-100 dark:bg-zinc-800">
+              <Image
+                src={siteConfig.animations.loading}
+                alt="Loading..."
+                fill
+                className="object-cover"
+                priority
+                unoptimized
+              />
+            </div>
+            <div className="space-y-2 select-none">
+              <h3 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white animate-pulse">
+                Initializing...
+              </h3>
+              <p className="text-xs text-orange-500 dark:text-orange-400 font-mono font-medium tracking-wide">
+                Please wait
+              </p>
+            </div>
           </div>
         }
       >
