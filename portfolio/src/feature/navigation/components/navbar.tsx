@@ -121,11 +121,11 @@ export function Navbar() {
 
             {/* Actions & Mobile Menu Trigger */}
             <div className="flex-shrink-0 flex justify-end items-center gap-3 xl:gap-4">
-              <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+              <div className="hidden lg:flex items-center gap-5 xl:gap-6">
                 <AudioToggle />
                 <ThemeToggle />
                 <AuthButton />
-                <LanguageToggle className="lg:ml-4" />
+                <LanguageToggle className="lg:ml-2" />
               </div>
 
               <div className="-mr-2 flex items-center lg:hidden">
