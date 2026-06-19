@@ -3,12 +3,16 @@
 import React from 'react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
-export function LanguageToggle() {
+interface LanguageToggleProps {
+  className?: string;
+}
+
+export function LanguageToggle({ className }: LanguageToggleProps) {
   const { language, setLanguage } = useTranslation();
 
   return (
     <div 
-      className="flex items-center gap-1.5 font-bold text-lg text-foreground tracking-wide select-none"
+      className={`flex items-center gap-1.5 font-bold text-lg text-foreground tracking-wide select-none ${className || ''}`}
       style={{ fontFamily: 'var(--font-en)' }}
     >
       <button

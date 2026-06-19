@@ -125,7 +125,7 @@ export function Navbar() {
                 <AudioToggle />
                 <ThemeToggle />
                 <AuthButton />
-                <LanguageToggle />
+                <LanguageToggle className="lg:ml-4" />
               </div>
 
               <div className="-mr-2 flex items-center lg:hidden">
