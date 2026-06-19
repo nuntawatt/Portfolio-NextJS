@@ -70,7 +70,7 @@ export class UsersService {
           lastName: userData.lastName ?? null,
           email: userData.email.toLowerCase().trim(),
           password: userData.password,
-          avatar: userData.avatar ?? null,
+          avatar: userData.avatar || undefined,
           isEmailVerified: true,
         },
       });
