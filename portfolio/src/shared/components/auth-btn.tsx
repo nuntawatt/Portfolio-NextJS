@@ -94,6 +94,52 @@ export function AuthButton({ className = "" }: { className?: string }) {
   };
 
   if (isAuthenticated && session?.user) {
+    const isMobile = className.includes('flex-col');
+
+    if (isMobile) {
+      return (
+        <div 
+          className="w-full bg-orange-500 p-[3px] shadow-lg transition-all duration-200"
+          style={{ clipPath: PIXEL_CLIP_PATH }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div
+            className="bg-card text-card-foreground p-4 flex flex-col space-y-3.5"
+            style={{ clipPath: PIXEL_CLIP_PATH }}
+          >
+            {/* User Profile Header */}
+            <div className="flex items-center gap-3 border-b border-dashed border-gray-200 dark:border-white/10 pb-3 select-none">
+              <div className="relative w-11 h-11 rounded-full border border-gray-200 dark:border-white/10 overflow-hidden bg-white dark:bg-neutral-800 flex-shrink-0 flex items-center justify-center">
+                {userImage ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={userImage} alt={userName || 'User'} className="w-full h-full object-cover" />
+                ) : (
+                  <UserIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-white truncate font-mono uppercase tracking-tight">
+                  {userName || 'User'}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                  {userEmail}
+                </p>
+              </div>
+            </div>
+
+            {/* Sign Out Button */}
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center justify-center gap-3 px-3 py-2.5 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 rounded transition-colors duration-200 cursor-pointer border border-dashed border-red-500/20 hover:border-red-500/40"
+            >
+              <PixelSignOutIcon className="w-4 h-[12px]" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={`relative ${className}`} ref={profileRef}>
         {/* Circular Avatar Button */}
