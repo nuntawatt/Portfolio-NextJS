@@ -67,7 +67,7 @@
   "skills.cat6.title": "Languages & Soft Skills",
   "skills.cat6.subtitle": "COMMUNICATION & LEARNING",
   "footer.rights": "All rights reserved.",
-  "footer.built_with": "Crafted with Next.js & Tailwind CSS",
+  "footer.built_with": "Crafted with Next.js & NestJS",
   "contact.headline": "Get In Touch",
   "contact.description": "Feel free to reach out for collaborations or just a friendly hello."
 }

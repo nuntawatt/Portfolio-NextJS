@@ -67,7 +67,7 @@
   "skills.cat6.title": "ภาษาและทักษะอื่นๆ",
   "skills.cat6.subtitle": "การสื่อสารและการเรียนรู้",
   "footer.rights": "สงวนลิขสิทธิ์",
-  "footer.built_with": "สร้างด้วย Next.js และ Tailwind CSS",
+  "footer.built_with": "สร้างด้วย Next.js และ NestJS",
   "contact.headline": "ติดต่อผม",
   "contact.description": "ทักทายเข้ามาพูดคุย หรือสอบถามเรื่องโปรเจกต์ได้เสมอครับ"
 }

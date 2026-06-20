@@ -37,7 +37,7 @@ export function Footer() {
 
         </div>
 
-        <div className="mt-8 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left transition-colors">
+        <div className="mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left transition-colors">
           <p className="text-muted-foreground text-sm">
             &copy; {currentYear} Morgorn. {t('footer.rights')}
           </p>
