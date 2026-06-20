@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { VerifyEmailContainer } from '@/feature/auth';
 import { Suspense } from 'react';
+import { LoadingScreen } from '@/shared/components/loading/loading-card';
 
 export const metadata: Metadata = {
   title: 'Verify Email | Morgorn',
@@ -9,8 +10,9 @@ export const metadata: Metadata = {
 
 export default function VerifyEmailPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingScreen title="Loading verification..." subtitle="Please wait" />}>
       <VerifyEmailContainer />
     </Suspense>
   );
 }
+

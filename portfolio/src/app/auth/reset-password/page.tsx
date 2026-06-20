@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { ResetPasswordContainer } from '@/feature/auth';
 import { Suspense } from 'react';
+import { LoadingScreen } from '@/shared/components/loading/loading-card';
 
 export const metadata: Metadata = {
   title: 'Reset Password | Morgorn',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingScreen title="Loading password reset..." subtitle="Please wait" />}>
       <ResetPasswordContainer />
     </Suspense>
   );

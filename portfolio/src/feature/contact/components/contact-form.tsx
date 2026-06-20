@@ -9,6 +9,7 @@ import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useClipboard } from '@/shared/hooks/use-clipboard';
 import { useSpotlight } from '@/shared/hooks/use-spotlight';
 import { useContactForm } from '../hooks/use-contact-form';
+import { LoadingCard } from '@/shared/components/loading/loading-card';
 
 export function ContactForm() {
   const { t } = useTranslation();
@@ -31,8 +32,11 @@ export function ContactForm() {
       <div
         className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none flex flex-col items-center justify-center min-h-[400px]"
       >
-        <div className="w-10 h-10 rounded-full border-4 border-orange-500/20 border-t-orange-500 animate-spin mb-4" />
-        <span className="text-sm text-muted-foreground font-medium">Loading form...</span>
+        <LoadingCard 
+          flat 
+          title="Loading form..." 
+          subtitle="Checking authorization status" 
+        />
       </div>
     );
   }

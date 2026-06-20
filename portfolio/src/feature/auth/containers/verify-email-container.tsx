@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import { AuthPageLayout } from '@/shared/components/auth-page-layout';
 import { routes } from '@/config/routes';
 import Link from 'next/link';
 import { useVerifyEmail } from '../hooks/use-verify-email';
+import { LoadingCard } from '@/shared/components/loading/loading-card';
 
 export function VerifyEmailContainer() {
   const { status, message } = useVerifyEmail();
@@ -19,13 +20,11 @@ export function VerifyEmailContainer() {
 
         <div className="relative z-10 flex flex-col items-center">
           {status === 'loading' && (
-            <>
-              <div className="w-16 h-16 rounded-full bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center mb-6">
-                <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Verifying Email</h2>
-              <p className="text-gray-500 dark:text-gray-400">{message}</p>
-            </>
+            <LoadingCard 
+              flat 
+              title="Verifying Email" 
+              subtitle={message || "Please wait"} 
+            />
           )}
 
           {status === 'success' && (
