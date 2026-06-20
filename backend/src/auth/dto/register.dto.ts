@@ -26,7 +26,7 @@ export class RegisterDto {
 
   @ApiProperty({
     description: 'The email address of the user',
-    example: 'user@example.com',
+    example: 'user@email.com',
   })
   @IsEmail({}, { message: 'Please enter a valid email address' })
   @IsNotEmpty({ message: 'Email is required' })

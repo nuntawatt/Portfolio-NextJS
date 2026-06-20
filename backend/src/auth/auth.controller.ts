@@ -144,7 +144,7 @@ export class AuthController {
       type: 'object',
       required: ['email'],
       properties: {
-        email: { type: 'string', format: 'email', example: 'user@example.com' },
+        email: { type: 'string', format: 'email', example: 'user@email.com' },
       },
     },
   })
