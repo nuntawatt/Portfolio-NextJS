@@ -65,31 +65,26 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full relative flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-[15px] font-semibold rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-orange-500/50 group overflow-hidden"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-[15px] font-semibold rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                 >
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                    <span className="relative flex items-center gap-2">
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.signing_in')}
-                            </>
-                        ) : (
-                            <>
-                                {t('auth.signin_btn')}
-                                <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                            </>
-                        )}
-                    </span>
+                    {isLoading ? (
+                        <>
+                            <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.signing_in')}
+                        </>
+                    ) : (
+                        t('auth.signin_btn')
+                    )}
                 </button>
             </div>
 
             <div className="relative">
-                <div className="absolute inset-0 flex items-center">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
                     <div className="w-full border-t border-gray-200 dark:border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gray-50 dark:bg-[#0a0a0a] text-gray-500">{t('auth.or_continue_with')}</span>
+                    <span className="px-2 bg-white dark:bg-[#111111] text-gray-500 dark:text-gray-400 font-medium">
+                        {t('auth.or_continue_with')}
+                    </span>
                 </div>
             </div>
 

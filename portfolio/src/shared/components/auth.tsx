@@ -39,7 +39,7 @@ export function AuthFormLayout({
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-white dark:to-gray-200 bg-clip-text text-transparent">
             {title}
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm font-medium leading-relaxed">
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-medium leading-relaxed sm:whitespace-nowrap">
             {subtitle}
           </p>
         </div>

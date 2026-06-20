@@ -110,7 +110,7 @@
   "auth.forgot_btn": "Send Reset Link",
   "auth.forgot_sending": "Sending...",
   "auth.reset_title": "Create new password",
-  "auth.reset_subtitle": "Please enter your new password below",
+  "auth.reset_subtitle": "Enter your new password below",
   "auth.reset_new_password": "New Password",
   "auth.reset_confirm_new_password": "Confirm New Password",
   "auth.reset_btn": "Reset Password",

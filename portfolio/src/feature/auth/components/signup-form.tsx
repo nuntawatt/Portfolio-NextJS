@@ -145,35 +145,30 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full relative flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-[15px] font-semibold rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-orange-500/50 group overflow-hidden"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-[15px] font-semibold rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                 >
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                    <span className="relative flex items-center gap-2">
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.signing_up')}
-                            </>
-                        ) : (
-                            <>
-                                {t('auth.signup_btn')}
-                                <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                            </>
-                        )}
-                    </span>
+                    {isLoading ? (
+                        <>
+                            <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.signing_up')}
+                        </>
+                    ) : (
+                        t('auth.signup_btn')
+                    )}
                 </button>
             </div>
 
-            <div className="relative pt-6">
-                <div className="absolute inset-0 flex items-center pt-6">
+            <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
                     <div className="w-full border-t border-gray-200 dark:border-white/10" />
                 </div>
-                <div className="relative flex justify-center text-sm pt-6">
-                    <span className="px-2 bg-gray-50 dark:bg-[#0a0a0a] text-gray-500">{t('auth.or_continue_with')}</span>
+                <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white dark:bg-[#111111] text-gray-500 dark:text-gray-400 font-medium">
+                        {t('auth.or_continue_with')}
+                    </span>
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-6">
+            <div className="grid grid-cols-2 gap-3">
                 <a
                     href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'}/auth/google`}
                     className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl transition-colors font-medium text-sm text-gray-700 dark:text-gray-300"
