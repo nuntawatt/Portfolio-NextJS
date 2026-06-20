@@ -1,7 +1,7 @@
 import { SignUpContainer } from '@/feature/auth';
 
 export const metadata = {
-  title: 'Sign Up - Morgorn Portfolio',
+  title: 'Sign Up',
   description: 'Create an account to access the full portfolio experience.',
 };
 

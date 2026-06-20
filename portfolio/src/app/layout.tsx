@@ -12,6 +12,9 @@ const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

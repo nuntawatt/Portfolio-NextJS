@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { LoadingScreen } from '@/shared/components/loading/loading-card';
 
 export const metadata: Metadata = {
-  title: 'Verify Email | Morgorn',
+  title: 'Verify Email',
   description: 'Verify your email address.',
 };
 
