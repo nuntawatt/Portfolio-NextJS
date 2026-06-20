@@ -11,24 +11,19 @@ import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/config/routes';
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeHash, setActiveHash] = useState<string>('');
-  const isClickScrolling = useRef(false);
+  // --- States & Refs ---
+  const [isOpen, setIsOpen] = useState(false); // สถานะเปิด/ปิดเมนูสำหรับหน้าจอมือถือ
+  const [activeHash, setActiveHash] = useState<string>(''); // เก็บค่า Hash ลิงก์ที่กำลัง Active เพื่อแสดงเส้นใต้ไฮไลต์
+  const isClickScrolling = useRef(false); // บล็อก IntersectionObserver ชั่วคราวเวลาที่เลื่อนแบบสมูท (Smooth Scroll) หลังจากผู้ใช้คลิก
   const clickScrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Clean up timeouts on unmount
-  useEffect(() => {
-    return () => {
-      if (clickScrollTimeout.current) {
-        clearTimeout(clickScrollTimeout.current);
-      }
-    };
-  }, []);
   const pathname = usePathname();
   const { t } = useTranslation();
 
+  // กำหนดลิงก์ที่กำลังแสดงผล (หน้าติดต่อ contact จะไฮไลต์แบบคงที่)
   const activeLink = pathname === '/contact' ? routes.contact : activeHash;
 
+  // รายการเมนูทั้งหมด
   const navLinks = [
     { name: t('nav.home'), href: routes.home },
     { name: t('nav.about'), href: routes.about },
@@ -36,7 +31,18 @@ export function Navbar() {
     { name: t('nav.contact'), href: routes.contact },
   ];
 
-  // Prevent background scrolling when mobile menu is open
+  // --- Effects ---
+
+  // ล้างค่า Timeout เมื่อปิด Component เพื่อป้องกันปัญหา Memory Leak
+  useEffect(() => {
+    return () => {
+      if (clickScrollTimeout.current) {
+        clearTimeout(clickScrollTimeout.current);
+      }
+    };
+  }, []);
+
+  // ล็อกไม่ให้หน้าจอหลักเลื่อนได้ขณะเปิดเมนูมือถือ
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -48,7 +54,7 @@ export function Navbar() {
     };
   }, [isOpen]);
 
-  // Handle ESC key to dismiss the mobile drawer
+  // ตรวจจับปุ่ม Escape เพื่อกดปิดเมนูมือถือ
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) setIsOpen(false);
@@ -57,7 +63,7 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handleEsc);
   }, [isOpen]);
 
-  // Handle active section detection using IntersectionObserver to prevent layout thrashing
+  // ตรวจจับ Section ปัจจุบันบนหน้าจอโดยใช้ IntersectionObserver เพื่อนำไปไฮไลต์เมนู
   useEffect(() => {
     if (pathname === '/contact') {
       return;
@@ -66,6 +72,7 @@ export function Navbar() {
     const sections = ['home', 'about', 'skills'];
     const observer = new IntersectionObserver(
       (entries) => {
+        // หากเป็นการเลื่อนโดยการกดลิงก์ จะไม่ทำการเปลี่ยนแปลงไฮไลต์ระหว่างทาง
         if (isClickScrolling.current) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -74,7 +81,7 @@ export function Navbar() {
         });
       },
       {
-        // Highlight active link when section occupies the upper-middle region of the viewport
+        // กำหนดขอบเขตการคำนวณตำแหน่งช่วงบน-กลางของหน้าจอ
         rootMargin: '-30% 0px -65% 0px',
         threshold: 0,
       }
@@ -88,6 +95,9 @@ export function Navbar() {
     return () => observer.disconnect();
   }, [pathname]);
 
+  // --- Handlers ---
+  
+  // จัดการเมื่อคลิกลิงก์เมนู (เซ็ตค่าแฮช ปิดเมนูมือถือ และเปิดล็อกกัน Observer แทรกแซงขณะเลื่อนหน้าจอ)
   const handleLinkClick = (href: string) => {
     setActiveHash(href);
     setIsOpen(false);
@@ -103,17 +113,19 @@ export function Navbar() {
 
   return (
     <>
+      {/* --- Main Navigation Bar --- */}
       <nav className="fixed top-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-md border-b border-border transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 gap-4 lg:gap-8">
-            {/* Logo */}
+            
+            {/* โลโก้ (MorGorn) */}
             <div className="flex-shrink-0 flex items-center">
               <a href={routes.home} className="text-2xl font-bold text-foreground tracking-tighter transition-colors" style={{ fontFamily: 'var(--font-logo)' }}>
                 Mor<span className="text-orange-500">gorn</span>
               </a>
             </div>
 
-            {/* Desktop Navigation */}
+            {/* เมนูนำทางเวอร์ชัน Desktop */}
             <div className="hidden lg:flex flex-1 items-center justify-center">
               <div className="flex items-center justify-center space-x-6 xl:space-x-8">
                 {navLinks.map((link) => (
@@ -127,7 +139,7 @@ export function Navbar() {
                       }`}
                   >
                     {link.name}
-                    {/* Animated Underline Effect */}
+                    {/* เส้นใต้เคลื่อนไหวเมื่อ Hover หรือ Active */}
                     <span
                       className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${activeLink === link.href
                           ? 'opacity-100 scale-x-100'
@@ -139,8 +151,9 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Actions & Mobile Menu Trigger */}
+            {/* ปุ่มฟังก์ชันต่างๆ & ปุ่มเปิดเมนูมือถือ */}
             <div className="flex-shrink-0 flex justify-end items-center gap-3 xl:gap-4">
+              {/* แผงควบคุมควบคุม (เสียง, ธีม, สิทธิ์เข้าใช้, เปลี่ยนภาษา) บนเดสก์ท็อป */}
               <div className="hidden lg:flex items-center gap-5 xl:gap-6">
                 <AudioToggle />
                 <ThemeToggle />
@@ -148,6 +161,7 @@ export function Navbar() {
                 <LanguageToggle className="lg:ml-2" />
               </div>
 
+              {/* ปุ่มเปิดลิ้นชักเมนูบนมือถือ */}
               <div className="-mr-2 flex items-center lg:hidden">
                 <button
                   onClick={() => setIsOpen(true)}
@@ -161,11 +175,14 @@ export function Navbar() {
                 </button>
               </div>
             </div>
+
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* --- Mobile Menu Drawer --- */}
+      
+      {/* ฉากหลังสีเข้ม (Overlay) เมื่อเปิดเมนูมือถือ */}
       <div
         className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ease-out ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
@@ -173,7 +190,7 @@ export function Navbar() {
         aria-hidden="true"
       />
 
-      {/* Mobile Menu Drawer (Slide-in from right) */}
+      {/* ลิ้นชักสำหรับหน้าจอมือถือ (สไลด์เข้ามาจากด้านขวา) */}
       <div
         id="mobile-menu-drawer"
         className={`fixed top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -182,6 +199,7 @@ export function Navbar() {
         aria-modal="true"
         aria-label="Mobile Navigation Drawer"
       >
+        {/* หัวลิ้นชักมือถือ พร้อมปุ่มปิด */}
         <div className="flex items-center justify-between p-6 border-b border-border">
           <span className="text-2xl font-bold text-foreground tracking-tighter" style={{ fontFamily: 'var(--font-logo)' }}>
             Mor<span className="text-orange-500">gorn</span>
@@ -195,7 +213,9 @@ export function Navbar() {
           </button>
         </div>
 
+        {/* รายการลิงก์และปุ่มฟังก์ชันมือถือ */}
         <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col">
+          {/* ลิงก์นำทางมือถือ */}
           <div className="flex flex-col space-y-1.5 mb-auto">
             <span className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider mb-2 px-3">
               {t('nav.navigation')}
@@ -215,6 +235,7 @@ export function Navbar() {
             ))}
           </div>
 
+          {/* แผงฟังก์ชันเปลี่ยนภาษา, ปรับระดับเสียง และปุ่มบัญชีผู้ใช้งานบนมือถือ */}
           <div className="pt-8 mt-8 border-t border-border flex flex-col gap-6">
             <div className="flex items-center justify-between px-2">
               <span className="text-sm font-semibold text-muted-foreground">{t('nav.language')}</span>
@@ -231,7 +252,7 @@ export function Navbar() {
               <ThemeToggle />
             </div>
 
-            {/* Highlighted Mobile CTA Wrapper */}
+            {/* ปุ่มบัญชีผู้ใช้ (Sign In / Profile) บนมือถือ */}
             <div className="mt-2" onClick={() => setIsOpen(false)}>
               <AuthButton className="flex-col" />
             </div>
