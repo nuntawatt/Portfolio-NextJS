@@ -120,5 +120,15 @@
   "auth.password_strength_fair": "ปานกลาง",
   "auth.password_strength_good": "ดี",
   "auth.password_strength_strong": "ปลอดภัย",
-  "auth.password_strength_very_strong": "ปลอดภัยสูง"
+  "auth.password_strength_very_strong": "ปลอดภัยสูง",
+  "auth.validation.email_required": "โปรดกรอกอีเมล",
+  "auth.validation.email_invalid": "รูปแบบอีเมลไม่ถูกต้อง",
+  "auth.validation.password_required": "โปรดกรอกรหัสผ่าน",
+  "auth.validation.password_min": "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร",
+  "auth.validation.firstname_min": "ชื่อจริงต้องมีความยาวอย่างน้อย 2 ตัวอักษร",
+  "auth.validation.lastname_min": "นามสกุลต้องมีความยาวอย่างน้อย 2 ตัวอักษร",
+  "auth.validation.confirm_password_required": "โปรดยืนยันรหัสผ่าน",
+  "auth.validation.password_mismatch": "รหัสผ่านไม่ตรงกัน",
+  "auth.validation.no_token": "ไม่พบโทเค็นรีเซ็ต โปรดขอลิงก์รีเซ็ตรหัสผ่านใหม่อีกครั้ง",
+  "auth.validation.reset_success": "รีเซ็ตรหัสผ่านสำเร็จแล้ว!"
 }

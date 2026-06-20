@@ -36,7 +36,7 @@ export function ResetPasswordContainer() {
             type={showPassword ? 'text' : 'password'}
             placeholder={t('auth.password_placeholder') as string}
             {...form.register('password')}
-            error={form.formState.errors.password?.message}
+            error={form.formState.errors.password?.message ? (t(form.formState.errors.password.message) as string) : undefined}
             icon={
               <button
                 type="button"
@@ -55,7 +55,7 @@ export function ResetPasswordContainer() {
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder={t('auth.password_placeholder') as string}
             {...form.register('confirmPassword')}
-            error={form.formState.errors.confirmPassword?.message}
+            error={form.formState.errors.confirmPassword?.message ? (t(form.formState.errors.confirmPassword.message) as string) : undefined}
             icon={
               <button
                 type="button"

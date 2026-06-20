@@ -120,5 +120,15 @@
   "auth.password_strength_fair": "Fair",
   "auth.password_strength_good": "Good",
   "auth.password_strength_strong": "Strong",
-  "auth.password_strength_very_strong": "Very Strong"
+  "auth.password_strength_very_strong": "Very Strong",
+  "auth.validation.email_required": "Email is required",
+  "auth.validation.email_invalid": "Please enter a valid email address",
+  "auth.validation.password_required": "Password is required",
+  "auth.validation.password_min": "Password must be at least 6 characters",
+  "auth.validation.firstname_min": "First name must be at least 2 characters",
+  "auth.validation.lastname_min": "Last name must be at least 2 characters",
+  "auth.validation.confirm_password_required": "Please confirm your password",
+  "auth.validation.password_mismatch": "Passwords don't match",
+  "auth.validation.no_token": "No reset token found. Please request a new password reset link.",
+  "auth.validation.reset_success": "Password reset successfully!"
 }

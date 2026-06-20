@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { AuthService, getErrorMessage } from '../core/lib';
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
+  email: z.string().min(1, 'auth.validation.email_required').email('auth.validation.email_invalid'),
 });
 
 export type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;

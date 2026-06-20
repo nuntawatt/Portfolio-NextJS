@@ -2,19 +2,19 @@ import { z } from 'zod';
 
 // ========== Schemas ==========
 export const signInSchema = z.object({
-    email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
-    password: z.string().min(1, 'Password is required').min(6, 'Password must be at least 6 characters'),
+    email: z.string().min(1, 'auth.validation.email_required').email('auth.validation.email_invalid'),
+    password: z.string().min(1, 'auth.validation.password_required').min(6, 'auth.validation.password_min'),
     rememberMe: z.boolean().optional(),
 });
 
 export const signUpSchema = z.object({
-    firstName: z.string().min(2, 'First name must be at least 2 characters'),
-    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-    email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    firstName: z.string().min(2, 'auth.validation.firstname_min'),
+    lastName: z.string().min(2, 'auth.validation.lastname_min'),
+    email: z.string().min(1, 'auth.validation.email_required').email('auth.validation.email_invalid'),
+    password: z.string().min(6, 'auth.validation.password_min'),
+    confirmPassword: z.string().min(1, 'auth.validation.confirm_password_required'),
 }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "auth.validation.password_mismatch",
     path: ["confirmPassword"],
 });
 

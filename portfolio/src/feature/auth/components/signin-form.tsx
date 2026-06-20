@@ -27,7 +27,7 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                 type="email"
                 placeholder={t('auth.email_placeholder') as string}
                 {...register('email')}
-                error={errors.email?.message}
+                error={errors.email?.message ? (t(errors.email.message) as string) : undefined}
             />
 
             <div>
@@ -37,7 +37,7 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                     type={showPassword ? 'text' : 'password'}
                     placeholder={t('auth.password_placeholder') as string}
                     {...register('password')}
-                    error={errors.password?.message}
+                    error={errors.password?.message ? (t(errors.password.message) as string) : undefined}
                     icon={
                         <button
                             type="button"

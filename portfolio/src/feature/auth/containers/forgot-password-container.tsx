@@ -34,7 +34,7 @@ export function ForgotPasswordContainer() {
             type="email"
             placeholder={t('auth.email_placeholder') as string}
             {...form.register('email')}
-            error={form.formState.errors.email?.message}
+            error={form.formState.errors.email?.message ? (t(form.formState.errors.email.message) as string) : undefined}
           />
 
           <div className="pt-2">

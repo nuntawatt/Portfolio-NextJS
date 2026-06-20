@@ -75,7 +75,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                         type="text"
                         placeholder={t('auth.firstname_placeholder') as string}
                         {...register('firstName')}
-                        error={errors.firstName?.message}
+                        error={errors.firstName?.message ? (t(errors.firstName.message) as string) : undefined}
                     />
                     <AuthInput
                         id="signup-lastname"
@@ -83,7 +83,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                         type="text"
                         placeholder={t('auth.lastname_placeholder') as string}
                         {...register('lastName')}
-                        error={errors.lastName?.message}
+                        error={errors.lastName?.message ? (t(errors.lastName.message) as string) : undefined}
                     />
                 </div>
                 <AuthInput
@@ -92,7 +92,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                     type="email"
                     placeholder={t('auth.email_placeholder') as string}
                     {...register('email')}
-                    error={errors.email?.message}
+                    error={errors.email?.message ? (t(errors.email.message) as string) : undefined}
                     wrapperClassName="sm:col-span-2"
                 />
             </div>
@@ -106,7 +106,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                         type={showPassword ? 'text' : 'password'}
                         placeholder={t('auth.password_placeholder') as string}
                         {...register('password')}
-                        error={errors.password?.message}
+                        error={errors.password?.message ? (t(errors.password.message) as string) : undefined}
                         icon={
                             <button
                                 type="button"
@@ -127,7 +127,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                     type={showConfirmPassword ? 'text' : 'password'}
                     placeholder={t('auth.password_placeholder') as string}
                     {...register('confirmPassword')}
-                    error={errors.confirmPassword?.message}
+                    error={errors.confirmPassword?.message ? (t(errors.confirmPassword.message) as string) : undefined}
                     icon={
                         <button
                             type="button"
