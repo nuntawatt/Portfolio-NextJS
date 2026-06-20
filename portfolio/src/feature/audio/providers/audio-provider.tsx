@@ -12,7 +12,7 @@ interface AudioContextType {
 
 export const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
-const AUDIO_SRC = '/audio/theme.mp3';
+const AUDIO_SRC = '/audio/music.mp3';
 const DEFAULT_VOLUME = 0.35;
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
