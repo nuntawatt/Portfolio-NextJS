@@ -39,8 +39,8 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
             id={id}
             {...props}
             className={`w-full px-4 py-3 bg-gray-50 dark:bg-white/5 border-2 transition-all duration-200 rounded-xl text-base placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none ${error
-                ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
-                : 'border-gray-200 dark:border-white/10 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10'
+                ? 'border-red-300 dark:border-red-500/50 focus:border-red-500'
+                : 'border-gray-200 dark:border-white/10 focus:border-orange-500'
               } text-gray-900 dark:text-white ${icon ? 'pr-12' : ''}`}
             aria-invalid={error ? 'true' : 'false'}
           />
