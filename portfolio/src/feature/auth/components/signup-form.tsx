@@ -70,7 +70,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                         id="signup-firstname"
                         label="First name"
                         type="text"
-                        placeholder="John"
+                        placeholder="Six"
                         {...register('firstName')}
                         error={errors.firstName?.message}
                     />
@@ -78,7 +78,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                         id="signup-lastname"
                         label="Last name"
                         type="text"
-                        placeholder="Doe"
+                        placeholder="Seven"
                         {...register('lastName')}
                         error={errors.lastName?.message}
                     />
