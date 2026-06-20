@@ -5,8 +5,7 @@ import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useSpotlight } from '@/shared/hooks/use-spotlight';
 
-// Reusable card shell — spotlight hover stays, but icon treatment now varies
-// per card below instead of every card sharing the same boxed-icon container.
+// A single reusable card component for all six skill categories, with a custom inner area
 function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {
   const { coords, hovered, spotlightHandlers } = useSpotlight();
 
@@ -50,8 +49,7 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
   );
 }
 
-// Shared tag pill, unchanged in spirit — just no orange unless a tag is the single
-// most relevant one for that category (handled per-card, not globally).
+// A simple component to render a row of tags/skills at the bottom of each card
 function TagRow({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap gap-1.5">
@@ -85,8 +83,7 @@ export function SkillsSection() {
             </p>
           </div>
 
-          {/* Handcrafted Widgets Grid - each card gets a visual native to its
-              own domain instead of all six reusing the same fake-terminal block. */}
+          {/* Skills Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {/* 1. Backend - request flow diagram */}
