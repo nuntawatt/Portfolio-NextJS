@@ -1,13 +1,18 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 interface AuthPageLayoutProps {
   children: React.ReactNode;
 }
 
 export function AuthPageLayout({ children }: AuthPageLayoutProps) {
+  const { t } = useTranslation();
+
   return (
     <main className="min-h-screen flex overflow-hidden relative w-full">
       {/* Absolute Back Button */}
@@ -22,7 +27,7 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
           <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to Home
+          {t('auth.back_to_home')}
         </Link>
       </div>
 
@@ -60,22 +65,22 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
           </div>
 
           <h1 className="text-4xl font-black text-white mb-4 tracking-tight">
-            Welcome to{' '}
+            {t('auth.welcome')}{' '}
             <span className="bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">
               Morgorn
             </span>
           </h1>
 
           <p className="text-gray-400 text-base leading-relaxed mb-10">
-            Full-stack developer portfolio showcasing scalable backend services, modern frontend applications, and creative solutions.
+            {t('auth.description')}
           </p>
 
           {/* Feature highlights */}
           <div className="space-y-4 text-left">
             {[
-              { text: 'Explore real-world projects and case studies' },
-              { text: 'Connect and collaborate on exciting ideas' },
-              { text: 'Track your favorite projects and updates' },
+              { text: t('auth.feature1') as string },
+              { text: t('auth.feature2') as string },
+              { text: t('auth.feature3') as string },
             ].map((feature) => (
               <div key={feature.text} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06]/60">
                 <span className="text-sm text-gray-300">{feature.text}</span>
@@ -86,7 +91,7 @@ export function AuthPageLayout({ children }: AuthPageLayoutProps) {
           {/* Bottom quote */}
           <div className="mt-12 pt-8 border-t border-white/[0.06]">
             <p className="text-sm text-gray-500 italic">
-              &ldquo;Clean architecture, performance, and code that is maintainable long after handoff.&rdquo;
+              &ldquo;{t('auth.quote')}&rdquo;
             </p>
             <p className="text-xs text-orange-500/70 mt-2 font-semibold">Nuntawat SaeHuam</p>
           </div>

@@ -69,5 +69,13 @@
   "footer.rights": "All rights reserved.",
   "footer.built_with": "Crafted with Next.js & NestJS",
   "contact.headline": "Get In Touch",
-  "contact.description": "Feel free to reach out for collaborations or just a friendly hello."
+  "contact.description": "Feel free to reach out for collaborations or just a friendly hello.",
+  "auth.welcome": "Welcome to",
+  "auth.description": "Full-stack developer portfolio showcasing scalable backend services, modern frontend applications, and creative solutions.",
+  "auth.feature1": "Explore real-world projects and case studies",
+  "auth.feature2": "Connect and collaborate on exciting ideas",
+  "auth.feature3": "Track your favorite projects and updates",
+  "auth.quote": "Clean architecture, performance, and code that is maintainable long after handoff.",
+  "auth.back_to_home": "Back to Home",
+  "auth.mobile_title": "Morgorn Portfolio"
 }
