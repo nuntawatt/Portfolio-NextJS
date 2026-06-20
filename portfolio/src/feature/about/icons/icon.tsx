@@ -81,7 +81,7 @@ export const Globe = ({ size = 20 }: { size?: number }) => (
     </svg>
 );
 
-// Map iconKey string → component (used by StatCard)
+// use dynamic import to reduce bundle size
 export const ICON_MAP: Record<string, React.FC<{ size?: number }>> = {
     Rocket, Layers, TrendingUp, Globe,
 };
