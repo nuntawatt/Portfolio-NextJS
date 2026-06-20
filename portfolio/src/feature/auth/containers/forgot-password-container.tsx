@@ -29,7 +29,7 @@ export function ForgotPasswordContainer() {
             id="forgot-email"
             label="Email address"
             type="email"
-            placeholder="your@example.com"
+            placeholder="your@email.com"
             {...form.register('email')}
             error={form.formState.errors.email?.message}
           />

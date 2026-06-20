@@ -87,7 +87,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                     id="signup-email"
                     label="Email address"
                     type="email"
-                    placeholder="your@example.com"
+                    placeholder="your@email.com"
                     {...register('email')}
                     error={errors.email?.message}
                     wrapperClassName="sm:col-span-2"

@@ -23,7 +23,7 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                 id="signin-email"
                 label="Email address"
                 type="email"
-                placeholder="your@example.com"
+                placeholder="your@email.com"
                 {...register('email')}
                 error={errors.email?.message}
             />
