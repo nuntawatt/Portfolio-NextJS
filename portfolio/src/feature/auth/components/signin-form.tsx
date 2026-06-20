@@ -57,7 +57,7 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                     </label>
                     <Link
                         href="/auth/forgot-password"
-                        className="text-xs font-semibold text-orange-600 dark:text-orange-500 hover:text-orange-700 dark:hover:text-orange-400 transition-colors hover:underline"
+                        className="text-xs font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300 transition-colors"
                     >
                         {t('auth.forgot_password_link')}
                     </Link>

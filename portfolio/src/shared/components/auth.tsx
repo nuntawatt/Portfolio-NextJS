@@ -66,7 +66,7 @@ export function AuthFormLayout({
             {footerText}{' '}
             <button
               onClick={onFooterAction}
-              className="font-semibold text-orange-600 dark:text-orange-500 hover:text-orange-700 dark:hover:text-orange-400 transition-colors focus:outline-none hover:underline rounded-sm"
+              className="font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300 transition-colors focus:outline-none rounded-sm"
             >
               {footerActionText}
             </button>
