@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
   icons: {
-    icon: "/logo.svg",
+    icon: "/images/avatar.png",
   },
 };
 
