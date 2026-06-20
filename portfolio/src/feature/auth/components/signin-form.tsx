@@ -55,7 +55,10 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                         <input type="checkbox" {...register('rememberMe')} className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-orange-500 focus:ring-orange-500/30 bg-gray-50 dark:bg-white/5 transition-colors" />
                         <span className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors font-medium">{t('auth.remember_me')}</span>
                     </label>
-                    <Link href="/auth/forgot-password" className="text-xs font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+                    <Link
+                        href="/auth/forgot-password"
+                        className="text-xs font-semibold text-orange-600 dark:text-orange-500 hover:text-orange-700 dark:hover:text-orange-400 transition-colors hover:underline"
+                    >
                         {t('auth.forgot_password_link')}
                     </Link>
                 </div>
