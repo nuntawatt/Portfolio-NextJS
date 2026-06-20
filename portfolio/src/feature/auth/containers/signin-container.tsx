@@ -19,7 +19,7 @@ export function SignInContainer() {
 
   const signInForm = useForm<SignInData>({
     resolver: zodResolver(signInSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
 
   React.useEffect(() => {

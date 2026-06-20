@@ -19,7 +19,7 @@ export function SignUpContainer() {
 
   const signUpForm = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
 
   const { register, isLoading, error } = useRegister();
