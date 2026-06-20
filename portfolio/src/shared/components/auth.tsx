@@ -60,13 +60,12 @@ export function AuthFormLayout({
 
         <div className="relative z-10">{children}</div>
 
-        {/* Footer */}
         <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/10 text-center relative z-10">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             {footerText}{' '}
             <button
               onClick={onFooterAction}
-              className="font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300 transition-colors focus:outline-none rounded-sm"
+              className="font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300 transition-colors focus:outline-none cursor-pointer rounded-sm"
             >
               {footerActionText}
             </button>
