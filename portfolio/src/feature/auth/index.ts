@@ -9,7 +9,6 @@ export * from './containers/forgot-password-container';
 export * from './containers/reset-password-container';
 export * from './containers/verify-email-container';
 
-export * from './hooks/use-auth';
 export * from './hooks/use-login';
 export * from './hooks/use-register';
 export * from './hooks/use-forgot-password';

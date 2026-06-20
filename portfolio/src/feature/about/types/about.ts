@@ -5,16 +5,6 @@ export interface StatItem {
     labelKey: string;
     iconKey: string;
 }
-export type ExperienceType = 'internship' | 'project';
-
-export interface ExperienceItem {
-    period: string;
-    type: ExperienceType;
-    title: string;
-    company: string;
-    desc: string;
-    tags: string[];
-}
 
 export interface ParticleData {
     x: number;
