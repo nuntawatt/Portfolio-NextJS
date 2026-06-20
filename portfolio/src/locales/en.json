@@ -130,5 +130,6 @@
   "auth.validation.confirm_password_required": "Please confirm your password",
   "auth.validation.password_mismatch": "Passwords don't match",
   "auth.validation.no_token": "No reset token found. Please request a new password reset link.",
-  "auth.validation.reset_success": "Password reset successfully!"
+  "auth.validation.reset_success": "Password reset successfully!",
+  "auth.validation.forgot_success": "If an account exists, a reset link has been sent to your email."
 }

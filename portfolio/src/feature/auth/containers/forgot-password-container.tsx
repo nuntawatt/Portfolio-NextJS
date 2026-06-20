@@ -24,8 +24,8 @@ export function ForgotPasswordContainer() {
         footerText={t('auth.forgot_remember') as string}
         footerActionText={t('auth.signin_link') as string}
         onFooterAction={() => router.push(routes.auth.signin)}
-        error={errorMsg}
-        successMsg={successMsg}
+        error={errorMsg ? (t(errorMsg) as string) : undefined}
+        successMsg={successMsg ? (t(successMsg) as string) : undefined}
       >
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
           <AuthInput

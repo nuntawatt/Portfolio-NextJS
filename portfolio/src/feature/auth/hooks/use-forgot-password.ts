@@ -28,7 +28,7 @@ export function useForgotPassword() {
 
     try {
       const res = await AuthService.forgotPassword(data.email);
-      setSuccessMsg(res.message || 'If an account exists, a reset link has been sent to your email.');
+      setSuccessMsg(res.message || 'auth.validation.forgot_success');
       form.reset();
     } catch (err) {
       setErrorMsg(getErrorMessage(err));

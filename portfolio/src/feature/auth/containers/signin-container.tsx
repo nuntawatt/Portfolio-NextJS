@@ -53,8 +53,8 @@ export function SignInContainer() {
         footerText={t('auth.dont_have_account') as string}
         footerActionText={t('auth.signup_link') as string}
         onFooterAction={() => router.push(routes.auth.signup)}
-        error={error}
-        successMsg={successMsg}
+        error={error ? (t(error) as string) : undefined}
+        successMsg={successMsg ? (t(successMsg) as string) : undefined}
       >
         <SignInForm
           form={signInForm}

@@ -130,5 +130,6 @@
   "auth.validation.confirm_password_required": "โปรดยืนยันรหัสผ่าน",
   "auth.validation.password_mismatch": "รหัสผ่านไม่ตรงกัน",
   "auth.validation.no_token": "ไม่พบโทเค็นรีเซ็ต โปรดขอลิงก์รีเซ็ตรหัสผ่านใหม่อีกครั้ง",
-  "auth.validation.reset_success": "รีเซ็ตรหัสผ่านสำเร็จแล้ว!"
+  "auth.validation.reset_success": "รีเซ็ตรหัสผ่านสำเร็จแล้ว!",
+  "auth.validation.forgot_success": "หากมีบัญชีผู้ใช้นี้อยู่ ลิงก์สำหรับรีเซ็ตรหัสผ่านจะถูกส่งไปยังอีเมลของคุณ"
 }

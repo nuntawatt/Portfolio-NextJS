@@ -33,7 +33,7 @@ export function useResetPassword() {
 
   const onSubmit = async (data: ResetPasswordData) => {
     if (!token) {
-      setErrorMsg('No reset token found. Please request a new password reset link.');
+      setErrorMsg('auth.validation.no_token');
       return;
     }
 
@@ -43,7 +43,7 @@ export function useResetPassword() {
 
     try {
       const res = await AuthService.resetPassword({ token, newPassword: data.password });
-      setSuccessMsg(res.message || 'Password reset successfully!');
+      setSuccessMsg(res.message || 'auth.validation.reset_success');
       form.reset();
       setTimeout(() => {
         router.push(routes.auth.signin);
