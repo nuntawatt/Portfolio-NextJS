@@ -5,6 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { Loader2, Eye } from 'lucide-react';
 import { SignUpData } from '../core/types';
 import { AuthInput, CustomEyeOff } from '@/shared/components/auth-in';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 interface SignUpFormProps {
     form: UseFormReturn<SignUpData>;
@@ -13,6 +14,7 @@ interface SignUpFormProps {
 }
 
 function PasswordStrength({ password }: { password: string }) {
+    const { t } = useTranslation();
     const strength = useMemo(() => {
         if (!password) return { score: 0, label: '', color: '' };
         let score = 0;
@@ -22,12 +24,12 @@ function PasswordStrength({ password }: { password: string }) {
         if (/[0-9]/.test(password)) score++;
         if (/[^A-Za-z0-9]/.test(password)) score++;
 
-        if (score <= 1) return { score: 1, label: 'Weak', color: 'bg-red-500' };
-        if (score <= 2) return { score: 2, label: 'Fair', color: 'bg-orange-500' };
-        if (score <= 3) return { score: 3, label: 'Good', color: 'bg-yellow-500' };
-        if (score <= 4) return { score: 4, label: 'Strong', color: 'bg-green-500' };
-        return { score: 5, label: 'Very Strong', color: 'bg-emerald-500' };
-    }, [password]);
+        if (score <= 1) return { score: 1, label: t('auth.password_strength_weak') as string, color: 'bg-red-500' };
+        if (score <= 2) return { score: 2, label: t('auth.password_strength_fair') as string, color: 'bg-orange-500' };
+        if (score <= 3) return { score: 3, label: t('auth.password_strength_good') as string, color: 'bg-yellow-500' };
+        if (score <= 4) return { score: 4, label: t('auth.password_strength_strong') as string, color: 'bg-green-500' };
+        return { score: 5, label: t('auth.password_strength_very_strong') as string, color: 'bg-emerald-500' };
+    }, [password, t]);
 
     if (!password) return null;
 
@@ -60,6 +62,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { register, handleSubmit, formState: { errors }, watch } = form;
     const watchedPassword = watch('password') || '';
+    const { t } = useTranslation();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-0" noValidate>
@@ -68,26 +71,26 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <AuthInput
                         id="signup-firstname"
-                        label="First name"
+                        label={t('auth.firstname') as string}
                         type="text"
-                        placeholder="Six"
+                        placeholder={t('auth.firstname_placeholder') as string}
                         {...register('firstName')}
                         error={errors.firstName?.message}
                     />
                     <AuthInput
                         id="signup-lastname"
-                        label="Last name"
+                        label={t('auth.lastname') as string}
                         type="text"
-                        placeholder="Seven"
+                        placeholder={t('auth.lastname_placeholder') as string}
                         {...register('lastName')}
                         error={errors.lastName?.message}
                     />
                 </div>
                 <AuthInput
                     id="signup-email"
-                    label="Email address"
+                    label={t('auth.email') as string}
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t('auth.email_placeholder') as string}
                     {...register('email')}
                     error={errors.email?.message}
                     wrapperClassName="sm:col-span-2"
@@ -99,9 +102,9 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                 <div>
                     <AuthInput
                         id="signup-password"
-                        label="Password"
+                        label={t('auth.password') as string}
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
+                        placeholder={t('auth.password_placeholder') as string}
                         {...register('password')}
                         error={errors.password?.message}
                         icon={
@@ -120,9 +123,9 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
 
                 <AuthInput
                     id="signup-confirmpassword"
-                    label="Confirm password"
+                    label={t('auth.confirm_password') as string}
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder={t('auth.password_placeholder') as string}
                     {...register('confirmPassword')}
                     error={errors.confirmPassword?.message}
                     icon={
@@ -149,11 +152,11 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                     <span className="relative flex items-center gap-2">
                         {isLoading ? (
                             <>
-                                <Loader2 className="w-5 h-5 animate-spin" /> Creating account...
+                                <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.signing_up')}
                             </>
                         ) : (
                             <>
-                                Create Account
+                                {t('auth.signup_btn')}
                                 <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                             </>
                         )}
@@ -166,7 +169,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                     <div className="w-full border-t border-gray-200 dark:border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm pt-6">
-                    <span className="px-2 bg-gray-50 dark:bg-[#0a0a0a] text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-gray-50 dark:bg-[#0a0a0a] text-gray-500">{t('auth.or_continue_with')}</span>
                 </div>
             </div>
 

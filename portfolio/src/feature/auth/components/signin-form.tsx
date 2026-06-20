@@ -6,6 +6,7 @@ import { Loader2, Eye } from 'lucide-react';
 import { SignInData } from '../core/types';
 import { AuthInput, CustomEyeOff } from '@/shared/components/auth-in';
 import Link from 'next/link';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 interface SignInFormProps {
     form: UseFormReturn<SignInData>;
@@ -16,14 +17,15 @@ interface SignInFormProps {
 export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors } } = form;
+    const { t } = useTranslation();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
             <AuthInput
                 id="signin-email"
-                label="Email address"
+                label={t('auth.email') as string}
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('auth.email_placeholder') as string}
                 {...register('email')}
                 error={errors.email?.message}
             />
@@ -31,9 +33,9 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
             <div>
                 <AuthInput
                     id="signin-password"
-                    label="Password"
+                    label={t('auth.password') as string}
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder={t('auth.password_placeholder') as string}
                     {...register('password')}
                     error={errors.password?.message}
                     icon={
@@ -51,10 +53,10 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                 <div className="flex items-center justify-between mt-3">
                     <label className="flex items-center gap-2 cursor-pointer group">
                         <input type="checkbox" {...register('rememberMe')} className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-orange-500 focus:ring-orange-500/30 bg-gray-50 dark:bg-white/5 transition-colors" />
-                        <span className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors font-medium">Remember me</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors font-medium">{t('auth.remember_me')}</span>
                     </label>
                     <Link href="/auth/forgot-password" className="text-xs font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
-                        Forgot password?
+                        {t('auth.forgot_password_link')}
                     </Link>
                 </div>
             </div>
@@ -70,11 +72,11 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                     <span className="relative flex items-center gap-2">
                         {isLoading ? (
                             <>
-                                <Loader2 className="w-5 h-5 animate-spin" /> Signing in...
+                                <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.signing_in')}
                             </>
                         ) : (
                             <>
-                                Sign In
+                                {t('auth.signin_btn')}
                                 <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                             </>
                         )}
@@ -87,7 +89,7 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                     <div className="w-full border-t border-gray-200 dark:border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gray-50 dark:bg-[#0a0a0a] text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-gray-50 dark:bg-[#0a0a0a] text-gray-500">{t('auth.or_continue_with')}</span>
                 </div>
             </div>
 

@@ -10,9 +10,11 @@ import { AuthPageLayout } from '@/shared/components/auth-page-layout';
 import { SignUpForm } from '../components/signup-form';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 export function SignUpContainer() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const signUpForm = useForm<SignUpData>({
@@ -24,7 +26,7 @@ export function SignUpContainer() {
 
   const onSubmit = (data: SignUpData) => {
     register(data, () => {
-      setSuccessMsg('Account created successfully! Please check your email to verify your account before logging in.');
+      setSuccessMsg(t('auth.signup_success') as string);
       signUpForm.reset();
       setTimeout(() => {
         router.push(routes.auth.signin);
@@ -35,10 +37,10 @@ export function SignUpContainer() {
   return (
     <AuthPageLayout>
       <AuthFormLayout
-        title="Create an account"
-        subtitle="Start your journey with us today"
-        footerText="Already have an account?"
-        footerActionText="Sign in"
+        title={t('auth.signup_title') as string}
+        subtitle={t('auth.signup_subtitle') as string}
+        footerText={t('auth.already_have_account') as string}
+        footerActionText={t('auth.signin_link') as string}
         onFooterAction={() => router.push(routes.auth.signin)}
         error={error}
         successMsg={successMsg}

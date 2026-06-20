@@ -9,17 +9,20 @@ import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useForgotPassword } from '../hooks/use-forgot-password';
 
+import { useTranslation } from '@/shared/providers/LanguageProvider';
+
 export function ForgotPasswordContainer() {
   const router = useRouter();
   const { form, isLoading, errorMsg, successMsg, onSubmit } = useForgotPassword();
+  const { t } = useTranslation();
 
   return (
     <AuthPageLayout>
       <AuthFormLayout
-        title="Reset Password"
-        subtitle="Enter your email to receive a password reset link"
-        footerText="Remember your password?"
-        footerActionText="Sign in"
+        title={t('auth.forgot_title') as string}
+        subtitle={t('auth.forgot_subtitle') as string}
+        footerText={t('auth.forgot_remember') as string}
+        footerActionText={t('auth.signin_link') as string}
         onFooterAction={() => router.push(routes.auth.signin)}
         error={errorMsg}
         successMsg={successMsg}
@@ -27,9 +30,9 @@ export function ForgotPasswordContainer() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
           <AuthInput
             id="forgot-email"
-            label="Email address"
+            label={t('auth.email') as string}
             type="email"
-            placeholder="your@email.com"
+            placeholder={t('auth.email_placeholder') as string}
             {...form.register('email')}
             error={form.formState.errors.email?.message}
           />
@@ -42,10 +45,10 @@ export function ForgotPasswordContainer() {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" /> Sending...
+                  <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.forgot_sending')}
                 </>
               ) : (
-                'Send Reset Link'
+                t('auth.forgot_btn') as string
               )}
             </button>
           </div>

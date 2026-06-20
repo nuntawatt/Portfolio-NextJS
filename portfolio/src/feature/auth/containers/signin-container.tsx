@@ -10,9 +10,11 @@ import { AuthPageLayout } from '@/shared/components/auth-page-layout';
 import { SignInForm } from '../components/signin-form';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 export function SignInContainer() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const signInForm = useForm<SignInData>({
@@ -37,7 +39,7 @@ export function SignInContainer() {
       } else {
         localStorage.removeItem('rememberedEmail');
       }
-      setSuccessMsg('Signed in successfully!');
+      setSuccessMsg(t('auth.signin_success') as string);
       signInForm.reset();
       router.push('/');
     });
@@ -46,10 +48,10 @@ export function SignInContainer() {
   return (
     <AuthPageLayout>
       <AuthFormLayout
-        title="Welcome back"
-        subtitle="Enter your details to access your account"
-        footerText="Don't have an account?"
-        footerActionText="Sign up"
+        title={t('auth.signin_title') as string}
+        subtitle={t('auth.signin_subtitle') as string}
+        footerText={t('auth.dont_have_account') as string}
+        footerActionText={t('auth.signup_link') as string}
         onFooterAction={() => router.push(routes.auth.signup)}
         error={error}
         successMsg={successMsg}

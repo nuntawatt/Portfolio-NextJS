@@ -9,19 +9,22 @@ import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useResetPassword } from '../hooks/use-reset-password';
 
+import { useTranslation } from '@/shared/providers/LanguageProvider';
+
 export function ResetPasswordContainer() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { form, isLoading, errorMsg, successMsg, onSubmit } = useResetPassword();
+  const { t } = useTranslation();
 
   return (
     <AuthPageLayout>
       <AuthFormLayout
-        title="Create new password"
-        subtitle="Please enter your new password below"
-        footerText="Back to"
-        footerActionText="Sign in"
+        title={t('auth.reset_title') as string}
+        subtitle={t('auth.reset_subtitle') as string}
+        footerText={t('auth.reset_back_to') as string}
+        footerActionText={t('auth.signin_link') as string}
         onFooterAction={() => router.push(routes.auth.signin)}
         error={errorMsg}
         successMsg={successMsg}
@@ -29,9 +32,9 @@ export function ResetPasswordContainer() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
           <AuthInput
             id="reset-password"
-            label="New Password"
+            label={t('auth.reset_new_password') as string}
             type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••"
+            placeholder={t('auth.password_placeholder') as string}
             {...form.register('password')}
             error={form.formState.errors.password?.message}
             icon={
@@ -48,9 +51,9 @@ export function ResetPasswordContainer() {
 
           <AuthInput
             id="reset-confirm-password"
-            label="Confirm New Password"
+            label={t('auth.confirm_password') as string}
             type={showConfirmPassword ? 'text' : 'password'}
-            placeholder="••••••••"
+            placeholder={t('auth.password_placeholder') as string}
             {...form.register('confirmPassword')}
             error={form.formState.errors.confirmPassword?.message}
             icon={
@@ -73,10 +76,10 @@ export function ResetPasswordContainer() {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" /> Resetting...
+                  <Loader2 className="w-5 h-5 animate-spin" /> {t('auth.reset_loading')}
                 </>
               ) : (
-                'Reset Password'
+                t('auth.reset_btn') as string
               )}
             </button>
           </div>
