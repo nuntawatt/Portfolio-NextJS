@@ -28,11 +28,11 @@ export function HeroSection() {
                 {t('hero.greeting')}
               </p>
 
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-tight transition-colors mb-3">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-tight transition-colors mb-5">
                 {t('hero.name')}
               </h1>
 
-              <h2 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-tight transition-colors mb-6">
+              <h2 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-wide transition-colors mb-8">
                 {rolesText}
               </h2>
 
