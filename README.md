@@ -96,13 +96,13 @@ This repository is structured as a monorepo containing two main components:
      ```bash
      cp .env.example .env
      ```
-   * Configure database, JWT, Resend API, OAuth, and MinIO credentials inside `.env`.
+   * Configure database, JWT, Resend API, OAuth, and MinIO credentials inside `.env`
    * Install packages and start the development server:
      ```bash
      pnpm install
      pnpm run start:dev
      ```
-   * The API server will be available at `http://localhost:3001`.
+   * The API server will be available at `http://localhost:3001`
 
 4. **Frontend Setup**
    * Navigate to the frontend directory:
@@ -114,7 +114,7 @@ This repository is structured as a monorepo containing two main components:
      pnpm install
      pnpm dev
      ```
-   * The application will run at `http://localhost:3000`.
+   * The application will run at `http://localhost:3000`
 
 ---
 
