@@ -34,8 +34,8 @@ export function ContactForm() {
       >
         <LoadingCard 
           flat 
-          title="Loading form..." 
-          subtitle="Checking authorization status" 
+          title={t('contact.loading_title') as string} 
+          subtitle={t('contact.loading_subtitle') as string} 
         />
       </div>
     );
@@ -137,7 +137,7 @@ export function ContactForm() {
               type="button"
               onClick={handleCopy}
               className="w-full sm:w-auto inline-flex items-center justify-center text-foreground bg-transparent border border-border rounded-xl text-sm px-6 py-3 gap-2 cursor-pointer hover:bg-secondary transition-all duration-200 relative group font-semibold"
-              title="Click to copy email address"
+              title={t('contact.copy_tooltip') as string}
             >
               <span>
                 <span className="underline underline-offset-1">{siteConfig.contact.email}</span>
@@ -254,7 +254,7 @@ export function ContactForm() {
           {sendError && (
             <div className="flex items-center gap-2 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-xl select-none animate-in fade-in duration-200">
               <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{sendError}</span>
+              <span>{t(sendError)}</span>
             </div>
           )}
 
@@ -283,7 +283,7 @@ export function ContactForm() {
               type="button"
               onClick={handleCopy}
               className="w-full sm:w-auto inline-flex items-center justify-center text-foreground bg-transparent border border-border rounded-xl text-sm px-6 py-3 gap-2 cursor-pointer hover:bg-secondary transition-all duration-200 relative group font-semibold"
-              title="Click to copy email address"
+              title={t('contact.copy_tooltip') as string}
             >
               <span>
                 <span className="underline underline-offset-1">{siteConfig.contact.email}</span>

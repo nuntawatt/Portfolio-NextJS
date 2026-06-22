@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { apiClient } from '@/lib/api-client';
+import { contactApi } from '../core/api';
 
 export function useContactForm() {
   const { data: session, status } = useSession();
@@ -28,7 +28,7 @@ export function useContactForm() {
     setSendError(null);
 
     try {
-      await apiClient.post('/contact', {
+      await contactApi.submitForm({
         name,
         subject,
         message,
@@ -38,7 +38,7 @@ export function useContactForm() {
       setSubject('');
       setMessage('');
     } catch (error) {
-      const errMsg = error instanceof Error ? error.message : 'Failed to send message. Please try again.';
+      const errMsg = error instanceof Error ? error.message : 'contact.error_fallback';
       setSendError(errMsg);
     } finally {
       setIsSending(false);
