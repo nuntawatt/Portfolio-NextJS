@@ -2,9 +2,11 @@
 
 import { Play, Pause } from 'lucide-react';
 import { useAudio } from '../hooks/use-audio';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 export function AudioToggle() {
   const { playing, ready, toggle } = useAudio();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -30,9 +32,9 @@ export function AudioToggle() {
       <button
         type="button"
         onClick={toggle}
-        aria-label={playing ? 'Pause background music' : 'Play background music'}
+        aria-label={playing ? (t('audio.pause_label') as string) : (t('audio.play_label') as string)}
         aria-pressed={playing}
-        title={ready ? undefined : 'Theme song'}
+        title={ready ? undefined : (t('audio.theme_song') as string)}
         className="relative flex items-center justify-center w-10 h-10 rounded-full
                    bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-white/10
                    text-muted-foreground hover:text-foreground

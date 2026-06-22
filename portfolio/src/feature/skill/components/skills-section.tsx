@@ -107,7 +107,7 @@ export function SkillsSection() {
                     ))}
                   </div>
                   <p className="mt-3 text-[11px] text-muted-foreground text-center">
-                    Scalable Microservices Architecture
+                    {t('skills.cat1.architecture')}
                   </p>
                 </div>
                 <TagRow items={['Node.js', 'NestJS', 'FastAPI', 'Go']} />
@@ -129,16 +129,16 @@ export function SkillsSection() {
                   <div className="ml-3.5 pl-3 border-l border-border space-y-1.5">
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-border" />
-                      <span>Layout · responsive</span>
+                      <span>{t('skills.cat2.layout')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-border" />
-                      <span>Routes · Next.js</span>
+                      <span>{t('skills.cat2.routes')}</span>
                     </div>
                     <div className="ml-3.5 pl-3 border-l border-border">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-border" />
-                        <span>Components · TypeScript</span>
+                        <span>{t('skills.cat2.components')}</span>
                       </div>
                     </div>
                   </div>
@@ -156,14 +156,14 @@ export function SkillsSection() {
               <div className="flex flex-col h-full justify-between">
                 <div className="mb-6 select-none space-y-3">
                   {[
-                    { name: 'PostgreSQL', note: 'Relational', width: '70%' },
-                    { name: 'MongoDB', note: 'Documents', width: '55%' },
-                    { name: 'Redis', note: 'In-memory cache', width: '92%' },
+                    { name: 'PostgreSQL', noteKey: 'skills.cat3.relational', width: '70%' },
+                    { name: 'MongoDB', noteKey: 'skills.cat3.documents', width: '55%' },
+                    { name: 'Redis', noteKey: 'skills.cat3.cache', width: '92%' },
                   ].map((row) => (
                     <div key={row.name}>
                       <div className="flex justify-between items-baseline mb-1">
                         <span className="text-xs font-semibold text-foreground/85">{row.name}</span>
-                        <span className="text-[10px] text-muted-foreground">{row.note}</span>
+                        <span className="text-[10px] text-muted-foreground">{t(row.noteKey)}</span>
                       </div>
                       <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
                         <div className="h-full bg-orange-500 rounded-full transition-all duration-1000 ease-out" style={{ width: row.width }} />
@@ -184,11 +184,15 @@ export function SkillsSection() {
               <div className="flex flex-col h-full justify-between">
                 <div className="mb-6 select-none">
                   <div className="flex items-center">
-                    {['Build', 'Containerize', 'Deploy'].map((stage, i, arr) => (
-                      <React.Fragment key={stage}>
+                    {[
+                      { name: 'Build', key: 'skills.cat4.build' },
+                      { name: 'Containerize', key: 'skills.cat4.containerize' },
+                      { name: 'Deploy', key: 'skills.cat4.deploy' }
+                    ].map((stage, i, arr) => (
+                      <React.Fragment key={stage.name}>
                         <div className="flex flex-col items-center gap-1.5 flex-1">
                           <span className={`w-2.5 h-2.5 rounded-full ${i === arr.length - 1 ? 'bg-orange-500' : 'bg-foreground/30'}`} />
-                          <span className="text-[10px] font-medium text-muted-foreground text-center">{stage}</span>
+                          <span className="text-[10px] font-medium text-muted-foreground text-center">{t(stage.key)}</span>
                         </div>
                         {i < arr.length - 1 && (
                           <span className="flex-1 h-px bg-border -mt-4" aria-hidden="true" />
@@ -197,7 +201,7 @@ export function SkillsSection() {
                     ))}
                   </div>
                   <p className="mt-3 text-[11px] text-muted-foreground text-center">
-                    Docker · APISIX/Nginx · AWS
+                    {t('skills.cat4.desc')}
                   </p>
                 </div>
                 <TagRow items={['Docker', 'CI/CD', 'AWS', 'Gateway']} />
@@ -213,16 +217,16 @@ export function SkillsSection() {
               <div className="flex flex-col h-full justify-between">
                 <div className="grid grid-cols-2 gap-2 mb-6 select-none text-center">
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
-                    Git / VCS
+                    {t('skills.cat5.git')}
                   </div>
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
-                    Postman / API
+                    {t('skills.cat5.postman')}
                   </div>
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
-                    VS Code / Editor
+                    {t('skills.cat5.vscode')}
                   </div>
                   <div className="p-2 bg-secondary rounded-xl border border-border font-semibold text-xs text-foreground/80">
-                    Figma / Design
+                    {t('skills.cat5.figma')}
                   </div>
                 </div>
                 <TagRow items={['Git', 'Postman', 'VS Code', 'Figma']} />
@@ -238,16 +242,16 @@ export function SkillsSection() {
               <div className="flex flex-col h-full justify-between">
                 <div className="space-y-4 mb-6 select-none font-medium text-sm">
                   <div className="flex justify-between items-center border-b border-border/50 pb-2">
-                    <span className="text-foreground/90">Thai</span>
-                    <span className="text-xs font-bold text-orange-500">Native</span>
+                    <span className="text-foreground/90">{t('skills.cat6.thai')}</span>
+                    <span className="text-xs font-bold text-orange-500">{t('skills.cat6.native')}</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-border/50 pb-2">
-                    <span className="text-foreground/90">English</span>
-                    <span className="text-xs font-semibold text-muted-foreground">Professional</span>
+                    <span className="text-foreground/90">{t('skills.cat6.english')}</span>
+                    <span className="text-xs font-semibold text-muted-foreground">{t('skills.cat6.professional')}</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-border/50 pb-2">
-                    <span className="text-foreground/90">Adaptability</span>
-                    <span className="text-xs font-semibold text-muted-foreground">Highly adaptive</span>
+                    <span className="text-foreground/90">{t('skills.cat6.adapt')}</span>
+                    <span className="text-xs font-semibold text-muted-foreground">{t('skills.cat6.adaptive')}</span>
                   </div>
                 </div>
                 <TagRow items={['Thai', 'English', 'Adaptability', 'Learning']} />

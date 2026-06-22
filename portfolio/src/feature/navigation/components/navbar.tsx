@@ -168,9 +168,9 @@ export function Navbar() {
                   className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none transition-all duration-200 active:scale-95"
                   aria-expanded={isOpen}
                   aria-controls="mobile-menu-drawer"
-                  aria-label={isOpen ? "Close main menu" : "Open main menu"}
+                  aria-label={isOpen ? (t('nav.close_menu') as string) : (t('nav.open_menu') as string)}
                 >
-                  <span className="sr-only">Open main menu</span>
+                  <span className="sr-only">{t('nav.open_menu')}</span>
                   <Menu className="block h-6 w-6" />
                 </button>
               </div>
@@ -197,7 +197,7 @@ export function Navbar() {
           }`}
         role="dialog"
         aria-modal="true"
-        aria-label="Mobile Navigation Drawer"
+        aria-label={t('nav.drawer_label') as string}
       >
         {/* หัวลิ้นชักมือถือ พร้อมปุ่มปิด */}
         <div className="flex items-center justify-between p-6 border-b border-border">
@@ -207,7 +207,7 @@ export function Navbar() {
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 -mr-2 text-muted-foreground hover:bg-secondary rounded-md transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-            aria-label="Close menu drawer"
+            aria-label={t('nav.close_menu') as string}
           >
             <X className="w-5 h-5" />
           </button>

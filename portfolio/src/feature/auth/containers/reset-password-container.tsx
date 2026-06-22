@@ -42,7 +42,7 @@ export function ResetPasswordContainer() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="transition-colors focus:outline-none text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? (t('auth.hide_password') as string) : (t('auth.show_password') as string)}
               >
                 {showPassword ? <Eye className="w-5 h-5" /> : <CustomEyeOff className="w-5 h-5" />}
               </button>
@@ -61,7 +61,7 @@ export function ResetPasswordContainer() {
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="transition-colors focus:outline-none text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                aria-label={showConfirmPassword ? (t('auth.hide_password') as string) : (t('auth.show_password') as string)}
               >
                 {showConfirmPassword ? <Eye className="w-5 h-5" /> : <CustomEyeOff className="w-5 h-5" />}
               </button>
