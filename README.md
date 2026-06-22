@@ -7,7 +7,7 @@ A modern, high-performance full-stack portfolio ecosystem featuring a Next.js 16
 ## Project Architecture
 
 This repository is structured as a monorepo containing two main components:
-* **portfolio**: A client-side frontend application built with Next.js App Router and React 19.
+* **frontend**: A client-side frontend application built with Next.js App Router and React 19.
 * **backend**: A server-side RESTful API built with NestJS handling authentication, email dispatch, upload processing, and business logic.
 
 ---
@@ -43,7 +43,7 @@ This repository is structured as a monorepo containing two main components:
 
 ```text
 /
-├── portfolio/             # Next.js Frontend
+├── frontend/              # Next.js Frontend
 │   ├── src/
 │   │   ├── app/           # App Router Pages & Layouts
 │   │   ├── config/        # Site Config & Metadata
@@ -107,7 +107,7 @@ This repository is structured as a monorepo containing two main components:
 4. **Frontend Setup**
    * Navigate to the frontend directory:
      ```bash
-     cd ../portfolio
+     cd ../frontend
      ```
    * Install packages and start the development server:
      ```bash
