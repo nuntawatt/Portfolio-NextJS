@@ -9,6 +9,7 @@ const COUNT = 70;
 const LINK_DIST = 90;
 const MOUSE_FORCE = 0.00012;
 
+// project: ฟังก์ชันคำนวณตำแหน่งจากพิกัด 3D เป็น 2D บนหน้าจอ (Perspective Projection)
 function project(
     nx: number,
     ny: number,
@@ -24,6 +25,7 @@ function project(
     };
 }
 
+// createParticles: ฟังก์ชันสร้างข้อมูลของอนุภาค (Particles) พร้อมคุณสมบัติเริ่มต้นแบบสุ่ม
 function createParticles(): ParticleData[] {
     return Array.from({ length: COUNT }, () => ({
         x: Math.random(),
@@ -38,9 +40,12 @@ function createParticles(): ParticleData[] {
     }));
 }
 
+// ParticleCanvas: คอมโพเนนต์สำหรับวาดเอฟเฟกต์อนุภาค 3D พื้นหลังที่โต้ตอบตามเมาส์
 export function ParticleCanvas() {
+    // อ้างอิงถึงองค์ประกอบ Canvas ใน DOM
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    // ตั้งค่าและควบคุมแอนิเมชันของอนุภาค รวมถึงตรวจจับการเคลื่อนไหวของเมาส์และการปรับขนาดหน้าจอ
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;

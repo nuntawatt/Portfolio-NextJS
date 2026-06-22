@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ LoadingCard
 interface LoadingCardProps {
   title?: string;
   subtitle?: string;
@@ -11,6 +12,7 @@ interface LoadingCardProps {
   flat?: boolean;
 }
 
+// คอมโพเนนต์การ์ดแสดงสถานะกำลังโหลด (Loading Card) มีรูปภาพอนิเมชั่นและข้อความกำลังโหลด
 export function LoadingCard({
   title = "Loading Portfolio...",
   subtitle = "Connecting to Morgorn",
@@ -50,10 +52,12 @@ export function LoadingCard({
   );
 }
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ LoadingScreen
 interface LoadingScreenProps extends LoadingCardProps {
   fullScreen?: boolean;
 }
 
+// คอมโพเนนต์หน้าจอแสดงสถานะกำลังโหลด (Loading Screen) สามารถกำหนดให้เต็มจอ (Full Screen) ได้
 export function LoadingScreen({
   title,
   subtitle,

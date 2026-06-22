@@ -3,11 +3,14 @@
 import React from 'react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ LanguageToggle
 interface LanguageToggleProps {
   className?: string;
 }
 
+// คอมโพเนนต์ปุ่มสลับภาษา (Language Switcher) ระหว่าง ภาษาอังกฤษ (EN) และภาษาไทย (TH)
 export function LanguageToggle({ className }: LanguageToggleProps) {
+  // ดึงค่าภาษาปัจจุบัน (language) และฟังก์ชันสำหรับเปลี่ยนภาษา (setLanguage) จาก Context
   const { language, setLanguage } = useTranslation();
 
   return (

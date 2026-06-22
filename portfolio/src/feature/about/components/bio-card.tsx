@@ -8,8 +8,11 @@ const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
 ] as const;
 
+// BioCard: คอมโพเนนต์การ์ดแสดงข้อมูลประวัติย่อ (ชื่อ, บทบาท, สถานที่, ช่องทางติดต่อ) พร้อมเอฟเฟกต์ Spotlight ตามการเลื่อนเมาส์
 export function BioCard() {
+    // ดึงฟังก์ชันแปลภาษา
     const { t } = useTranslation();
+    // ดึงข้อมูลพิกัดและการเลื่อนเมาส์สำหรับเอฟเฟกต์ Spotlight
     const { coords, hovered, spotlightHandlers } = useSpotlight();
 
     const PROFILE_META = [

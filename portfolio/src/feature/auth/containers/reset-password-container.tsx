@@ -11,11 +11,16 @@ import { useResetPassword } from '../hooks/use-reset-password';
 
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// คอนเทนเนอร์สำหรับจัดการหน้าตั้งค่ารหัสผ่านใหม่ (Reset Password Container)
 export function ResetPasswordContainer() {
+  // เรียกใช้งาน Router จาก Next.js
   const router = useRouter();
+  // สถานะสำหรับควบคุมการแสดงหรือซ่อนรหัสผ่านและยืนยันรหัสผ่าน
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // ดึงข้อมูลฟอร์ม สถานะการโหลด ข้อความ และฟังก์ชันการส่งข้อมูลจาก custom hook
   const { form, isLoading, errorMsg, successMsg, onSubmit } = useResetPassword();
+  // ดึงฟังก์ชันสำหรับการแปลภาษา
   const { t } = useTranslation();
 
   return (

@@ -11,6 +11,7 @@ import { useTranslation } from '@/shared/providers/LanguageProvider';
 const PIXEL_CLIP_PATH = "polygon(0px 4px, 4px 4px, 4px 0px, calc(100% - 4px) 0px, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0px calc(100% - 4px))";
 
 // Inline pixel-art sign out SVG icon
+// ไอคอนปุ่ม Sign Out สไตล์ Pixel Art
 function PixelSignOutIcon({ className }: { className?: string }) {
   const width = 12;
   const height = 11;
@@ -52,13 +53,18 @@ function PixelSignOutIcon({ className }: { className?: string }) {
   );
 }
 
+// คอมโพเนนต์ปุ่มยืนยันตัวตน (Authentication Button) และเมนูโปรไฟล์ของผู้ใช้งาน
 export function AuthButton({ className = "" }: { className?: string }) {
+  // ดึงข้อมูลเซสชันการเข้าสู่ระบบและสถานะ
   const { data: session, status: nextAuthStatus } = useSession();
+  // สถานะเปิด/ปิดเมนู Dropdown โปรไฟล์ของผู้ใช้งาน
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  // ตัวอ้างอิงตำแหน่งของเมนูโปรไฟล์ เพื่อนำไปใช้ตรวจจับการคลิกด้านนอก
   const profileRef = useRef<HTMLDivElement>(null);
+  // ดึงฟังก์ชันสำหรับใช้แปลภาษา
   const { t } = useTranslation();
 
-  // Close profile dropdown if clicked outside or pressing Escape
+  // จัดการการปิดเมนู Dropdown เมื่อคลิกนอกเมนูหรือกดแป้นพิมพ์ Escape
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
@@ -88,6 +94,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
   const userName = session?.user?.name || '';
   const userImage = session?.user?.image || null;
 
+  // ฟังก์ชันสำหรับออกจากระบบ (Sign Out)
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' });
     setIsProfileOpen(false);

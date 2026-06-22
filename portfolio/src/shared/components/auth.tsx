@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ AuthFormLayout
 interface AuthFormLayoutProps {
   title: string;
   subtitle: string;
@@ -13,6 +14,8 @@ interface AuthFormLayoutProps {
   successMsg?: string | null;
 }
 
+// คอมโพเนนต์เลย์เอาต์สำหรับกล่องฟอร์มยืนยันตัวตน (Authentication Form Card Layout)
+// รองรับการแสดงหัวข้อ, รายละเอียด, กล่องข้อความผิดพลาด/สำเร็จ และลิงก์การนำทางด้านล่าง
 export function AuthFormLayout({
   title,
   subtitle,

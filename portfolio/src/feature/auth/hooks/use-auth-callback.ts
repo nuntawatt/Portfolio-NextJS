@@ -6,13 +6,20 @@ import { signIn } from 'next-auth/react';
 import { useAuthStore } from '@/feature/auth/stores/store';
 import { setAuthToken } from '@/feature/auth/core/lib';
 
+// Custom Hook สำหรับประมวลผลการตอบกลับจากหน้าเข้าสู่ระบบผ่านผู้ให้บริการภายนอก (OAuth Callback)
 export function useAuthCallback() {
+  // ดึง router สำหรับนำทางหน้าเว็บ
   const router = useRouter();
+  // ดึงข้อมูล Query Parameters จาก URL
   const searchParams = useSearchParams();
+  // สถานะสำหรับเก็บข้อความแสดงข้อผิดพลาด (ถ้ามี)
   const [error, setError] = useState<string | null>(null);
+  // ฟังก์ชันในการบันทึกสถานะการล็อกอินลงใน Auth Store
   const setAuth = useAuthStore((state) => state.setAuth);
 
+  // ทำการดึงและตรวจสอบข้อมูลที่รับกลับมาจากเซิร์ฟเวอร์หลังทำการยืนยันตัวตนด้วย OAuth สำเร็จ
   useEffect(() => {
+    // ฟังก์ชันภายในสำหรับประมวลผลข้อมูล Callback
     const processCallback = async () => {
       const dataParam = searchParams.get('data');
       if (!dataParam) {
@@ -24,8 +31,9 @@ export function useAuthCallback() {
         const parsedData = JSON.parse(dataParam);
         const { user, token } = parsedData;
 
-        // Legacy local storage setup for apiClient
+        // บันทึก JWT Token ลงใน Local Storage เพื่อให้ apiClient สามารถเรียกใช้ได้
         setAuthToken(token.accessToken);
+        // บันทึกข้อมูลผู้ใช้เข้าสู่ระบบลงใน Client-side Auth Store (Zustand)
         setAuth({
           id: user.id,
           email: user.email,
@@ -35,7 +43,7 @@ export function useAuthCallback() {
           avatar: user.avatar || '',
         });
 
-        // Initialize NextAuth session using CredentialsProvider
+        // ล็อกอินเข้าสู่ระบบ (Sign In) ฝั่ง NextAuth Client ด้วย CredentialsProvider
         const result = await signIn('credentials', {
           redirect: false,
           token: token.accessToken,

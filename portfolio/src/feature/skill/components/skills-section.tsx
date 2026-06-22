@@ -5,8 +5,9 @@ import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useSpotlight } from '@/shared/hooks/use-spotlight';
 
-// A single reusable card component for all six skill categories, with a custom inner area
+// SkillCard: คอมโพเนนต์การ์ดแสดงแต่ละกลุ่มทักษะความสามารถ พร้อมเอฟเฟกต์แสงไฟ Spotlight ตามเมาส์
 function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {
+  // ดึงข้อมูลการเลื่อนเมาส์และพิกัดสำหรับเอฟเฟกต์ Spotlight
   const { coords, hovered, spotlightHandlers } = useSpotlight();
 
   return (
@@ -49,7 +50,7 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
   );
 }
 
-// A simple component to render a row of tags/skills at the bottom of each card
+// TagRow: คอมโพเนนต์ย่อยสำหรับแสดงป้ายกำกับ (Tags) ของทักษะแต่ละหัวข้อ
 function TagRow({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap gap-1.5">
@@ -62,7 +63,9 @@ function TagRow({ items }: { items: string[] }) {
   );
 }
 
+// SkillsSection: คอมโพเนนต์หลักสำหรับส่วน "ทักษะความเชี่ยวชาญ" (Skills Section) แสดงผลทักษะต่างๆ แยกตามประเภท
 export function SkillsSection() {
+  // ดึงฟังก์ชันแปลภาษาสำหรับการแสดงผลหลายภาษา
   const { t } = useTranslation();
 
   return (

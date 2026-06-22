@@ -44,6 +44,7 @@ const SLEEPY_GRID = [
   "....dddddd...."
 ];
 
+// คอมโพเนนต์แสดงมาสคอตสไตล์ Pixel-art จากตารางกริดที่กำหนด
 function PixelMascot({ grid }: { grid: string[] }) {
   const width = 14;
   const height = 12;
@@ -84,6 +85,7 @@ function PixelMascot({ grid }: { grid: string[] }) {
   );
 }
 
+// คอมโพเนนต์แสดงก้อนเมฆสไตล์ Pixel-art สำหรับพื้นหลังปุ่มตอนกลางวัน (Light Mode)
 function PixelCloud({ className }: { className?: string }) {
   const grid = [
     "...www....",
@@ -118,6 +120,7 @@ function PixelCloud({ className }: { className?: string }) {
   );
 }
 
+// คอมโพเนนต์แสดงดาวสไตล์ Pixel-art สำหรับพื้นหลังปุ่มตอนกลางคืน (Dark Mode)
 function PixelStar({ className }: { className?: string }) {
   const grid = [
     ".y.",
@@ -149,8 +152,11 @@ function PixelStar({ className }: { className?: string }) {
   );
 }
 
+// คอมโพเนนต์ปุ่มสลับธีม (Theme Toggle) สำหรับสลับระหว่างโหมดมืด (Dark Mode) และโหมดสว่าง (Light Mode)
 export function ThemeToggle() {
+  // ดึงค่าธีม ฟังก์ชันสลับธีม และตรวจสอบสถานะเมาท์ของคอมโพเนนต์
   const { theme, toggleTheme, mounted } = useTheme();
+  // สถานะเพื่อตรวจสอบว่าเมาส์ชี้อยู่เหนือปุ่มสวิตช์นี้หรือไม่
   const [hovered, setHovered] = useState(false);
 
   if (!mounted) {

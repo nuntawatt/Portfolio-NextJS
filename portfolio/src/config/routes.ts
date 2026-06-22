@@ -1,3 +1,4 @@
+// กำหนดเส้นทาง (Routes) ทั้งหมดของแอปพลิเคชัน
 export const routes = {
   home: "/#home",
   about: "/#about",
@@ -8,3 +9,4 @@ export const routes = {
     signup: "/auth/signup",
   },
 } as const;
+

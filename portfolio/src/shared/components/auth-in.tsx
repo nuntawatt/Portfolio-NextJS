@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-// Custom Eye Icons
+// ไอคอนรูปปิดตา (Eye Off) แบบกำหนดเอง สำหรับใช้สลับแสดง/ซ่อนรหัสผ่าน
 export const CustomEyeOff = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M4 9c0 0 4 5 8 5s8-5 8-5" />
@@ -13,6 +13,7 @@ export const CustomEyeOff = ({ className }: { className?: string }) => (
 );
 
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ AuthInput
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
@@ -20,6 +21,7 @@ interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   wrapperClassName?: string;
 }
 
+// คอมโพเนนต์อินพุตข้อมูลการตรวจสอบสิทธิ์ (Authentication Input) ที่รองรับการส่งต่อ ref
 export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
   ({ label, error, icon, id, wrapperClassName = '', ...props }, ref) => {
     return (

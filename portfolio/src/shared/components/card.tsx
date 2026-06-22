@@ -1,11 +1,14 @@
 import React, { HTMLAttributes } from 'react';
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ Card
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   hoverEffect?: boolean;
 }
 
+// คอมโพเนนต์การ์ดเนื้อหา (Card Component) ใช้แสดงบล็อกข้อมูล พร้อมตัวเลือกเอฟเฟกต์โฮเวอร์ (Hover Effect)
 export function Card({ children, hoverEffect = false, className = '', ...props }: CardProps) {
+  // สไตล์พื้นฐานสำหรับการ์ด
   const baseStyles = 'bg-card border border-border rounded-2xl p-6 shadow-sm';
   
   const hoverStyles = hoverEffect 

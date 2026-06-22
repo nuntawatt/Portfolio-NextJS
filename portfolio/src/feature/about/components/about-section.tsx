@@ -6,8 +6,9 @@ import { StatCard } from './stat-card';
 import { STATS } from '../constants/data';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// AboutSection: คอมโพเนนต์หลักสำหรับส่วน "เกี่ยวกับฉัน" (About Section) แสดงข้อมูลประวัติ ค่าสถิติ และการศึกษา
 export function AboutSection() {
+    // ดึงฟังก์ชันแปลภาษาสำหรับรองรับการแสดงผลหลายภาษา
     const { t } = useTranslation();
 
     return (

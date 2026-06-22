@@ -8,15 +8,20 @@ import { AuthInput, CustomEyeOff } from '@/shared/components/auth-in';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// กำหนด Props สำหรับคอมโพเนนต์ฟอร์มเข้าสู่ระบบ (SignInForm)
 interface SignInFormProps {
     form: UseFormReturn<SignInData>;
     onSubmit: (data: SignInData) => void;
     isLoading: boolean;
 }
 
+// คอมโพเนนต์ฟอร์มเข้าสู่ระบบ (Sign In) ที่รองรับการป้อนอีเมล รหัสผ่าน และการล็อกอินผ่านผู้ให้บริการบุคคลที่สาม (OAuth)
 export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
+    // สถานะสำหรับควบคุมการแสดงหรือซ่อนรหัสผ่าน (Show/Hide Password)
     const [showPassword, setShowPassword] = useState(false);
+    // ดึงฟังก์ชันและสถานะของฟอร์มจาก React Hook Form
     const { register, handleSubmit, formState: { errors } } = form;
+    // ดึงฟังก์ชันการแปลภาษา (Translation)
     const { t } = useTranslation();
 
     return (

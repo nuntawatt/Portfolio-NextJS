@@ -8,7 +8,9 @@ import Link from 'next/link';
 import { useVerifyEmail } from '../hooks/use-verify-email';
 import { LoadingCard } from '@/shared/components/loading/loading-card';
 
+// คอนเทนเนอร์หลักสำหรับหน้าตรวจสอบยืนยันอีเมล (Verify Email Container)
 export function VerifyEmailContainer() {
+  // ดึงสถานะผลลัพธ์ (status) และข้อความแจ้งเตือน (message) จาก custom hook สำหรับการยืนยันอีเมล
   const { status, message } = useVerifyEmail();
 
   return (

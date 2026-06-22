@@ -5,8 +5,11 @@ import { siteConfig } from '@/config/site';
 import { routes } from '@/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// Footer: คอมโพเนนต์ส่วนท้ายของเว็บไซต์ แสดงโลโก้ ลิงก์โซเชียลมีเดีย และข้อความลิขสิทธิ์
 export function Footer() {
+  // ดึงปีปัจจุบันสำหรับการแสดงผลลิขสิทธิ์
   const currentYear = new Date().getFullYear();
+  // ดึงฟังก์ชันแปลภาษา
   const { t } = useTranslation();
 
   return (

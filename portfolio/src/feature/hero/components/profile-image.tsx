@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+// ProfileImage: คอมโพเนนต์แสดงรูปภาพโปรไฟล์ในกรอบวงกลม พร้อมพื้นหลังเรืองแสงสีส้มและอนิเมชันซูมเมื่อชี้เมาส์
 export function ProfileImage() {
   return (
     <div className="relative flex justify-center lg:justify-end items-center mt-4 lg:mt-0 order-1 lg:order-2 w-full mx-auto max-w-[260px] md:max-w-sm lg:max-w-none">

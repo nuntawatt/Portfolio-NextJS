@@ -6,11 +6,15 @@ import Image from 'next/image';
 import { siteConfig } from '@/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// อินเตอร์เฟซสำหรับ Props ของหน้าเลย์เอาต์ระบบยืนยันตัวตน
 interface AuthPageLayoutProps {
   children: React.ReactNode;
 }
 
+// คอมโพเนนต์เลย์เอาต์หลักของหน้าระบบเข้าสู่ระบบ / สมัครสมาชิก (Authentication Layout)
+// แสดงข้อมูลแบรนดิ้งที่ฝั่งซ้าย (เฉพาะหน้าจอขนาดใหญ่) และแสดงฟอร์มกรอกข้อมูลที่ฝั่งขวา
 export function AuthPageLayout({ children }: AuthPageLayoutProps) {
+  // ดึงฟังก์ชันสำหรับจัดการแปลภาษา
   const { t } = useTranslation();
 
   return (

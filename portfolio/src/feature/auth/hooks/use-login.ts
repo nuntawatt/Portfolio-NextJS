@@ -6,12 +6,16 @@ import { AuthService, getErrorMessage } from '../core/lib';
 import { SignInData } from '../core/types';
 import { useAuthStore } from '../stores/store';
 
+// Custom Hook สำหรับกระบวนการเข้าสู่ระบบ (Login Process)
 export const useLogin = () => {
+  // สถานะการทำงานส่งข้อมูล และสถานะข้อความแสดงความผิดพลาด
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
+  // เรียกฟังก์ชันสำหรับบันทึกข้อมูลผู้ใช้ลงใน Auth Store (Zustand)
   const setAuth = useAuthStore((state) => state.setAuth);
 
+  // ฟังก์ชันล็อกอิน ส่งข้อมูลไปยัง API และซิงค์เซสชันเข้า NextAuth
   const login = async (data: SignInData, onSuccess?: () => void) => {
     setIsLoading(true);
     setError(null);
@@ -44,6 +48,7 @@ export const useLogin = () => {
     }
   };
 
+  // ฟังก์ชันล้างข้อความแจ้งเตือนข้อผิดพลาด
   const resetError = () => setError(null);
 
   return { login, isLoading, error, resetError };

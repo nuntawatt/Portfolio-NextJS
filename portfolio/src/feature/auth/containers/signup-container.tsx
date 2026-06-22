@@ -12,22 +12,30 @@ import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// คอนเทนเนอร์หลักสำหรับหน้าลงทะเบียนผู้ใช้ใหม่ (Sign Up Container)
 export function SignUpContainer() {
+  // เรียกใช้งาน Router จาก Next.js
   const router = useRouter();
+  // เรียกใช้งานระบบแปลภาษา (Translation)
   const { t } = useTranslation();
+  // สถานะสำหรับเก็บข้อความแจ้งเตือนเมื่อลงทะเบียนสำเร็จ
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  // เตรียมฟอร์มลงทะเบียนโดยใช้ React Hook Form และ Zod Validation Schema
   const signUpForm = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
     mode: 'onSubmit',
   });
 
+  // เรียกใช้ custom hook สำหรับส่งคำขอลงทะเบียนไปยัง Backend API
   const { register, isLoading, error } = useRegister();
 
+  // ฟังก์ชันยิง API เมื่อกดยืนยันการลงทะเบียน (Submit)
   const onSubmit = (data: SignUpData) => {
     register(data, () => {
       setSuccessMsg(t('auth.signup_success') as string);
       signUpForm.reset();
+      // นำทางไปยังหน้าเข้าสู่ระบบหลังจากแสดงข้อความสำเร็จ 5 วินาที
       setTimeout(() => {
         router.push(routes.auth.signin);
       }, 5000);

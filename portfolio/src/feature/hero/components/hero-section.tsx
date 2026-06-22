@@ -7,8 +7,11 @@ import { ProfileImage } from './profile-image';
 import { siteConfig } from '@/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// HeroSection: คอมโพเนนต์หน้าแรก (Hero Section) แสดงการทักทาย ชื่อตำแหน่งประวัติย่อ และปุ่มเปิด CV
 export function HeroSection() {
+  // ดึงฟังก์ชันแปลภาษา
   const { t } = useTranslation();
+  // ดึงข้อมูลบทบาทหน้าที่และจัดรูปแบบตัวอักษรให้อยู่ในรูปข้อความคั่นด้วยเครื่องหมาย "/"
   const roles = t('hero.roles');
   const rolesText = Array.isArray(roles) ? roles.join(' / ') : roles;
 

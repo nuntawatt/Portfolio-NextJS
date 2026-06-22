@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
-// Custom hook to animate counting up a number when active
+// useCountUp: Hook สำหรับนับตัวเลขจาก 0 ขึ้นไปจนถึงค่าเป้าหมาย (target) แบบมีแอนิเมชัน (Ease-Out-Quart) เมื่อถูกกระตุ้นการทำงาน (active)
 export function useCountUp(
   target: number,
   active: boolean,
   duration = 1800,
 ): number {
+  // value: เก็บค่าปัจจุบันที่กำลังถูกนับขึ้น
   const [value, setValue] = useState(0);
 
+  // เริ่มทำการนับเลขขึ้นเมื่อ active และมีเป้าหมายที่ต้องนับ
   useEffect(() => {
     if (!active || !target) return;
 

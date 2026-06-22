@@ -1,4 +1,4 @@
-// Re-export everything for encapsulated structured architecture
+// ส่งออกส่วนประกอบ ฟอร์ม คอนเทนเนอร์ Custom Hooks ข้อมูลโครงสร้าง และ Store ทั้งหมดของโมดูล Auth
 export * from './components/signin-form';
 export * from './components/signup-form';
 export * from './components/auth-callback';

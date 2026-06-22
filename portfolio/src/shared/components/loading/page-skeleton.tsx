@@ -1,11 +1,14 @@
 import { Navbar, Footer } from '@/feature/navigation';
 
+// คอมโพเนนต์เอฟเฟกต์ Shimmer (การเคลื่อนไหวสว่างวูบวาบ) เพื่อสื่อถึงการกำลังโหลดข้อมูล
 export function Shimmer({ className }: { className?: string }) {
   return (
     <div className={`animate-gradient bg-gray-200 dark:bg-white/5 ${className}`} />
   );
 }
 
+// คอมโพเนนต์โครงร่างจำลองหน้าเว็บ (Page Skeleton Loader)
+// แสดงโครงร่างจำลองสำหรับหน้ารายละเอียดหลัก (เช่น Hero และ About) ในขณะรอโหลดข้อมูลจริง
 export function PageSkeleton() {
   return (
     <div className="relative overflow-hidden w-full">

@@ -9,7 +9,9 @@ import { AudioProvider } from "@/feature/audio";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/shared/providers/LanguageProvider";
 
+// Root Provider Component ของแอปพลิเคชัน ทำหน้าที่ห่อหุ้มคอมโพเนนต์ลูกด้วย Context Providers ต่างๆ (Theme, Language, React Query, Auth, Audio)
 export default function Providers({ children }: { children: ReactNode }) {
+  // สร้าง QueryClient สำหรับการจัดการ Cache และสถานะการดึงข้อมูลด้วย React Query
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -22,10 +24,11 @@ export default function Providers({ children }: { children: ReactNode }) {
       })
   );
 
+  // ดึงฟังก์ชันสำหรับตั้งค่าและลงชื่อออก (Logout) จาก Auth Store
   const setAuth = useAuthStore((state) => state.setAuth);
   const logout = useAuthStore((state) => state.logout);
 
-  // Restore user session on mount if token exists in localStorage
+  // คืนค่าเซสชันการใช้งาน (Restore User Session) เมื่อ Component ถูก Mount หากยังมี Token บันทึกอยู่ใน localStorage
   useEffect(() => {
     const restoreSession = async () => {
       if (typeof window === "undefined") return;
@@ -43,7 +46,7 @@ export default function Providers({ children }: { children: ReactNode }) {
           token: token,
         });
       } catch {
-        // If profile fetch fails (token invalid or expired), clear session
+        // หากดึงโปรไฟล์ล้มเหลว (เช่น Token หมดอายุหรือไม่ถูกต้อง) ให้ล้างข้อมูลเซสชัน
         localStorage.removeItem("auth_token");
         logout();
       }

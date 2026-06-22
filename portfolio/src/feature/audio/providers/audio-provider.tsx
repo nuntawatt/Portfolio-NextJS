@@ -2,6 +2,7 @@
 
 import React, { createContext, useCallback, useEffect, useRef, useState } from 'react';
 
+// AudioContextType: โครงสร้างชนิดข้อมูลสำหรับการควบคุมระบบเสียง
 interface AudioContextType {
   playing: boolean;
   ready: boolean;
@@ -10,15 +11,21 @@ interface AudioContextType {
   setVolume: (v: number) => void;
 }
 
+// AudioContext: คอนเทกซ์สำหรับแบ่งปันสถานะและการควบคุมเสียงภายในแอปพลิเคชัน
 export const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 const AUDIO_SRC = '/audio/music.mp3';
 const DEFAULT_VOLUME = 0.35;
 
+// AudioProvider: คอมโพเนนต์ครอบเพื่อให้บริการจัดการและควบคุมระบบเสียง
 export function AudioProvider({ children }: { children: React.ReactNode }) {
+  // audioRef: อ้างอิงถึงออบเจกต์ Audio ในระดับเบราว์เซอร์เพื่อหลีกเลี่ยงการสร้างใหม่ทุกครั้งที่เรนเดอร์
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // playing: สถานะการเล่นเสียงเพลง (จริง/เท็จ)
   const [playing, setPlaying] = useState(false);
+  // ready: สถานะความพร้อมใช้งานของออบเจกต์ Audio
   const [ready, setReady] = useState(false);
+  // volume: สถานะระดับเสียง ดึงค่าล่าสุดจาก localStorage หรือใช้ค่าเริ่มต้น
   const [volume, setVolumeState] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedVolume = localStorage.getItem('audio_volume');
@@ -27,7 +34,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     return DEFAULT_VOLUME;
   });
 
-  // Helper to lazily initialize the Audio object (pure: no synchronous React state updates)
+  // getOrInitAudio: ฟังก์ชันสร้างหรือดึงออบเจกต์ Audio ในแบบ Lazy loading เพื่อหลีกเลี่ยงการสร้างทรัพยากรที่ไม่จำเป็น
   const getOrInitAudio = useCallback((initialVol = volume) => {
     if (audioRef.current) return audioRef.current;
     if (typeof window === 'undefined') return null;
@@ -40,7 +47,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     return audio;
   }, [volume]);
 
-  // Restore playback state dynamically on mount if previously playing
+  // คืนค่าสถานะการเล่นและการตั้งค่าระดับเสียงเมื่อโหลดคอมโพเนนต์ครั้งแรก
   useEffect(() => {
     const savedPlaying = localStorage.getItem('audio_playing') === 'true';
     const savedVolume = localStorage.getItem('audio_volume');
@@ -51,9 +58,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       if (audio) {
         audio.play().then(() => {
           setPlaying(true);
-          setReady(true); // Async setState within a promise resolve is safe
+          setReady(true); // ตั้งค่าความพร้อมใช้งานเมื่อเล่นเพลงสำเร็จ
         }).catch(() => {
-          // Autoplay block or error - fail silently and stay paused
+          // หากเบราว์เซอร์บล็อกการเล่นอัตโนมัติ ให้ปิดสถานะการเล่น
           setPlaying(false);
           localStorage.setItem('audio_playing', 'false');
         });
@@ -68,6 +75,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     };
   }, [getOrInitAudio]);
 
+  // toggle: ฟังก์ชันสลับสถานะการเล่นและหยุดเล่นเสียงเพลง
   const toggle = () => {
     if (typeof window === 'undefined') return;
     
@@ -93,6 +101,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // setVolume: ฟังก์ชันปรับระดับความดังของเสียง (0.0 ถึง 1.0)
   const setVolume = (v: number) => {
     let audio = audioRef.current;
     if (!audio) {

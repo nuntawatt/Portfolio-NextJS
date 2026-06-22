@@ -3,6 +3,7 @@
 import React from 'react';
 import { ContactForm } from './contact-form';
 
+// คอมโพเนนต์จัดวางโครงสร้างพื้นที่สำหรับแสดงแบบฟอร์มการติดต่อ (Contact Section)
 export function ContactSection() {
   return (
     <div className="relative w-full flex-1 flex flex-col justify-center">

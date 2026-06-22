@@ -1,3 +1,4 @@
+// อินเตอร์เฟซกำหนดโครงสร้างข้อมูลประสบการณ์ทำงาน (Experience interface)
 export interface Experience {
   period: string;
   type: 'internship' | 'project' | 'academic' | 'work';
@@ -7,6 +8,7 @@ export interface Experience {
   tags: string[];
 }
 
+// รายการข้อมูลประสบการณ์ทำงานและโปรเจกต์ต่าง ๆ (Experiences Data List)
 export const EXPERIENCES: Experience[] = [
   {
     period: '2026',

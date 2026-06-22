@@ -2,12 +2,15 @@
 
 import React, { ButtonHTMLAttributes } from 'react';
 
+// อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ Button
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'outline' | 'ghost';
   children: React.ReactNode;
 }
 
+// คอมโพเนนต์ปุ่มอเนกประสงค์ (Button Component) ที่รองรับหลากหลายดีไซน์ (variant)
 export function Button({ variant = 'primary', className = '', children, ...props }: ButtonProps) {
+  // สไตล์พื้นฐานของปุ่ม ทุกแบบจะใช้ร่วมกัน
   const baseStyles = 'inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 shadow-sm cursor-pointer';
   
   const variants = {

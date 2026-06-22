@@ -2,6 +2,7 @@
 
 import type { InputHTMLAttributes } from "react";
 
+// คอมโพเนนต์ช่องกรอกข้อความพื้นฐาน (Basic Input Component) ที่รับแอตทริบิวต์ทั้งหมดของ HTML input
 export default function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   const { className, ...rest } = props;
   return (

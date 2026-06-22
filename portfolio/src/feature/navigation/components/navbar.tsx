@@ -10,6 +10,7 @@ import { LanguageToggle } from '@/shared/components/language-toggle';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/config/routes';
 
+// Navbar: คอมโพเนนต์แถบนำทางหลัก (Navbar) รองรับการแสดงผลทุกหน้าจอ สลับธีม สลับภาษา และควบคุมการเล่นเสียงเพลง
 export function Navbar() {
   // --- States & Refs ---
   const [isOpen, setIsOpen] = useState(false); // สถานะเปิด/ปิดเมนูสำหรับหน้าจอมือถือ
@@ -17,7 +18,9 @@ export function Navbar() {
   const isClickScrolling = useRef(false); // บล็อก IntersectionObserver ชั่วคราวเวลาที่เลื่อนแบบสมูท (Smooth Scroll) หลังจากผู้ใช้คลิก
   const clickScrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  // ดึงเส้นทาง URL ปัจจุบัน
   const pathname = usePathname();
+  // ดึงฟังก์ชันสำหรับจัดการหลายภาษา
   const { t } = useTranslation();
 
   // กำหนดลิงก์ที่กำลังแสดงผล (หน้าติดต่อ contact จะไฮไลต์แบบคงที่)

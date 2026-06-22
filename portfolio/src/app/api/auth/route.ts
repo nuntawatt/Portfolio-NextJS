@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+// คืนค่ารายการ Endpoint สำหรับ Authentication ทั้งหมดที่มีให้บริการ (เมื่อร้องขอผ่าน HTTP GET)
 export async function GET() {
   return NextResponse.json({
     ok: true,
@@ -10,6 +11,7 @@ export async function GET() {
   });
 }
 
+// คืนค่าข้อความแจ้งเตือนและสถานะ 405 Method Not Allowed (เมื่อร้องขอผ่าน HTTP POST มายัง Root Path นี้)
 export async function POST() {
   return NextResponse.json(
     {
@@ -23,3 +25,4 @@ export async function POST() {
     { status: 405 }
   );
 }
+

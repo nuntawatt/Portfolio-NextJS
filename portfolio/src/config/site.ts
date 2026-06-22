@@ -1,3 +1,4 @@
+// ข้อมูลการตั้งค่าและรายละเอียดต่างๆ ของเว็บไซต์ (Metadata และค่าคงที่สำหรับใช้งานในเว็บ)
 export const siteConfig = {
   name: "Portfolio",
   description: "Modern portfolio of Morgorn, Backend and Fullstack Developer",
@@ -19,3 +20,4 @@ export const siteConfig = {
     welcome: "/animation/anime-welcome.gif",
   }
 } as const;
+

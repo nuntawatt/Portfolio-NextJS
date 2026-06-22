@@ -11,8 +11,11 @@ import { useSpotlight } from '@/shared/hooks/use-spotlight';
 import { useContactForm } from '../hooks/use-contact-form';
 import { LoadingCard } from '@/shared/components/loading/loading-card';
 
+// คอมโพเนนต์ฟอร์มสำหรับติดต่อสอบถาม (Contact Form)
 export function ContactForm() {
+  // ดึงฟังก์ชันแปลภาษาสำหรับการรองรับหลายภาษา
   const { t } = useTranslation();
+  // ดึงสถานะและฟังก์ชันจัดการฟอร์มติดต่อจาก custom hook
   const {
     formData: { name, subject, message },
     formActions: { setName, setSubject, setMessage },
@@ -22,9 +25,12 @@ export function ContactForm() {
     resetSuccess,
   } = useContactForm();
 
+  // เรียกใช้งาน hook สำหรับการคัดลอกข้อมูลลงคลิปบอร์ด (Clipboard)
   const { copied, copyToClipboard } = useClipboard();
+  // เรียกใช้งาน hook สำหรับจำลองแสงไฟส่อง (Spotlight Effect) ตามตำแหน่งเคอร์เซอร์เมาส์
   const { coords, hovered, spotlightHandlers } = useSpotlight();
 
+  // ฟังก์ชันสำหรับคัดลอกอีเมลติดต่อที่กำหนดไว้ในไฟล์ตั้งค่าลงคลิปบอร์ด
   const handleCopy = () => copyToClipboard(siteConfig.contact.email);
 
   if (status === 'loading') {

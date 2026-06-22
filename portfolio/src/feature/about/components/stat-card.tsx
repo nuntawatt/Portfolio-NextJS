@@ -10,10 +10,15 @@ interface StatCardProps {
     stat: StatItem;
 }
 
+// StatCard: คอมโพเนนต์การ์ดแสดงตัวเลขค่าสถิติที่จะนับเลขอัพแบบแอนิเมชันเมื่อเลื่อนมาเห็นการ์ด
 export function StatCard({ stat }: StatCardProps) {
+    // ดึงฟังก์ชันแปลภาษา
     const { t } = useTranslation();
+    // ใช้สปายตรวจสอบว่าการ์ดอยู่ในมุมมองหน้าจอหรือไม่ (Threshold: 0.4)
     const [ref, inView] = useInView<HTMLDivElement>(0.4);
+    // ทำอนิเมชันนับเลขขึ้นตามค่าที่ระบุเมื่อคอมโพเนนต์เริ่มแสดงบนจอ
     const count = useCountUp(stat.value, inView);
+    // แสดงไอคอนตามไอคอนคีย์ที่กำหนด
     const Icon = ICON_MAP[stat.iconKey];
 
     return (

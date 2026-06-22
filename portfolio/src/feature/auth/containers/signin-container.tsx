@@ -12,16 +12,22 @@ import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// คอนเทนเนอร์หลักสำหรับหน้าเข้าสู่ระบบ (Sign In Container)
 export function SignInContainer() {
+  // เรียกใช้งาน Router จาก Next.js
   const router = useRouter();
+  // เรียกใช้งานระบบแปลภาษา (Translation)
   const { t } = useTranslation();
+  // สถานะสำหรับเก็บข้อความแจ้งเตือนเมื่อเข้าสู่ระบบสำเร็จ
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  // เตรียมฟอร์มเข้าสู่ระบบโดยใช้ React Hook Form และ Zod Validation Schema
   const signInForm = useForm<SignInData>({
     resolver: zodResolver(signInSchema),
     mode: 'onSubmit',
   });
 
+  // โหลดอีเมลที่ผู้ใช้บันทึกไว้ (Remember Me) จาก localStorage เพื่อนำมาใช้กรอกอัตโนมัติในฟอร์ม
   React.useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail) {
@@ -30,10 +36,13 @@ export function SignInContainer() {
     }
   }, [signInForm]);
 
+  // เรียกใช้ custom hook สำหรับการส่งคำขอล็อกอินไปยัง Backend API
   const { login, isLoading, error } = useLogin();
 
+  // ฟังก์ชันยิง API เมื่อกดยอมรับฟอร์ม (Submit)
   const onSubmit = (data: SignInData) => {
     login(data, () => {
+      // บันทึกหรือลบอีเมลใน localStorage ขึ้นอยู่กับเช็คบ็อกซ์ Remember Me
       if (data.rememberMe) {
         localStorage.setItem('rememberedEmail', data.email);
       } else {

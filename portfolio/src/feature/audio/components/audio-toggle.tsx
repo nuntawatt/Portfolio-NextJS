@@ -4,8 +4,11 @@ import { Play, Pause } from 'lucide-react';
 import { useAudio } from '../hooks/use-audio';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// AudioToggle: คอมโพเนนต์ปุ่มสำหรับเล่น/หยุดเล่นเสียงเพลงพื้นหลัง (Background Music) พร้อมอนิเมชันคลื่นเสียง
 export function AudioToggle() {
+  // ดึงข้อมูลสถานะการเล่น ความพร้อมของเสียง และฟังก์ชันเปิด-ปิดเสียง
   const { playing, ready, toggle } = useAudio();
+  // ดึงฟังก์ชันแปลภาษา
   const { t } = useTranslation();
 
   return (

@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+// ฟังก์ชันช่วยสร้าง React Context และ Custom Hook ที่มีความปลอดภัย (Strict Context)
+// โดยจะแจ้งเตือน (Throw Error) ทันทีหากเรียกใช้งาน Hook นอกขอบเขตของ Provider
 function getStrictContext<T>(
   name?: string,
 ): readonly [
@@ -28,3 +30,4 @@ function getStrictContext<T>(
 }
 
 export { getStrictContext };
+

@@ -7,14 +7,17 @@ import { SignUpData } from '../core/types';
 import { AuthInput, CustomEyeOff } from '@/shared/components/auth-in';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
+// กำหนด Props สำหรับคอมโพเนนต์ฟอร์มลงทะเบียน (SignUpForm)
 interface SignUpFormProps {
     form: UseFormReturn<SignUpData>;
     onSubmit: (data: SignUpData) => void;
     isLoading: boolean;
 }
 
+// คอมโพเนนต์สำหรับแสดงความแข็งแกร่งของรหัสผ่าน (Password Strength Indicator)
 function PasswordStrength({ password }: { password: string }) {
     const { t } = useTranslation();
+    // คำนวณระดับความแข็งแกร่งของรหัสผ่านโดยอิงตามเกณฑ์ความปลอดภัยต่างๆ
     const strength = useMemo(() => {
         if (!password) return { score: 0, label: '', color: '' };
         let score = 0;
@@ -57,11 +60,16 @@ function PasswordStrength({ password }: { password: string }) {
     );
 }
 
+// คอมโพเนนต์ฟอร์มลงทะเบียน (Sign Up) สำหรับสร้างบัญชีผู้ใช้งานใหม่
 export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
+    // สถานะสำหรับควบคุมการแสดงผลรหัสผ่านและยืนยันรหัสผ่าน (เปิด/ปิดตา)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    // ดึงฟังก์ชันจัดการฟอร์มและตรวจสอบค่าที่เปลี่ยนแปลงจาก React Hook Form
     const { register, handleSubmit, formState: { errors }, watch } = form;
+    // ติดตามข้อมูลการพิมพ์รหัสผ่านเพื่อนำไปส่งต่อให้ตัวประเมินระดับความปลอดภัย
     const watchedPassword = watch('password') || '';
+    // ดึงฟังก์ชันสำหรับการแปลภาษา
     const { t } = useTranslation();
 
     return (
