@@ -98,7 +98,11 @@ export function SkillsSection() {
               <div className="flex flex-col h-full justify-between">
                 <div className="mb-6 select-none">
                   <div className="flex items-center gap-1.5">
-                    {['Request', 'Response', 'Database'].map((node, i, arr) => (
+                    {[
+                      t('skills.cat1.node.request') as string,
+                      t('skills.cat1.node.response') as string,
+                      t('skills.cat1.node.database') as string
+                    ].map((node, i, arr) => (
                       <React.Fragment key={node}>
                         <div className="flex-1 text-center py-2.5 px-1 rounded-lg border border-border bg-card text-[11px] font-semibold text-foreground/80 truncate">
                           {node}
