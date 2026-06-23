@@ -9,6 +9,7 @@ import { AudioToggle } from '@/feature/audio';
 import { LanguageToggle } from '@/shared/components/language-toggle';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/config/routes';
+import { cn } from '@/shared/lib/utils';
 
 // Navbar: คอมโพเนนต์แถบนำทางหลัก (Navbar) รองรับการแสดงผลทุกหน้าจอ สลับธีม สลับภาษา และควบคุมการเล่นเสียงเพลง
 export function Navbar() {
@@ -47,11 +48,7 @@ export function Navbar() {
 
   // ล็อกไม่ให้หน้าจอหลักเลื่อนได้ขณะเปิดเมนูมือถือ
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -68,9 +65,7 @@ export function Navbar() {
 
   // ตรวจจับ Section ปัจจุบันบนหน้าจอโดยใช้ IntersectionObserver เพื่อนำไปไฮไลต์เมนู
   useEffect(() => {
-    if (pathname === '/contact') {
-      return;
-    }
+    if (pathname === '/contact') return;
 
     const sections = ['home', 'about', 'skills'];
     const observer = new IntersectionObserver(
@@ -131,26 +126,29 @@ export function Navbar() {
             {/* เมนูนำทางเวอร์ชัน Desktop */}
             <div className="hidden lg:flex flex-1 items-center justify-center">
               <div className="flex items-center justify-center space-x-6 xl:space-x-8">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name as string}
-                    href={link.href}
-                    onClick={() => handleLinkClick(link.href)}
-                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 group ${activeLink === link.href
-                        ? 'text-orange-600 dark:text-orange-500'
-                        : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                  >
-                    {link.name}
-                    {/* เส้นใต้เคลื่อนไหวเมื่อ Hover หรือ Active */}
-                    <span
-                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center ${activeLink === link.href
-                          ? 'opacity-100 scale-x-100'
-                          : 'opacity-0 scale-x-0 group-hover:opacity-50 group-hover:scale-x-75'
-                        }`}
-                    ></span>
-                  </a>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = activeLink === link.href;
+                  return (
+                    <a
+                      key={link.name as string}
+                      href={link.href}
+                      onClick={() => handleLinkClick(link.href)}
+                      className={cn(
+                        "relative px-3 py-2 text-sm font-medium transition-colors duration-200 group",
+                        isActive ? "text-orange-600 dark:text-orange-500" : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {link.name}
+                      {/* เส้นใต้เคลื่อนไหวเมื่อ Hover หรือ Active */}
+                      <span
+                        className={cn(
+                          "absolute left-0 -bottom-1 h-[2px] w-full bg-orange-500 rounded-full transition-all duration-300 ease-out origin-center",
+                          isActive ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-50 group-hover:scale-x-75"
+                        )}
+                      ></span>
+                    </a>
+                  );
+                })}
               </div>
             </div>
 
@@ -187,8 +185,10 @@ export function Navbar() {
       
       {/* ฉากหลังสีเข้ม (Overlay) เมื่อเปิดเมนูมือถือ */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ease-out ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
+        className={cn(
+          "fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ease-out",
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
       />
@@ -196,8 +196,10 @@ export function Navbar() {
       {/* ลิ้นชักสำหรับหน้าจอมือถือ (สไลด์เข้ามาจากด้านขวา) */}
       <div
         id="mobile-menu-drawer"
-        className={`fixed top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
+        className={cn(
+          "fixed top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          isOpen ? "translate-x-0" : "translate-x-full"
+        )}
         role="dialog"
         aria-modal="true"
         aria-label={t('nav.drawer_label') as string}
@@ -223,19 +225,24 @@ export function Navbar() {
             <span className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider mb-2 px-3">
               {t('nav.navigation')}
             </span>
-            {navLinks.map((link) => (
-               <a
-                key={link.name as string}
-                href={link.href}
-                className={`text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95 ${activeLink === link.href
-                    ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 font-semibold'
-                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                onClick={() => handleLinkClick(link.href)}
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeLink === link.href;
+              return (
+                <a
+                  key={link.name as string}
+                  href={link.href}
+                  className={cn(
+                    "text-base font-medium px-4 py-3 rounded-xl transition-all duration-200 active:scale-95",
+                    isActive
+                      ? "bg-orange-500/10 text-orange-600 dark:text-orange-400 font-semibold"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  )}
+                  onClick={() => handleLinkClick(link.href)}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
           </div>
 
           {/* แผงฟังก์ชันเปลี่ยนภาษา, ปรับระดับเสียง และปุ่มบัญชีผู้ใช้งานบนมือถือ */}
