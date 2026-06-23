@@ -56,14 +56,14 @@
     inset: 0;
     z-index: -10;
     pointer-events: none;
+    /* ลดจำนวน radial-gradient จาก 5 เหลือ 3 เพื่อลดภาระการประมวลผลการวาดของเบราว์เซอร์ */
     background: 
-      radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.018) 0px, transparent 55%),
-      radial-gradient(at 100% 0%, rgba(249, 115, 22, 0.012) 0px, transparent 45%),
+      radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.02) 0px, transparent 60%),
       radial-gradient(at 50% 50%, rgba(249, 115, 22, 0.015) 0px, transparent 65%),
-      radial-gradient(at 0% 100%, rgba(249, 115, 22, 0.018) 0px, transparent 55%),
-      radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.012) 0px, transparent 45%),
+      radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.02) 0px, transparent 60%),
       var(--background);
     transform: translate3d(0, 0, 0); /* Force GPU composite layer */
+    will-change: transform;
   }
 
   /* Global subtle noise overlay */
@@ -73,7 +73,10 @@
     z-index: 99;
     opacity: 0.018;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    /* เปลี่ยน numOctaves ใน SVG Filter จาก 3 เหลือ 1 เพื่อให้เบราว์เซอร์เรนเดอร์เอฟเฟกต์นอยส์ได้เร็วขึ้น 3 เท่า */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    transform: translate3d(0, 0, 0); /* Force GPU composite layer เพื่อไม่ให้เกิดการวาดหน้าใหม่ขณะเลื่อนหน้าจอ */
+    will-change: transform;
   }
 
   /* Custom Transparent Checkbox with orange checked state */
