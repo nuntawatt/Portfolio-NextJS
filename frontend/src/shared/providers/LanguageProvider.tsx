@@ -25,33 +25,23 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 // คอมโพเนนต์ตัวให้บริการจัดการด้านภาษา (Language Provider)
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // สถานะสำหรับกำหนดภาษาปัจจุบัน โดยตรวจสอบจาก localStorage หรือกำหนดให้เป็นภาษาอังกฤษ (en) เสมอเป็นค่าตั้งต้น
-  const [language, setLanguageState] = useState<Language>(() => {
-    if (typeof window !== 'undefined') {
-      const savedLang = localStorage.getItem('language') as Language;
-      if (savedLang && (savedLang === 'en' || savedLang === 'th')) {
-        return savedLang;
-      }
-    }
-    return 'en';
-  });
-  // สถานะที่ระบุว่าคอมโพเนนต์ทำการเมาท์บนเบราว์เซอร์เสร็จแล้ว เพื่อลดปัญหาความไม่สอดคล้องของ HTML (Hydration)
-  const [mounted, setMounted] = useState(false);
+  // กำหนดภาษาตั้งต้นเป็น 'en' เพื่อให้ตรงกับการเรนเดอร์ฝั่งเซิร์ฟเวอร์ (Server-Side Rendering) ป้องกันปัญหา Hydration Mismatch
+  const [language, setLanguageState] = useState<Language>('en');
 
-  // ตั้งค่าเมื่อคอมโพเนนต์ติดตั้งเสร็จสิ้น
+  // ดึงภาษาที่บันทึกไว้ใน localStorage หลังจากคอมโพเนนต์ติดตั้งบนฝั่งไคลเอนต์สำเร็จ ( client-side mount )
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
+    const savedLang = localStorage.getItem('language') as Language;
+    if (savedLang && (savedLang === 'en' || savedLang === 'th')) {
+      setLanguageState(savedLang);
+    }
   }, []);
 
   // คอยเพิ่ม/ลดคลาสตามภาษาที่เลือกบนแท็ก HTML เพื่อรองรับการปรับฟอนต์ (เช่น font-th หรือ font-en)
   useEffect(() => {
-    if (!mounted) return;
-    
-    // Apply font class to HTML tag based on language
     const html = document.documentElement;
     html.classList.remove('lang-en', 'lang-th');
     html.classList.add(`lang-${language}`);
-  }, [language, mounted]);
+  }, [language]);
 
   // ฟังก์ชันสำหรับกำหนดภาษาใหม่และบันทึกข้อมูลลงใน localStorage
   const setLanguage = useCallback((lang: Language) => {
@@ -68,14 +58,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language]
   );
 
-  // Prevent hydration mismatch by returning empty div instead of null, but STILL WRAP with Provider
+  // แสดงผลเนื้อหาหน้าเว็บทันทีโดยไม่สวม Wrapper ซ่อนรูป เพื่อให้บราวเซอร์ทำ First Contentful Paint ได้ทันที ส่งผลให้ประสิทธิภาพเว็บพุ่งสูง
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
-      {!mounted ? (
-        <div style={{ visibility: 'hidden' }}>{children}</div>
-      ) : (
-        children
-      )}
+      {children}
     </LanguageContext.Provider>
   );
 }
