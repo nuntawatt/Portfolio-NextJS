@@ -54,7 +54,7 @@ interface MobileMenuProps {
   navLinks: Array<{ name: string; href: string }>;
   activeLink: string;
   onLinkClick: (href: string) => void;
-  t: (key: string) => string;
+  t: (key: string) => string | string[];
 }
 
 // คอมโพเนนต์เมนูดึงสไลด์สำหรับหน้าจอมือถือ
@@ -80,7 +80,7 @@ function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick, t }: M
         )}
         role="dialog"
         aria-modal="true"
-        aria-label={t('nav.drawer_label')}
+        aria-label={t('nav.drawer_label') as string}
       >
         {/* หัวเมนู พร้อมโลโก้และปุ่มปิด */}
         <div className="flex items-center justify-between p-6 border-b border-border">
@@ -90,7 +90,7 @@ function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick, t }: M
           <button
             onClick={onClose}
             className="p-2 -mr-2 text-muted-foreground hover:bg-secondary rounded-md transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-            aria-label={t('nav.close_menu')}
+            aria-label={t('nav.close_menu') as string}
           >
             <X className="w-5 h-5" />
           </button>
