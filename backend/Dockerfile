@@ -1,25 +1,22 @@
-# Base image
+# --- Stage 1: Build & Development ---
 FROM node:22-alpine AS development
 
-# Create app directory
 WORKDIR /usr/src/app
 
-# Install pnpm
 RUN npm install -g pnpm
 
-# Copy source code
-COPY . .
-
-# Install dependencies
+# Cache optimization: copy package lists first so code changes don't invalidate pnpm cache
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install
 
-# Generate Prisma Client
-RUN pnpm run prisma:generate
+COPY . .
 
-# Build the application
+# Generate engine binaries inside dev node_modules before compiling code
+RUN pnpm run prisma:generate
 RUN pnpm run build
 
-# --- Production Stage ---
+
+# --- Stage 2: Production ---
 FROM node:22-alpine AS production
 
 ARG NODE_ENV=production
@@ -30,16 +27,15 @@ WORKDIR /usr/src/app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY prisma ./prisma
 
+# Install production dependencies only (strips development test frameworks/compilers)
 RUN npm install -g pnpm && pnpm install --prod
 
-# Generate Prisma Client in the production node_modules
+# Regenerate client mapping for the production node_modules directory
 RUN pnpm run prisma:generate
 
-# Copy built application from development stage
+# Copy compiled JS outputs only, keeping raw TS source code out of the production image
 COPY --from=development /usr/src/app/dist ./dist
 
 EXPOSE 3001
 
-# Start the server
 CMD ["node", "dist/src/main"]
-
