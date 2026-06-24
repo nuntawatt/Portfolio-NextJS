@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { AuthService } from '@/shared/auth-service';
+import { AuthService } from '@/shared/auth/auth-service';
 
 // Custom Hook สำหรับประมวลผลการยืนยันอีเมล (Verify Email Process)
 export function useVerifyEmail() {

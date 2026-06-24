@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { AuthFormLayout } from '@/shared/auth-form-layout';
-import { AuthPageLayout } from '@/shared/auth-page-layout';
+import { AuthFormLayout } from '@/shared/auth/auth-form-layout';
+import { AuthPageLayout } from '@/shared/auth/auth-page-layout';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useResetPassword } from '../hooks/use-reset-password';
 import { ResetPasswordForm } from '../components/reset-password-form';
-import { useTranslation } from '@/shared/LanguageProvider';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // คอนเทนเนอร์สำหรับจัดการหน้าตั้งค่ารหัสผ่านใหม่ (Reset Password Container)
 export function ResetPasswordContainer() {

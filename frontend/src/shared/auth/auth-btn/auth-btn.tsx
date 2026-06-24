@@ -6,7 +6,7 @@ import { SignOutButton } from '@/feature/auth/signout/components/signout-button'
 import { User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
-import { useTranslation } from '@/shared/LanguageProvider';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // Stepped/Pixelated clip-path for retro border styling
 const PIXEL_CLIP_PATH = "polygon(0px 4px, 4px 4px, 4px 0px, calc(100% - 4px) 0px, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0px calc(100% - 4px))";

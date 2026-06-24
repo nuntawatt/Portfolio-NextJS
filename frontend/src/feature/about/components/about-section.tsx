@@ -4,7 +4,7 @@ import { BioCard } from './bio-card';
 import { EducationCard } from './education-card';
 import { StatCard } from './stat-card';
 import { STATS } from '../constants/data';
-import { useTranslation } from '@/shared/LanguageProvider';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // AboutSection: คอมโพเนนต์หลักสำหรับส่วน "เกี่ยวกับฉัน" (About Section) แสดงข้อมูลประวัติ ค่าสถิติ และการศึกษา
 export function AboutSection() {

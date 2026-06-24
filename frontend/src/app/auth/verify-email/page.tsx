@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { VerifyEmailContainer } from '@/feature/auth/verify-email/containers/verify-email-container';
 import { Suspense } from 'react';
-import { LoadingScreen } from '@/shared/loading/loading-card';
+import { LoadingScreen } from '@/shared/components/loading/loading-card';
 
 // ข้อมูล Meta สำหรับหน้ายืนยันอีเมล
 export const metadata: Metadata = {

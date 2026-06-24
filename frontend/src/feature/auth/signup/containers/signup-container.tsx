@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema, SignUpData } from '../types';
 import { useRegister } from '../hooks/use-register';
-import { AuthFormLayout } from '@/shared/auth-form-layout';
-import { AuthPageLayout } from '@/shared/auth-page-layout';
+import { AuthFormLayout } from '@/shared/auth/auth-form-layout';
+import { AuthPageLayout } from '@/shared/auth/auth-page-layout';
 import { SignUpForm } from '../components/signup-form';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
-import { useTranslation } from '@/shared/LanguageProvider';
+import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // คอนเทนเนอร์หลักสำหรับหน้าลงทะเบียนผู้ใช้ใหม่ (Sign Up Container)
 export function SignUpContainer() {

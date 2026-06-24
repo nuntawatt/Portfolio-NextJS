@@ -3,10 +3,10 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { ThemeToggle } from '@/feature/theme';
-import { AuthButton } from '@/shared/auth-btn';
+import { AuthButton } from '@/shared/auth/auth-btn';
 import { AudioToggle } from '@/feature/audio';
-import { LanguageToggle } from '@/shared/language-toggle';
-import { cn } from '@/shared/utils';
+import { LanguageToggle } from '@/shared/components/language-toggle';
+import { cn } from '@/shared/lib/utils';
 
 interface MobileMenuProps {
   isOpen: boolean;
