@@ -3,7 +3,7 @@
 import { Facebook, Github, Linkedin } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import { routes } from '@/config/routes';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 // Footer: คอมโพเนนต์ส่วนท้ายของเว็บไซต์ แสดงโลโก้ ลิงก์โซเชียลมีเดีย และข้อความลิขสิทธิ์
 export function Footer() {

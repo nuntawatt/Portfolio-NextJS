@@ -2,12 +2,12 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuthStore } from "@/shared/hooks/use-auth-store";
-import { authApi } from "@/shared/lib/auth-service";
-import { AuthProvider } from "@/shared/providers/AuthProvider";
+import { useAuthStore } from "@/shared/use-auth-store";
+import { authApi } from "@/shared/auth-service";
+import { AuthProvider } from "@/shared/AuthProvider";
 import { AudioProvider } from "@/feature/audio";
 import { ThemeProvider } from "next-themes";
-import { LanguageProvider } from "@/shared/providers/LanguageProvider";
+import { LanguageProvider } from "@/shared/LanguageProvider";
 
 // Root Provider Component ของแอปพลิเคชัน ทำหน้าที่ห่อหุ้มคอมโพเนนต์ลูกด้วย Context Providers ต่างๆ (Theme, Language, React Query, Auth, Audio)
 export default function Providers({ children }: { children: ReactNode }) {

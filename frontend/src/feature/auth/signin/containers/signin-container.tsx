@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInSchema, SignInData } from '../types';
 import { useLogin } from '../hooks/use-login';
-import { AuthFormLayout } from '@/shared/components/auth-form-layout';
-import { AuthPageLayout } from '@/shared/components/auth-page-layout';
+import { AuthFormLayout } from '@/shared/auth-form-layout';
+import { AuthPageLayout } from '@/shared/auth-page-layout';
 import { SignInForm } from '../components/signin-form';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 // คอนเทนเนอร์หลักสำหรับหน้าเข้าสู่ระบบ (Sign In Container)
 export function SignInContainer() {

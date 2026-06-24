@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { AuthFormLayout } from '@/shared/components/auth-form-layout';
-import { AuthPageLayout } from '@/shared/components/auth-page-layout';
+import { AuthFormLayout } from '@/shared/auth-form-layout';
+import { AuthPageLayout } from '@/shared/auth-page-layout';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useForgotPassword } from '../hooks/use-forgot-password';
 import { ForgotPasswordForm } from '../components/forgot-password-form';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 // คอนเทนเนอร์หลักสำหรับหน้าขอรีเซ็ตรหัสผ่าน (Forgot Password Container)
 export function ForgotPasswordContainer() {

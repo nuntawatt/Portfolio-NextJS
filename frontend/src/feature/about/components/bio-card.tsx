@@ -1,8 +1,8 @@
 'use client';
 
 import { GitHub, MapPin, Phone } from '../icons/icon';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useTranslation } from '@/shared/LanguageProvider';
+import { useSpotlight } from '@/shared/use-spotlight';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },

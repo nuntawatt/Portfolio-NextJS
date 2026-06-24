@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useAuthCallback } from '../hooks/use-auth-callback';
-import { LoadingCard } from '@/shared/components/loading/loading-card';
+import { LoadingCard } from '@/shared/loading/loading-card';
 
 // คอมโพเนนต์ภายในสำหรับจัดการสถานะและแสดงผลการตรวจสอบสิทธิ์ความถูกต้องหลังจากเข้าสู่ระบบ
 function AuthCallbackContent() {

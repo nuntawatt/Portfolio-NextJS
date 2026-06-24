@@ -1,5 +1,5 @@
 import { apiClient } from '@/lib/api-client';
-import { AuthResponse } from '@/shared/lib/auth-types';
+import { AuthResponse } from '@/shared/auth-types';
 import { SignInData } from '@/feature/auth/signin/types';
 import { SignUpData } from '@/feature/auth/signup/types';
 

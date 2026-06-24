@@ -4,7 +4,7 @@ import { ICON_MAP } from '../icons/icon';
 import { useInView } from '../hooks/use-in-view';
 import { useCountUp } from '../hooks/use-count-up';
 import type { StatItem } from '../types/about';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 interface StatCardProps {
     stat: StatItem;

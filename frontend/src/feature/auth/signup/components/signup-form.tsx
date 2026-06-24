@@ -4,8 +4,8 @@ import { useState, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Loader2, Eye } from 'lucide-react';
 import { SignUpData } from '../types';
-import { AuthInput, CustomEyeOff } from '@/shared/components/auth-input';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { AuthInput, CustomEyeOff } from '@/shared/auth-input';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 // กำหนด Props สำหรับคอมโพเนนต์ฟอร์มลงทะเบียน (SignUpForm)
 interface SignUpFormProps {

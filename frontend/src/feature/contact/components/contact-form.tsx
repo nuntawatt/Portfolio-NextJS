@@ -5,11 +5,11 @@ import { Send, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
 import Link from 'next/link';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useClipboard } from '@/shared/hooks/use-clipboard';
-import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useTranslation } from '@/shared/LanguageProvider';
+import { useClipboard } from '@/shared/use-clipboard';
+import { useSpotlight } from '@/shared/use-spotlight';
 import { useContactForm } from '../hooks/use-contact-form';
-import { LoadingCard } from '@/shared/components/loading/loading-card';
+import { LoadingCard } from '@/shared/loading/loading-card';
 
 // คอมโพเนนต์ฟอร์มสำหรับติดต่อสอบถาม (Contact Form)
 export function ContactForm() {

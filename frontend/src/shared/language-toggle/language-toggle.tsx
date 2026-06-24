@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 // อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ LanguageToggle
 interface LanguageToggleProps {

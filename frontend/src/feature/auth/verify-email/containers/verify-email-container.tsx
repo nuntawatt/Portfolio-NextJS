@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { AuthPageLayout } from '@/shared/components/auth-page-layout';
+import { AuthPageLayout } from '@/shared/auth-page-layout';
 import { useVerifyEmail } from '../hooks/use-verify-email';
 import { VerifyEmailCard } from '../components/verify-email-card';
 

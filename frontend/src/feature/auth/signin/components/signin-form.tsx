@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Loader2, Eye } from 'lucide-react';
 import { SignInData } from '../types';
-import { AuthInput, CustomEyeOff } from '@/shared/components/auth-input';
+import { AuthInput, CustomEyeOff } from '@/shared/auth-input';
 import Link from 'next/link';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { useTranslation } from '@/shared/LanguageProvider';
 
 // กำหนด Props สำหรับคอมโพเนนต์ฟอร์มเข้าสู่ระบบ (SignInForm)
 interface SignInFormProps {

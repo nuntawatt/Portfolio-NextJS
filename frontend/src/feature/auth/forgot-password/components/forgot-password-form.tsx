@@ -3,8 +3,8 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
-import { AuthInput } from '@/shared/components/auth-input';
-import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { AuthInput } from '@/shared/auth-input';
+import { useTranslation } from '@/shared/LanguageProvider';
 import { ForgotPasswordData } from '../types';
 
 interface ForgotPasswordFormProps {

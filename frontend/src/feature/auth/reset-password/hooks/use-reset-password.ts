@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordSchema, ResetPasswordData } from '../types';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { AuthService, getErrorMessage } from '@/shared/lib/auth-service';
+import { AuthService, getErrorMessage } from '@/shared/auth-service';
 import { routes } from '@/config/routes';
 
 // Custom Hook สำหรับหน้าตั้งค่ารหัสผ่านใหม่ (Reset Password)
