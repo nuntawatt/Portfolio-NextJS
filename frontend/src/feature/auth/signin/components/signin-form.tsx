@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Loader2, Eye } from 'lucide-react';
-import { SignInData } from '../core/types';
-import { AuthInput, CustomEyeOff } from './auth-input';
+import { SignInData } from '../types';
+import { AuthInput, CustomEyeOff } from '@/shared/components/auth-input';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 

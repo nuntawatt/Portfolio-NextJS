@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { AuthService, getErrorMessage } from '../core/lib';
-import { SignUpData } from '../core/types';
-import { useAuthStore } from '../stores/store';
+import { AuthService, getErrorMessage } from '@/shared/lib/auth-service';
+import { SignUpData } from '../types';
+import { useAuthStore } from '@/shared/hooks/use-auth-store';
 
 // Custom Hook สำหรับขั้นตอนการลงทะเบียนสมาชิกใหม่ (Registration Process)
 export const useRegister = () => {

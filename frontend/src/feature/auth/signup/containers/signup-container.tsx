@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema, SignUpData } from '../core/types';
+import { signUpSchema, SignUpData } from '../types';
 import { useRegister } from '../hooks/use-register';
-import { AuthFormLayout } from '../components/auth-form-layout';
-import { AuthPageLayout } from '../components/auth-page-layout';
+import { AuthFormLayout } from '@/shared/components/auth-form-layout';
+import { AuthPageLayout } from '@/shared/components/auth-page-layout';
 import { SignUpForm } from '../components/signup-form';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';

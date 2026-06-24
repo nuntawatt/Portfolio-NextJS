@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { AuthService, getErrorMessage } from '../core/lib';
-import { SignInData } from '../core/types';
-import { useAuthStore } from '../stores/store';
+import { AuthService, getErrorMessage } from '@/shared/lib/auth-service';
+import { SignInData } from '../types';
+import { useAuthStore } from '@/shared/hooks/use-auth-store';
 
 // Custom Hook สำหรับกระบวนการเข้าสู่ระบบ (Login Process)
 export const useLogin = () => {

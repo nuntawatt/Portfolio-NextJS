@@ -3,22 +3,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { resetPasswordSchema, ResetPasswordData } from '../types';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { AuthService, getErrorMessage } from '../core/lib';
+import { AuthService, getErrorMessage } from '@/shared/lib/auth-service';
 import { routes } from '@/config/routes';
-
-// Schema สำหรับตรวจสอบข้อมูลรหัสผ่านใหม่ที่พิมพ์เข้ามา (ความยาวอย่างน้อย 6 ตัวอักษร และต้องตรงกัน)
-export const resetPasswordSchema = z.object({
-  password: z.string().min(6, 'auth.validation.password_min'),
-  confirmPassword: z.string().min(1, 'auth.validation.confirm_password_required'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "auth.validation.password_mismatch",
-  path: ["confirmPassword"],
-});
-
-// ประเภทข้อมูลสำหรับส่งไปรีเซ็ตรหัสผ่าน
-export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
 
 // Custom Hook สำหรับหน้าตั้งค่ารหัสผ่านใหม่ (Reset Password)
 export function useResetPassword() {
