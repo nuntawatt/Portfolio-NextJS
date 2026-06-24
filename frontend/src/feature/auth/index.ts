@@ -19,3 +19,8 @@ export * from './hooks/use-auth-callback';
 export * from './core/types';
 export * from './core/lib';
 export * from './stores/store';
+
+export * from './components/auth-btn';
+export * from './components/auth-form-layout';
+export * from './components/auth-input';
+export * from './components/auth-page-layout';

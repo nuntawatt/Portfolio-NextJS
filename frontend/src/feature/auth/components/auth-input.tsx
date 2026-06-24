@@ -12,7 +12,6 @@ export const CustomEyeOff = ({ className }: { className?: string }) => (
   </svg>
 );
 
-
 // อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ AuthInput
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;

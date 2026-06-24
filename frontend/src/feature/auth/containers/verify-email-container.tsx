@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CheckCircle2, XCircle } from 'lucide-react';
-import { AuthPageLayout } from '@/shared/components/auth-page-layout';
+import { AuthPageLayout } from '../components/auth-page-layout';
 import { routes } from '@/config/routes';
 import Link from 'next/link';
 import { useVerifyEmail } from '../hooks/use-verify-email';

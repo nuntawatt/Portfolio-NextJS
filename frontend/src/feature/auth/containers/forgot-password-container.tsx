@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { Loader2 } from 'lucide-react';
-import { AuthFormLayout } from '@/shared/components/auth';
-import { AuthPageLayout } from '@/shared/components/auth-page-layout';
-import { AuthInput } from '@/shared/components/auth-in';
+import { AuthFormLayout } from '../components/auth-form-layout';
+import { AuthPageLayout } from '../components/auth-page-layout';
+import { AuthInput } from '../components/auth-input';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useForgotPassword } from '../hooks/use-forgot-password';

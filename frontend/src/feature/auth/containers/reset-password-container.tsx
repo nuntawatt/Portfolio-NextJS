@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { Loader2, Eye } from 'lucide-react';
-import { AuthFormLayout } from '@/shared/components/auth';
-import { AuthPageLayout } from '@/shared/components/auth-page-layout';
-import { AuthInput, CustomEyeOff } from '@/shared/components/auth-in';
+import { AuthFormLayout } from '../components/auth-form-layout';
+import { AuthPageLayout } from '../components/auth-page-layout';
+import { AuthInput, CustomEyeOff } from '../components/auth-input';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
 import { useResetPassword } from '../hooks/use-reset-password';

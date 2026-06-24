@@ -32,8 +32,8 @@ export function AuthFormLayout({
       <div className="relative p-8 sm:p-10 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-100 dark:border-white/10 transition-all duration-500 overflow-hidden">
 
         {/* Decorative background glows */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-500/10 dark:bg-orange-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-orange-500/5 dark:bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-50/10 dark:bg-orange-50/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-orange-50/5 dark:bg-orange-50/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Animated top border accent */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-60" />
