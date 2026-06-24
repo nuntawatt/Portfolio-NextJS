@@ -156,7 +156,7 @@ function PixelStar({ className }: { className?: string }) {
 export function ThemeToggle() {
   // ดึงค่าธีม ฟังก์ชันสลับธีม และตรวจสอบสถานะเมาท์ของคอมโพเนนต์
   const { theme, toggleTheme, mounted } = useTheme();
-  // สถานะเพื่อตรวจสอบว่าเมาส์ชี้อยู่เหนือปุ่มสวิตช์นี้หรือไม่
+  // Status to check if mouse is hovering over the toggle button
   const [hovered, setHovered] = useState(false);
 
   if (!mounted) {
