@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useSignOut } from '@/feature/auth/signout/hooks/use-signout';
+import { SignOutButton } from '@/feature/auth/signout/components/signout-button';
 import { User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
@@ -11,55 +11,10 @@ import { useTranslation } from '@/shared/providers/LanguageProvider';
 // Stepped/Pixelated clip-path for retro border styling
 const PIXEL_CLIP_PATH = "polygon(0px 4px, 4px 4px, 4px 0px, calc(100% - 4px) 0px, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0px calc(100% - 4px))";
 
-// Inline pixel-art sign out SVG icon
-// ไอคอนปุ่ม Sign Out สไตล์ Pixel Art
-function PixelSignOutIcon({ className }: { className?: string }) {
-  const width = 12;
-  const height = 11;
-  const grid = [
-    "bbbbbbb.....",
-    "b.....b.....",
-    "b.....b...a.",
-    "b.....b..aa.",
-    "b.....baaaaa",
-    "b.....aaaaaa",
-    "b.....baaaaa",
-    "b.....b..aa.",
-    "b.....b...a.",
-    "b.....b.....",
-    "bbbbbbb....."
-  ];
-  return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className={className}
-      shapeRendering="crispEdges"
-    >
-      {grid.map((row, y) =>
-        row.split('').map((char, x) => {
-          if (char === '.') return null;
-          return (
-            <rect
-              key={`${x}-${y}`}
-              x={x}
-              y={y}
-              width={1}
-              height={1}
-              fill="currentColor"
-            />
-          );
-        })
-      )}
-    </svg>
-  );
-}
-
 // คอมโพเนนต์ปุ่มยืนยันตัวตน (Authentication Button) และเมนูโปรไฟล์ของผู้ใช้งาน
 export function AuthButton({ className = "" }: { className?: string }) {
   // ดึงข้อมูลเซสชันการเข้าสู่ระบบและสถานะ
   const { data: session, status: nextAuthStatus } = useSession();
-  // ดึงฟังก์ชันออกจากระบบจาก useSignOut hook
-  const { signOut: performSignOut } = useSignOut();
   // สถานะเปิด/ปิดเมนู Dropdown โปรไฟล์ของผู้ใช้งาน
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   // ตัวอ้างอิงตำแหน่งของเมนูโปรไฟล์ เพื่อนำไปใช้ตรวจจับการคลิกด้านนอก
@@ -97,12 +52,6 @@ export function AuthButton({ className = "" }: { className?: string }) {
   const userName = session?.user?.name || '';
   const userImage = session?.user?.image || null;
 
-  // ฟังก์ชันสำหรับออกจากระบบ (Sign Out)
-  const handleSignOut = () => {
-    performSignOut();
-    setIsProfileOpen(false);
-  };
-
   if (isAuthenticated && session?.user) {
     const isMobile = className.includes('flex-col');
 
@@ -137,14 +86,8 @@ export function AuthButton({ className = "" }: { className?: string }) {
               </div>
             </div>
 
-            {/* Sign Out Button */}
-            <button
-              onClick={handleSignOut}
-              className="w-full flex items-center justify-center gap-3 px-3 py-2.5 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 rounded transition-colors duration-200 cursor-pointer border border-dashed border-red-500/20 hover:border-red-500/40"
-            >
-              <PixelSignOutIcon className="w-4 h-[12px]" />
-              <span>Sign Out</span>
-            </button>
+            {/* Sign Out Button (Mobile view) */}
+            <SignOutButton variant="mobile" onSignOut={() => setIsProfileOpen(false)} />
           </div>
         </div>
       );
@@ -203,14 +146,8 @@ export function AuthButton({ className = "" }: { className?: string }) {
                     {userEmail}
                   </p>
                 </div>
-                <button
-                  role="menuitem"
-                  onClick={handleSignOut}
-                  className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 rounded transition-colors duration-200 cursor-pointer"
-                >
-                  <PixelSignOutIcon className="w-4 h-[12px]" />
-                  <span>Sign Out</span>
-                </button>
+                {/* Sign Out Button (Desktop view) */}
+                <SignOutButton variant="desktop" onSignOut={() => setIsProfileOpen(false)} />
               </div>
             </div>
           </div>
