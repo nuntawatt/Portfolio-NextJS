@@ -3,7 +3,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { ThemeToggle } from '@/feature/theme';
-import { AuthButton } from '@/feature/auth';
+import { AuthButton } from '@/shared/components/auth-btn';
 import { AudioToggle } from '@/feature/audio';
 import { LanguageToggle } from '@/shared/components/language-toggle';
 import { cn } from '@/shared/lib/utils';

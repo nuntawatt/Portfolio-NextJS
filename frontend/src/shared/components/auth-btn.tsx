@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { useSignOut } from '@/feature/auth/signout/hooks/use-signout';
 import { User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
@@ -57,6 +58,8 @@ function PixelSignOutIcon({ className }: { className?: string }) {
 export function AuthButton({ className = "" }: { className?: string }) {
   // ดึงข้อมูลเซสชันการเข้าสู่ระบบและสถานะ
   const { data: session, status: nextAuthStatus } = useSession();
+  // ดึงฟังก์ชันออกจากระบบจาก useSignOut hook
+  const { signOut: performSignOut } = useSignOut();
   // สถานะเปิด/ปิดเมนู Dropdown โปรไฟล์ของผู้ใช้งาน
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   // ตัวอ้างอิงตำแหน่งของเมนูโปรไฟล์ เพื่อนำไปใช้ตรวจจับการคลิกด้านนอก
@@ -96,7 +99,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
 
   // ฟังก์ชันสำหรับออกจากระบบ (Sign Out)
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/' });
+    performSignOut();
     setIsProfileOpen(false);
   };
 

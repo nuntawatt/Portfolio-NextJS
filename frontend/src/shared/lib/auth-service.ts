@@ -1,5 +1,7 @@
-import { apiClient } from '../../../lib/api-client';
-import { SignInData, SignUpData, AuthResponse } from './types';
+import { apiClient } from '@/lib/api-client';
+import { AuthResponse } from './auth-types';
+import { SignInData } from '@/feature/auth/signin/types';
+import { SignUpData } from '@/feature/auth/signup/types';
 
 // กำหนดรูปแบบข้อมูลสำหรับโปรไฟล์ผู้ใช้
 export interface ProfilePayload {

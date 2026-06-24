@@ -2,8 +2,8 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuthStore } from "../feature/auth/stores/store";
-import { authApi } from "../feature/auth/core/lib";
+import { useAuthStore } from "@/shared/hooks/use-auth-store";
+import { authApi } from "@/shared/lib/auth-service";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
 import { AudioProvider } from "@/feature/audio";
 import { ThemeProvider } from "next-themes";

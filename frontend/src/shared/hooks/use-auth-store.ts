@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AuthUser } from '../core/types';
+import { AuthUser } from '../lib/auth-types';
 
 // กำหนดประเภทข้อมูลสถานะ (State) และการกระทำ (Actions) ใน Auth Store
 interface AuthState {
