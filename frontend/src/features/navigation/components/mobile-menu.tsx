@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 import { ThemeToggle } from '@/features/theme';
 import { AuthButton } from '@/shared/auth/auth-btn';
 import { AudioToggle } from '@/features/audio';
-import { LanguageToggle } from '@/shared/components/language-toggle';
+import { LanguageToggle } from '@/shared/ui';
 import { cn } from '@/shared/lib/utils';
 
 interface MobileMenuProps {

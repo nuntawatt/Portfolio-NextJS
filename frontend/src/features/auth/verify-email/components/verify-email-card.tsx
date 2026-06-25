@@ -4,7 +4,7 @@ import React from 'react';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/shared/config/routes';
-import { LoadingCard } from '@/shared/components/loading/loading-card';
+import { LoadingCard } from '@/shared/ui';
 
 interface VerifyEmailCardProps {
   status: 'loading' | 'success' | 'error';

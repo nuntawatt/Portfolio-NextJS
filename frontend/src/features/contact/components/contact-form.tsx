@@ -6,10 +6,9 @@ import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useClipboard } from '@/shared/hooks/use-clipboard';
-import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useClipboard, useSpotlight } from '@/shared/lib';
 import { useContactForm } from '../hooks/use-contact-form';
-import { LoadingCard } from '@/shared/components/loading/loading-card';
+import { LoadingCard } from '@/shared/ui';
 
 // คอมโพเนนต์ฟอร์มสำหรับติดต่อสอบถาม (Contact Form)
 export function ContactForm() {

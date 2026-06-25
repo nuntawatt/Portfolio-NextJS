@@ -11,7 +11,7 @@ import {
 } from 'motion/react';
 
 import { getStrictContext } from '@/shared/lib/utils/get-strict-context';
-import { useControlledState } from '@/shared/hooks/use-controlled-state';
+import { useControlledState } from '@/shared/lib';
 
 // สร้าง context สำหรับ switch component
 type SwitchContextType = {

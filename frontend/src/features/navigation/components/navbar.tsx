@@ -6,7 +6,7 @@ import { Menu } from 'lucide-react';
 import { ThemeToggle } from '@/features/theme';
 import { AuthButton } from '@/shared/auth/auth-btn';
 import { AudioToggle } from '@/features/audio';
-import { LanguageToggle } from '@/shared/components/language-toggle';
+import { LanguageToggle } from '@/shared/ui';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/shared/config/routes';
 import { NavLink } from './nav-link';

@@ -3,7 +3,7 @@
 import React from 'react';
 import { GraduationCap } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useSpotlight } from '@/shared/lib';
 
 // EducationCard: คอมโพเนนต์การ์ดแสดงข้อมูลประวัติการศึกษา พร้อมเอฟเฟกต์ Spotlight เมื่อเมาส์ชี้ผ่าน
 export function EducationCard() {

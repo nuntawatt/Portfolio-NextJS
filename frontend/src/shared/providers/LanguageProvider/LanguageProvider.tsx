@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import en from '@/shared/locales/en.json';
-import th from '@/shared/locales/th.json';
+import en from '@/shared/assets/locales/en.json';
+import th from '@/shared/assets/locales/th.json';
 
 type Language = 'en' | 'th';
 type Translations = Record<string, string | string[]>;

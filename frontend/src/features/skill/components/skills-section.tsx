@@ -3,7 +3,7 @@
 import React from 'react';
 import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useSpotlight } from '@/shared/lib';
 
 // SkillCard: คอมโพเนนต์การ์ดแสดงแต่ละกลุ่มทักษะความสามารถ พร้อมเอฟเฟกต์แสงไฟ Spotlight ตามเมาส์
 function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {

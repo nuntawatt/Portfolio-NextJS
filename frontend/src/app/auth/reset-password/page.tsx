@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { ResetPasswordContainer } from '@/features/auth/reset-password/containers/reset-password-container';
 import { Suspense } from 'react';
-import { LoadingScreen } from '@/shared/components/loading/loading-card';
+import { LoadingScreen } from '@/shared/ui';
 
 // ข้อมูล Meta สำหรับหน้าตั้งรหัสผ่านใหม่
 export const metadata: Metadata = {

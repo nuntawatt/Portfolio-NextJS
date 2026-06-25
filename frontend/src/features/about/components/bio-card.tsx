@@ -2,7 +2,7 @@
 
 import { GitHub, MapPin, Phone } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useSpotlight } from '@/shared/hooks/use-spotlight';
+import { useSpotlight } from '@/shared/lib';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
