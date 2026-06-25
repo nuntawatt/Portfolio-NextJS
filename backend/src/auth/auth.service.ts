@@ -176,12 +176,34 @@ export class AuthService {
     const frontendUrl = process.env.FRONTEND_URL;
     const verifyUrl = `${frontendUrl}/auth/verify-email?token=${rawToken}`;
 
+    const emailHtml = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f8fafc; border-radius: 16px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h2 style="color: #0f172a; font-size: 24px; font-weight: 800; margin: 0; font-family: system-ui, -apple-system, sans-serif;">Morgorn Portfolio</h2>
+        </div>
+        <div style="background-color: #ffffff; padding: 32px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;">
+          <h3 style="color: #1e293b; font-size: 20px; font-weight: 700; margin-top: 0; margin-bottom: 16px;">Verify your email address</h3>
+          <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0; margin-bottom: 24px;">
+            Thank you for creating an account. Please verify your email address by clicking the button below. This link is valid for 1 hour.
+          </p>
+          <div style="text-align: center; margin-bottom: 24px;">
+            <a href="${verifyUrl}" style="background-color: #f97316; color: #ffffff; padding: 12px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);">
+              Verify Email
+            </a>
+          </div>
+          <p style="color: #94a3b8; font-size: 12px; line-height: 1.5; margin: 0; text-align: center;">
+            If you did not request this, you can safely ignore this email.
+          </p>
+        </div>
+      </div>
+    `;
+
     // Send email asynchronously
     this.mailService
       .sendEmail(
         email,
         'Verify your email',
-        `<p>Click here to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
+        emailHtml,
       )
       .catch((error: unknown) => {
         const message =
@@ -374,11 +396,33 @@ export class AuthService {
     const frontendUrl = process.env.FRONTEND_URL;
     const resetUrl = `${frontendUrl}/auth/reset-password?token=${rawToken}`;
 
+    const resetHtml = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f8fafc; border-radius: 16px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <h2 style="color: #0f172a; font-size: 24px; font-weight: 800; margin: 0; font-family: system-ui, -apple-system, sans-serif;">Morgorn Portfolio</h2>
+        </div>
+        <div style="background-color: #ffffff; padding: 32px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;">
+          <h3 style="color: #1e293b; font-size: 20px; font-weight: 700; margin-top: 0; margin-bottom: 16px;">Reset your password</h3>
+          <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0; margin-bottom: 24px;">
+            We received a request to reset your password. Click the button below to set a new password. This link is valid for 15 minutes.
+          </p>
+          <div style="text-align: center; margin-bottom: 24px;">
+            <a href="${resetUrl}" style="background-color: #f97316; color: #ffffff; padding: 12px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);">
+              Reset Password
+            </a>
+          </div>
+          <p style="color: #94a3b8; font-size: 12px; line-height: 1.5; margin: 0; text-align: center;">
+            If you did not request a password reset, you can safely ignore this email.
+          </p>
+        </div>
+      </div>
+    `;
+
     this.mailService
       .sendEmail(
         normalizedEmail,
         'Reset your password',
-        `<p>Click here to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`,
+        resetHtml,
       )
       .catch((error: unknown) => {
         const message =
