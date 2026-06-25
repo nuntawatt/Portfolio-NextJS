@@ -1,3 +1,3 @@
-export * from './use-clipboard';
-export * from './use-controlled-state';
-export * from './use-spotlight';
+export * from './useClipboard';
+export * from './useControlledState';
+export * from './useSpotlight';

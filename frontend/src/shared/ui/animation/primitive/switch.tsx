@@ -10,7 +10,7 @@ import {
   type LegacyAnimationControls,
 } from 'motion/react';
 
-import { getStrictContext } from '@/shared/lib/utils/get-strict-context';
+import { getStrictContext } from '@/shared/lib/utils/getStrictContext';
 import { useControlledState } from '@/shared/lib';
 
 // สร้าง context สำหรับ switch component

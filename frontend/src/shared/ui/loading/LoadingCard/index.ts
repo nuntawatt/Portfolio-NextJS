@@ -1,1 +1,1 @@
-export { LoadingCard, LoadingScreen } from './loading-card';
+export { LoadingCard, LoadingScreen } from './LoadingCard';

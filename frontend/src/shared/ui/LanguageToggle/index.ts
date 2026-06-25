@@ -1,1 +1,1 @@
-export { LanguageToggle } from './language-toggle';
+export { LanguageToggle } from './LanguageToggle';

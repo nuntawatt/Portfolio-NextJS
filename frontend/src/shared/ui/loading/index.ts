@@ -1,2 +1,2 @@
-export * from './page-skeleton';
-export * from './loading-card';
+export * from './PageSkeleton';
+export * from './LoadingCard';

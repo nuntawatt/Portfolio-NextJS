@@ -1,1 +1,1 @@
-export { useClipboard } from './use-clipboard';
+export { useClipboard } from './useClipboard';

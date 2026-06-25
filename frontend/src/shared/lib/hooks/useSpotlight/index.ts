@@ -1,1 +1,1 @@
-export { useSpotlight } from './use-spotlight';
+export { useSpotlight } from './useSpotlight';

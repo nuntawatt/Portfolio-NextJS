@@ -1,1 +1,1 @@
-export { PageSkeleton, Shimmer } from './page-skeleton';
+export { PageSkeleton, Shimmer } from './PageSkeleton';

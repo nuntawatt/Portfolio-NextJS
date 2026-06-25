@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { SignOutButton } from '@/features/auth/signout/components/signout-button';
+import { SignOutButton } from '@/features/auth/signOut/components/SignOutButton';
 import { User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/shared/config/routes';
