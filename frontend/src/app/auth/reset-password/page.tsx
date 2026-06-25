@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { ResetPasswordContainer } from '@/feature/auth/reset-password/containers/reset-password-container';
+import { ResetPasswordContainer } from '@/features/auth/reset-password/containers/reset-password-container';
 import { Suspense } from 'react';
 import { LoadingScreen } from '@/shared/components/loading/loading-card';
 

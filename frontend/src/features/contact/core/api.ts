@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/api-client';
+import { apiClient } from '@/shared/lib/api/api-client';
 import { ContactPayload, ContactResponse } from './types';
 
 // อ็อบเจกต์รวบรวม API สำหรับส่วนติดต่อ (Contact API)

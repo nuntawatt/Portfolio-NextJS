@@ -5,8 +5,8 @@ import {
   SwitchThumb as SwitchThumbPrimitive,
   SwitchIcon as SwitchIconPrimitive,
   type SwitchProps as SwitchPrimitiveProps,
-} from '@/animation/primitive/switch';
-import { cn } from '@/lib/utils';
+} from '@/shared/animation/primitive/switch';
+import { cn } from '@/shared/lib/utils';
 
 type SwitchProps = SwitchPrimitiveProps & {
   pressedWidth?: number;

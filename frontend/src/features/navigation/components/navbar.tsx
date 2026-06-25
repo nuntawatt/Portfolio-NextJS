@@ -3,9 +3,9 @@
 import React, { useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
-import { ThemeToggle } from '@/feature/theme';
+import { ThemeToggle } from '@/features/theme';
 import { AuthButton } from '@/shared/auth/auth-btn';
-import { AudioToggle } from '@/feature/audio';
+import { AudioToggle } from '@/features/audio';
 import { LanguageToggle } from '@/shared/components/language-toggle';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/config/routes';

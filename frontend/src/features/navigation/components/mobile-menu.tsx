@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { X } from 'lucide-react';
-import { ThemeToggle } from '@/feature/theme';
+import { ThemeToggle } from '@/features/theme';
 import { AuthButton } from '@/shared/auth/auth-btn';
-import { AudioToggle } from '@/feature/audio';
+import { AudioToggle } from '@/features/audio';
 import { LanguageToggle } from '@/shared/components/language-toggle';
 import { cn } from '@/shared/lib/utils';
 

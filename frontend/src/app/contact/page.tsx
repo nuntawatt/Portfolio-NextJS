@@ -1,7 +1,7 @@
 'use client';
 
-import { Navbar, Footer } from '@/feature/navigation';
-import { ContactSection } from '@/feature/contact';
+import { Navbar, Footer } from '@/features/navigation';
+import { ContactSection } from '@/features/contact';
 
 // หน้าเพจติดต่อ (Contact Page) ประกอบด้วยแถบนำทาง (Navbar), ส่วนฟอร์มติดต่อ (ContactSection) และส่วนท้ายเว็บ (Footer)
 export default function ContactPage() {

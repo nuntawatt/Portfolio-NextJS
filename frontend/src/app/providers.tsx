@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/auth/use-auth-store";
 import { authApi } from "@/shared/auth/auth-service";
 import { AuthProvider } from "@/shared/auth/AuthProvider";
-import { AudioProvider } from "@/feature/audio";
+import { AudioProvider } from "@/features/audio";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/shared/providers/LanguageProvider";
 

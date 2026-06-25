@@ -1,4 +1,4 @@
-import { Navbar, Footer } from '@/feature/navigation';
+import { Navbar, Footer } from '@/features/navigation';
 
 // คอมโพเนนต์เอฟเฟกต์ Shimmer (การเคลื่อนไหวสว่างวูบวาบ) เพื่อสื่อถึงการกำลังโหลดข้อมูล
 export function Shimmer({ className }: { className?: string }) {
