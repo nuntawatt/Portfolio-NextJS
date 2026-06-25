@@ -33,10 +33,10 @@ graph TD
     end
 
     subgraph External ["Data & Third-Party Services"]
-        DB[(PostgreSQL Database)]
-        Redis[(Redis Caching & Queue)]
-        MinIO[(MinIO / Supabase S3)]
-        Resend[Resend API (Emails)]
+        DB[("PostgreSQL Database")]
+        Redis[("Redis Caching & Queue")]
+        MinIO[("MinIO / Supabase S3")]
+        Resend["Resend API (Emails)"]
     end
 
     %% Flow lines
@@ -45,7 +45,7 @@ graph TD
     Throttler --> Upload
     Throttler --> Contact
     
-    Auth -->|OAuth Verification| GoogleGitHub[Google & GitHub OAuth]
+    Auth -->|OAuth Verification| GoogleGitHub["Google & GitHub OAuth"]
     Upload -->|Multipart Upload| MinIO
     Contact -->|SMTP Dispatch| Resend
     
