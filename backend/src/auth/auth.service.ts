@@ -174,7 +174,7 @@ export class AuthService {
     );
 
     const frontendUrl = process.env.FRONTEND_URL;
-    const verifyUrl = `${frontendUrl}/auth/verify-email?token=${rawToken}`;
+    const verifyUrl = `${frontendUrl}/auth/verifyEmail?token=${rawToken}`;
 
     const emailHtml = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f8fafc; border-radius: 16px;">
@@ -394,7 +394,7 @@ export class AuthService {
     );
 
     const frontendUrl = process.env.FRONTEND_URL;
-    const resetUrl = `${frontendUrl}/auth/reset-password?token=${rawToken}`;
+    const resetUrl = `${frontendUrl}/auth/resetPassword?token=${rawToken}`;
 
     const resetHtml = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f8fafc; border-radius: 16px;">
