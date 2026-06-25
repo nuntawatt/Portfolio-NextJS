@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { Monitor, Cpu, Database, Wrench, Palette, Users } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useSpotlight } from '@/shared/lib';
+import { ScrollReveal } from '@/shared/ui';
 
 // SkillCard: คอมโพเนนต์การ์ดแสดงแต่ละกลุ่มทักษะความสามารถ พร้อมเอฟเฟกต์แสงไฟ Spotlight ตามเมาส์
 function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {
@@ -76,6 +78,7 @@ export function SkillsSection() {
         <div className="relative">
 
           {/* Headline */}
+          <ScrollReveal direction="up">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4 transition-colors font-heading tracking-tight">
               {t('skills.title_prefix')} <span className="text-orange-500">{t('skills.title_highlight')}</span>
@@ -85,11 +88,13 @@ export function SkillsSection() {
               {t('skills.description')}
             </p>
           </div>
+          </ScrollReveal>
 
           {/* Skills Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {/* 1. Backend - request flow diagram */}
+            <ScrollReveal direction="up" delay={0.08 * 0}>
             <SkillCard
               title={t('skills.cat1.title') as string}
               subtitle={t('skills.cat1.subtitle') as string}
@@ -120,8 +125,10 @@ export function SkillsSection() {
                 <TagRow items={['Node.js', 'NestJS', 'FastAPI', 'Go']} />
               </div>
             </SkillCard>
+            </ScrollReveal>
 
             {/* 2. Frontend - component tree, not code */}
+            <ScrollReveal direction="up" delay={0.08 * 1}>
             <SkillCard
               title={t('skills.cat2.title') as string}
               subtitle={t('skills.cat2.subtitle') as string}
@@ -153,8 +160,10 @@ export function SkillsSection() {
                 <TagRow items={['Next.js', 'React.js', 'TypeScript', 'Tailwind CSS']} />
               </div>
             </SkillCard>
+            </ScrollReveal>
 
             {/* 3. Database - comparative mini bar chart */}
+            <ScrollReveal direction="up" delay={0.08 * 2}>
             <SkillCard
               title={t('skills.cat3.title') as string}
               subtitle={t('skills.cat3.subtitle') as string}
@@ -173,7 +182,7 @@ export function SkillsSection() {
                         <span className="text-[10px] text-muted-foreground">{t(row.noteKey)}</span>
                       </div>
                       <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
-                        <div className="h-full bg-orange-500 rounded-full transition-all duration-1000 ease-out" style={{ width: row.width }} />
+                        <motion.div className="h-full bg-orange-500 rounded-full" initial={{ width: '0%' }} whileInView={{ width: row.width }} viewport={{ once: true }} transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }} />
                       </div>
                     </div>
                   ))}
@@ -181,8 +190,10 @@ export function SkillsSection() {
                 <TagRow items={['PostgreSQL', 'MongoDB', 'Redis (caching)']} />
               </div>
             </SkillCard>
+            </ScrollReveal>
 
             {/* 4. DevOps - pipeline stepper, dots not fake-log */}
+            <ScrollReveal direction="up" delay={0.08 * 3}>
             <SkillCard
               title={t('skills.cat4.title') as string}
               subtitle={t('skills.cat4.subtitle') as string}
@@ -214,8 +225,10 @@ export function SkillsSection() {
                 <TagRow items={['Docker', 'CI/CD', 'AWS', 'Gateway']} />
               </div>
             </SkillCard>
+            </ScrollReveal>
 
             {/* 5. Tools - grid mockup kept, it's already not code */}
+            <ScrollReveal direction="up" delay={0.08 * 4}>
             <SkillCard
               title={t('skills.cat5.title') as string}
               subtitle={t('skills.cat5.subtitle') as string}
@@ -239,8 +252,10 @@ export function SkillsSection() {
                 <TagRow items={['Git', 'Postman', 'VS Code', 'Figma']} />
               </div>
             </SkillCard>
+            </ScrollReveal>
 
             {/* 6. Languages & soft skills - one orange accent, on Native only */}
+            <ScrollReveal direction="up" delay={0.08 * 5}>
             <SkillCard
               title={t('skills.cat6.title') as string}
               subtitle={t('skills.cat6.subtitle') as string}
@@ -264,6 +279,7 @@ export function SkillsSection() {
                 <TagRow items={['Thai', 'English', 'Adaptability', 'Learning']} />
               </div>
             </SkillCard>
+            </ScrollReveal>
 
           </div>
         </div>

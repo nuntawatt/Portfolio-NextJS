@@ -4,6 +4,7 @@ import { Facebook, Github, Linkedin } from 'lucide-react';
 import { siteConfig } from '@/shared/config/site';
 import { routes } from '@/shared/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { ScrollReveal } from '@/shared/ui';
 
 // Footer: คอมโพเนนต์ส่วนท้ายของเว็บไซต์ แสดงโลโก้ ลิงก์โซเชียลมีเดีย และข้อความลิขสิทธิ์
 export function Footer() {
@@ -14,6 +15,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-transparent pt-12 pb-8 transition-colors duration-300">
+      <ScrollReveal direction="up">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
 
@@ -49,6 +51,7 @@ export function Footer() {
           </p>
         </div>
       </div>
+      </ScrollReveal>
     </footer>
   );
 }
