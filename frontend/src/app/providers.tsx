@@ -8,6 +8,7 @@ import { AuthProvider } from "@/shared/auth/AuthProvider";
 import { AudioProvider } from "@/features/audio";
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/shared/providers/LanguageProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Root Provider Component ของแอปพลิเคชัน ทำหน้าที่ห่อหุ้มคอมโพเนนต์ลูกด้วย Context Providers ต่างๆ (Theme, Language, React Query, Auth, Audio)
 export default function Providers({ children }: { children: ReactNode }) {
@@ -64,6 +65,7 @@ export default function Providers({ children }: { children: ReactNode }) {
               {children}
             </AudioProvider>
           </AuthProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </LanguageProvider>
     </ThemeProvider>
