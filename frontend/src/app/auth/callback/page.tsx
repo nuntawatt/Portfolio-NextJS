@@ -1,4 +1,4 @@
-import { AuthCallback } from '@/features/auth/callback/components/auth-callback';
+import { AuthCallback } from '@/features/auth/callback/components/AuthCallback';
 
 // ข้อมูล Meta สำหรับหน้า Auth Callback
 export const metadata = {

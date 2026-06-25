@@ -1,4 +1,4 @@
-import { SignInContainer } from '@/features/auth/signin/containers/signin-container';
+import { SignInContainer } from '@/features/auth/signIn/containers/SignInContainer';
 
 // ข้อมูล Meta สำหรับหน้าเข้าสู่ระบบ
 export const metadata = {

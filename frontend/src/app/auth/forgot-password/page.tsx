@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { ForgotPasswordContainer } from '@/features/auth/forgot-password/containers/forgot-password-container';
+import { ForgotPasswordContainer } from '@/features/auth/forgotPassword/containers/ForgotPasswordContainer';
 
 // ข้อมูล Meta สำหรับหน้าขอลืมรหัสผ่าน
 export const metadata: Metadata = {

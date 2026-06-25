@@ -1,4 +1,4 @@
-import { SignUpContainer } from '@/features/auth/signup/containers/signup-container';
+import { SignUpContainer } from '@/features/auth/signUp/containers/SignUpContainer';
 
 // ข้อมูล Meta สำหรับหน้าสมัครสมาชิก
 export const metadata = {

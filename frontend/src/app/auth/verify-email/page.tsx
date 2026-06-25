@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { VerifyEmailContainer } from '@/features/auth/verify-email/containers/verify-email-container';
+import { VerifyEmailContainer } from '@/features/auth/verifyEmail/containers/VerifyEmailContainer';
 import { Suspense } from 'react';
 import { LoadingScreen } from '@/shared/ui';
 
