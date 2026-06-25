@@ -1,8 +1,8 @@
 'use client';
 
 import { signOut as nextAuthSignOut } from 'next-auth/react';
-import { useAuthStore } from '@/shared/auth/use-auth-store';
-import { setAuthToken } from '@/shared/auth/auth-service';
+import { useAuthStore } from '@/shared/auth/useAuthStore';
+import { setAuthToken } from '@/shared/auth/AuthService';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

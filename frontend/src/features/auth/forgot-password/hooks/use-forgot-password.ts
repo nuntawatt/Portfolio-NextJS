@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forgotPasswordSchema, ForgotPasswordData } from '../types';
-import { AuthService, getErrorMessage } from '@/shared/auth/auth-service';
+import { AuthService, getErrorMessage } from '@/shared/auth/AuthService';
 
 // Custom Hook สำหรับหน้าขอลืมรหัสผ่าน (Forgot Password)
 export function useForgotPassword() {

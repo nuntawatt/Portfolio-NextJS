@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { useAuthStore } from '@/shared/auth/use-auth-store';
-import { setAuthToken } from '@/shared/auth/auth-service';
+import { useAuthStore } from '@/shared/auth/useAuthStore';
+import { setAuthToken } from '@/shared/auth/AuthService';
 
 // Custom Hook สำหรับประมวลผลการตอบกลับจากหน้าเข้าสู่ระบบผ่านผู้ให้บริการภายนอก (OAuth Callback)
 export function useAuthCallback() {

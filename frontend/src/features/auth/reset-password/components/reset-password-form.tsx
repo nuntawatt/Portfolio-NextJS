@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Loader2, Eye } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
-import { AuthInput, CustomEyeOff } from '@/shared/auth/auth-input';
+import { AuthInput, CustomEyeOff } from '@/shared/auth/AuthInput';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { ResetPasswordData } from '../types';
 

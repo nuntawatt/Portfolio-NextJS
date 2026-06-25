@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { AuthFormLayout } from '@/shared/auth/auth-form-layout';
-import { AuthPageLayout } from '@/shared/auth/auth-page-layout';
+import { AuthFormLayout } from '@/shared/auth/AuthFormLayout';
+import { AuthPageLayout } from '@/shared/auth/AuthPageLayout';
 import { routes } from '@/shared/config/routes';
 import { useRouter } from 'next/navigation';
 import { useResetPassword } from '../hooks/use-reset-password';

@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { ThemeToggle } from '@/features/theme';
-import { AuthButton } from '@/shared/auth/auth-btn';
+import { AuthButton } from '@/shared/auth/AuthButton';
 import { AudioToggle } from '@/features/audio';
 import { LanguageToggle } from '@/shared/ui';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
