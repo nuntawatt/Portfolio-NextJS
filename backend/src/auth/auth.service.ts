@@ -124,10 +124,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    // Email verification check bypassed for development / testing
-    // if (!user.isEmailVerified) {
-    //   throw new UnauthorizedException('Please verify your email address');
-    // }
+    // Email verification check
+    if (!user.isEmailVerified) {
+      throw new UnauthorizedException('Please verify your email address');
+    }
 
     const tokens = await this.issueTokens(user);
     this.logger.log(`User logged in: userId=${user.id}`);
@@ -198,16 +198,10 @@ export class AuthService {
 
     this.logger.log(`New user registered: ${email}`);
 
-    const tokens = await this.issueTokens(newUser);
-
     return {
       status: 'success',
-      message: 'Registration successful. Account is verified and ready.',
+      message: 'Registration successful. Please check your email to verify your account.',
       user: this.formatUserResponse(newUser),
-      token: {
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      },
     };
   }
 
