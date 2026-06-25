@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans, Kanit, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/shared/lib/utils";
 import Providers from "./providers";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/shared/config/site";
 
 // ตั้งค่าฟอนต์ภาษาไทยและภาษาอังกฤษ (Plus Jakarta Sans, Kanit, Outfit) จาก Google Fonts
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-en' });

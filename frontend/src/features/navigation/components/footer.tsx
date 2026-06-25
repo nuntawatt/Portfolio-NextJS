@@ -1,8 +1,8 @@
 'use client';
 
 import { Facebook, Github, Linkedin } from 'lucide-react';
-import { siteConfig } from '@/config/site';
-import { routes } from '@/config/routes';
+import { siteConfig } from '@/shared/config/site';
+import { routes } from '@/shared/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // Footer: คอมโพเนนต์ส่วนท้ายของเว็บไซต์ แสดงโลโก้ ลิงก์โซเชียลมีเดีย และข้อความลิขสิทธิ์

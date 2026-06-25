@@ -4,7 +4,7 @@ import React from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/shared/components/button';
 import { ProfileImage } from './profile-image';
-import { siteConfig } from '@/config/site';
+import { siteConfig } from '@/shared/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // HeroSection: คอมโพเนนต์หน้าแรก (Hero Section) แสดงการทักทาย ชื่อตำแหน่งประวัติย่อ และปุ่มเปิด CV

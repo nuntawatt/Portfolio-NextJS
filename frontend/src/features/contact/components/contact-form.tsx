@@ -3,7 +3,7 @@
 import React from 'react';
 import { Send, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
-import { siteConfig } from '@/config/site';
+import { siteConfig } from '@/shared/config/site';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useClipboard } from '@/shared/hooks/use-clipboard';

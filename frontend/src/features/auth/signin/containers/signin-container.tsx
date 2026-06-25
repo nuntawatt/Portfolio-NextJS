@@ -8,7 +8,7 @@ import { useLogin } from '../hooks/use-login';
 import { AuthFormLayout } from '@/shared/auth/auth-form-layout';
 import { AuthPageLayout } from '@/shared/auth/auth-page-layout';
 import { SignInForm } from '../components/signin-form';
-import { routes } from '@/config/routes';
+import { routes } from '@/shared/config/routes';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 

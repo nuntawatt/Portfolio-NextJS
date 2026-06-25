@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { siteConfig } from '@/config/site';
+import { siteConfig } from '@/shared/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // อินเตอร์เฟซสำหรับ Props ของหน้าเลย์เอาต์ระบบยืนยันตัวตน

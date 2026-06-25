@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { SignOutButton } from '@/features/auth/signout/components/signout-button';
 import { User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
-import { routes } from '@/config/routes';
+import { routes } from '@/shared/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // Stepped/Pixelated clip-path for retro border styling

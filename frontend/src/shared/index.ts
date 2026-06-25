@@ -6,3 +6,4 @@ export * from './constants';
 export * from './auth';
 export * from './animation';
 export * from './types';
+export * from './config';

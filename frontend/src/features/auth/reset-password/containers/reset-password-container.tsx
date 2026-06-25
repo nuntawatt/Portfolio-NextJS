@@ -3,7 +3,7 @@
 import React from 'react';
 import { AuthFormLayout } from '@/shared/auth/auth-form-layout';
 import { AuthPageLayout } from '@/shared/auth/auth-page-layout';
-import { routes } from '@/config/routes';
+import { routes } from '@/shared/config/routes';
 import { useRouter } from 'next/navigation';
 import { useResetPassword } from '../hooks/use-reset-password';
 import { ResetPasswordForm } from '../components/reset-password-form';

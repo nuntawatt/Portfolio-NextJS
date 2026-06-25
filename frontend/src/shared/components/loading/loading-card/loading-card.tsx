@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { siteConfig } from '@/config/site';
+import { siteConfig } from '@/shared/config/site';
 
 // อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ LoadingCard
 interface LoadingCardProps {

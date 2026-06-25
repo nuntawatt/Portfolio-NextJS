@@ -8,7 +8,7 @@ import { AuthButton } from '@/shared/auth/auth-btn';
 import { AudioToggle } from '@/features/audio';
 import { LanguageToggle } from '@/shared/components/language-toggle';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { routes } from '@/config/routes';
+import { routes } from '@/shared/config/routes';
 import { NavLink } from './nav-link';
 import { MobileMenu } from './mobile-menu';
 import {

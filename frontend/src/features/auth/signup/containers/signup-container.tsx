@@ -8,7 +8,7 @@ import { useRegister } from '../hooks/use-register';
 import { AuthFormLayout } from '@/shared/auth/auth-form-layout';
 import { AuthPageLayout } from '@/shared/auth/auth-page-layout';
 import { SignUpForm } from '../components/signup-form';
-import { routes } from '@/config/routes';
+import { routes } from '@/shared/config/routes';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
