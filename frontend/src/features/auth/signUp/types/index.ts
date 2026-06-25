@@ -7,6 +7,7 @@ export const signUpSchema = z.object({
     email: z.string().min(1, 'auth.validation.email_required').email('auth.validation.email_invalid'),
     password: z.string().min(6, 'auth.validation.password_min'),
     confirmPassword: z.string().min(1, 'auth.validation.confirm_password_required'),
+    agreeToTerms: z.boolean().refine((val) => val === true, 'auth.validation.terms_required'),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "auth.validation.password_mismatch",
     path: ["confirmPassword"],

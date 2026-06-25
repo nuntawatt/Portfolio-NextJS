@@ -149,6 +149,24 @@ export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
                 />
             </div>
 
+            {/* Terms of Service Checkbox */}
+            <div className="flex items-start gap-2.5 pt-4 pb-1">
+                <input
+                    id="signup-agree"
+                    type="checkbox"
+                    {...register('agreeToTerms')}
+                    className="mt-1 h-4 w-4 rounded border-gray-300 dark:border-white/10 text-orange-500 focus:ring-orange-500/50 cursor-pointer"
+                />
+                <label htmlFor="signup-agree" className="text-xs text-gray-500 dark:text-gray-400 select-none cursor-pointer leading-normal">
+                    {t('auth.agree_to_terms') as string}
+                </label>
+            </div>
+            {errors.agreeToTerms?.message && (
+                <p className="text-xs text-red-500 font-medium mt-1">
+                    {t(errors.agreeToTerms.message) as string}
+                </p>
+            )}
+
             <div className="pt-6">
                 <button
                     type="submit"

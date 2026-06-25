@@ -87,7 +87,7 @@ export const authApi = {
         email: user.email,
         firstName: user.firstName || '',
         lastName: user.lastName || '',
-        token: token.accessToken,
+        token: token?.accessToken || '',
         avatar: user.avatar || '',
       },
       message: response.data.message || 'Account created successfully',

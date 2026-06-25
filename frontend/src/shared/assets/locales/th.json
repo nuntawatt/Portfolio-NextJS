@@ -167,5 +167,7 @@
   "skills.cat6.english": "ภาษาอังกฤษ",
   "skills.cat6.professional": "ระดับวิชาชีพ/การทำงาน",
   "skills.cat6.adapt": "การปรับตัว",
-  "skills.cat6.adaptive": "มีความยืดหยุ่นและปรับตัวได้สูง"
+  "skills.cat6.adaptive": "มีความยืดหยุ่นและปรับตัวได้สูง",
+  "auth.agree_to_terms": "ฉันยอมรับข้อตกลงการให้บริการและนโยบายความเป็นส่วนตัว",
+  "auth.validation.terms_required": "คุณต้องยอมรับข้อตกลงการให้บริการและนโยบายความเป็นส่วนตัวก่อน"
 }
