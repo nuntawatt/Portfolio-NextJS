@@ -3,7 +3,7 @@
 import React from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/shared/ui';
-import { ProfileImage } from './profile-image';
+import { ProfileImage } from './ProfileImage';
 import { siteConfig } from '@/shared/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 

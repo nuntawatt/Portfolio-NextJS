@@ -5,8 +5,8 @@ import { AuthFormLayout } from '@/shared/auth/AuthFormLayout';
 import { AuthPageLayout } from '@/shared/auth/AuthPageLayout';
 import { routes } from '@/shared/config/routes';
 import { useRouter } from 'next/navigation';
-import { useForgotPassword } from '../hooks/use-forgot-password';
-import { ForgotPasswordForm } from '../components/forgot-password-form';
+import { useForgotPassword } from '../hooks/useForgotPassword';
+import { ForgotPasswordForm } from '../components/ForgotPasswordForm';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // คอนเทนเนอร์หลักสำหรับหน้าขอรีเซ็ตรหัสผ่าน (Forgot Password Container)

@@ -7,7 +7,7 @@ import { siteConfig } from '@/shared/config/site';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useClipboard, useSpotlight } from '@/shared/lib';
-import { useContactForm } from '../hooks/use-contact-form';
+import { useContactForm } from '../hooks/useContactForm';
 import { LoadingCard } from '@/shared/ui';
 
 // คอมโพเนนต์ฟอร์มสำหรับติดต่อสอบถาม (Contact Form)

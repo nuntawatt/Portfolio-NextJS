@@ -5,8 +5,8 @@ import { AuthFormLayout } from '@/shared/auth/AuthFormLayout';
 import { AuthPageLayout } from '@/shared/auth/AuthPageLayout';
 import { routes } from '@/shared/config/routes';
 import { useRouter } from 'next/navigation';
-import { useResetPassword } from '../hooks/use-reset-password';
-import { ResetPasswordForm } from '../components/reset-password-form';
+import { useResetPassword } from '../hooks/useResetPassword';
+import { ResetPasswordForm } from '../components/ResetPasswordForm';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 
 // คอนเทนเนอร์สำหรับจัดการหน้าตั้งค่ารหัสผ่านใหม่ (Reset Password Container)

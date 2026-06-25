@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { AuthPageLayout } from '@/shared/auth/AuthPageLayout';
-import { useVerifyEmail } from '../hooks/use-verify-email';
-import { VerifyEmailCard } from '../components/verify-email-card';
+import { useVerifyEmail } from '../hooks/useVerifyEmail';
+import { VerifyEmailCard } from '../components/VerifyEmailCard';
 
 // คอนเทนเนอร์หลักสำหรับหน้าตรวจสอบยืนยันอีเมล (Verify Email Container)
 export function VerifyEmailContainer() {

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AudioContext } from '../providers/audio-provider';
+import { AudioContext } from '../providers/AudioProvider';
 
 // useAudio: Hook สำหรับดึงข้อมูลสถานะและฟังก์ชันสำหรับควบคุมระบบเสียงจาก AudioContext
 export function useAudio() {

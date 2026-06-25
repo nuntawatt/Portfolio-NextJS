@@ -1,8 +1,8 @@
 'use client';
 
-import { BioCard } from './bio-card';
-import { EducationCard } from './education-card';
-import { StatCard } from './stat-card';
+import { BioCard } from './BioCard';
+import { EducationCard } from './EducationCard';
+import { StatCard } from './StatCard';
 import { STATS } from '../constants/data';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 

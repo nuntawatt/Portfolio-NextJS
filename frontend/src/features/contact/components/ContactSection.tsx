@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ContactForm } from './contact-form';
+import { ContactForm } from './ContactForm';
 
 // คอมโพเนนต์จัดวางโครงสร้างพื้นที่สำหรับแสดงแบบฟอร์มการติดต่อ (Contact Section)
 export function ContactSection() {

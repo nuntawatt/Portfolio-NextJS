@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from '../hooks/use-theme';
+import { useTheme } from '../hooks/useTheme';
 import { useState } from 'react';
 
 // Color map:

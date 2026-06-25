@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useAuthCallback } from '../hooks/use-auth-callback';
+import { useAuthCallback } from '../hooks/useAuthCallback';
 import { LoadingCard } from '@/shared/ui';
 
 // คอมโพเนนต์ภายในสำหรับจัดการสถานะและแสดงผลการตรวจสอบสิทธิ์ความถูกต้องหลังจากเข้าสู่ระบบ

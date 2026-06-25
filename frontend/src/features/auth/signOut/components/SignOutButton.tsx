@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useSignOut } from '../hooks/use-signout';
+import { useSignOut } from '../hooks/useSignOut';
 
 // ไอคอนปุ่ม Sign Out สไตล์ Pixel Art
 function PixelSignOutIcon({ className }: { className?: string }) {

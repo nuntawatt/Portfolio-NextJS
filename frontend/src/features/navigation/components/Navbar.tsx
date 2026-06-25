@@ -9,14 +9,14 @@ import { AudioToggle } from '@/features/audio';
 import { LanguageToggle } from '@/shared/ui';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { routes } from '@/shared/config/routes';
-import { NavLink } from './nav-link';
-import { MobileMenu } from './mobile-menu';
+import { NavLink } from './NavLink';
+import { MobileMenu } from './MobileMenu';
 import {
   useTimeoutCleanup,
   useBodyScrollLock,
   useEscapeKey,
   useActiveSectionObserver,
-} from '../hooks/use-navbar';
+} from '../hooks/useNavbar';
 
 // --- Main Navbar Component ---
 
