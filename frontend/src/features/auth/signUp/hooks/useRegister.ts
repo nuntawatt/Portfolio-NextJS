@@ -1,43 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { AuthService, getErrorMessage } from '@/shared/auth/AuthService';
 import { SignUpData } from '../types';
-import { useAuthStore } from '@/shared/auth/useAuthStore';
 
 // Custom Hook สำหรับขั้นตอนการลงทะเบียนสมาชิกใหม่ (Registration Process)
 export const useRegister = () => {
   // สถานะการทำรายการลงทะเบียน และสถานะข้อความแสดงความผิดพลาด
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  // เรียกฟังก์ชันสำหรับบันทึกข้อมูลผู้ใช้ลงใน Auth Store (Zustand)
-  const setAuth = useAuthStore((state) => state.setAuth);
 
-  // ฟังก์ชันลงทะเบียน ส่งข้อมูลไปยัง API และเข้าสู่ระบบผ่าน NextAuth
+  // ฟังก์ชันลงทะเบียน ส่งข้อมูลไปยัง API
   const register = async (data: SignUpData, onSuccess?: () => void) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      const response = await AuthService.register(data);
-      setAuth(response.user);
-      
-      const result = await signIn('credentials', {
-        redirect: false,
-        token: response.user.token,
-        id: response.user.id,
-        email: response.user.email,
-        firstName: response.user.firstName,
-        lastName: response.user.lastName,
-        avatar: response.user.avatar,
-      });
-
-      if (result?.error) {
-        throw new Error(result.error);
-      }
-
+      await AuthService.register(data);
       onSuccess?.();
     } catch (err) {
       setError(getErrorMessage(err));
