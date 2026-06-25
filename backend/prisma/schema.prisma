@@ -40,9 +40,9 @@ model User {
   avatar          String?   @default("https://hteelsogbgzpxbzrlmnb.supabase.co/storage/v1/object/public/portfolio/uploads/1781843852259-ca7d3610970e60ee.jpg")
   role            Role      @default(USER)
   isEmailVerified Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  deletedAt       DateTime?
+  createdAt       DateTime  @default(now()) @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @db.Timestamptz
+  deletedAt       DateTime? @db.Timestamptz
 
   // Relations
   oauthAccounts OauthAccount[]
@@ -55,9 +55,9 @@ model OauthAccount {
   id         String    @id @default(uuid())
   provider   String
   providerId String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  deletedAt  DateTime?
+  createdAt  DateTime  @default(now()) @db.Timestamptz
+  updatedAt  DateTime  @updatedAt @db.Timestamptz
+  deletedAt  DateTime? @db.Timestamptz
 
   // Relations
   userId String
@@ -71,9 +71,9 @@ model AuthToken {
   id        String        @id @default(uuid())
   tokenHash String
   type      AuthTokenType
-  expiresAt DateTime
-  usedAt    DateTime?
-  createdAt DateTime      @default(now())
+  expiresAt DateTime      @db.Timestamptz
+  usedAt    DateTime?     @db.Timestamptz
+  createdAt DateTime      @default(now()) @db.Timestamptz
 
   // Relations
   userId String

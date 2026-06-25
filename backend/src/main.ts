@@ -4,6 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+// Set default timezone for the application process
+process.env.TZ = 'Asia/Bangkok';
+
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
