@@ -5,13 +5,15 @@ import { useInView } from '../hooks/useInView';
 import { useCountUp } from '../hooks/useCountUp';
 import type { StatItem } from '../types/about';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { ScrollReveal } from '@/shared/ui';
 
 interface StatCardProps {
     stat: StatItem;
+    index?: number;
 }
 
 // StatCard: คอมโพเนนต์การ์ดแสดงตัวเลขค่าสถิติที่จะนับเลขอัพแบบแอนิเมชันเมื่อเลื่อนมาเห็นการ์ด
-export function StatCard({ stat }: StatCardProps) {
+export function StatCard({ stat, index = 0 }: StatCardProps) {
     // ดึงฟังก์ชันแปลภาษา
     const { t } = useTranslation();
     // ใช้สปายตรวจสอบว่าการ์ดอยู่ในมุมมองหน้าจอหรือไม่ (Threshold: 0.4)
@@ -22,6 +24,7 @@ export function StatCard({ stat }: StatCardProps) {
     const Icon = ICON_MAP[stat.iconKey];
 
     return (
+        <ScrollReveal direction="up" delay={0.08 * index}>
         <div
             className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-card/60 border border-border backdrop-blur-xl transition-colors duration-300"
         >
@@ -45,5 +48,6 @@ export function StatCard({ stat }: StatCardProps) {
                 </p>
             </div>
         </div>
+        </ScrollReveal>
     );
 }

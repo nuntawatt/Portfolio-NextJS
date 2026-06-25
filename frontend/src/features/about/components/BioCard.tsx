@@ -3,6 +3,7 @@
 import { GitHub, MapPin, Phone } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useSpotlight } from '@/shared/lib';
+import { ScrollReveal } from '@/shared/ui';
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
@@ -21,6 +22,7 @@ export function BioCard() {
     ] as const;
 
     return (
+        <ScrollReveal direction="up" delay={0.1}>
         <div
             className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-card/80 border border-border backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
             {...spotlightHandlers}
@@ -104,5 +106,6 @@ export function BioCard() {
                 ))}
             </div>
         </div>
+        </ScrollReveal>
     );
 }

@@ -5,6 +5,7 @@ import { EducationCard } from './EducationCard';
 import { StatCard } from './StatCard';
 import { STATS } from '../constants/data';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { ScrollReveal } from '@/shared/ui';
 
 // AboutSection: คอมโพเนนต์หลักสำหรับส่วน "เกี่ยวกับฉัน" (About Section) แสดงข้อมูลประวัติ ค่าสถิติ และการศึกษา
 export function AboutSection() {
@@ -56,6 +57,7 @@ export function AboutSection() {
                 {/* ── Content ── */}
                 <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header Row: Title + Pull Quote */}
+                    <ScrollReveal direction="up">
                     <div className="grid lg:grid-cols-[1fr_480px] gap-10 lg:gap-16 items-center mb-12 lg:mb-20">
                         <div>
                             <p className="text-xs font-bold uppercase tracking-widest mb-4 sm:mb-5 flex items-center gap-3 text-muted-foreground"
@@ -90,20 +92,23 @@ export function AboutSection() {
                             </div>
                         </div>
                     </div>
+                    </ScrollReveal>
 
                     {/* Content Row: Bio + Stats */}
+                    <ScrollReveal direction="up" delay={0.15}>
                     <div className="grid lg:grid-cols-[1fr_480px] gap-12 lg:gap-16 items-start mb-16 lg:mb-24">
                         <BioCard />
 
                         <div className="flex flex-col gap-6">
                             <div className="grid grid-cols-2 gap-4">
-                                {STATS.map((stat) => (
-                                    <StatCard key={stat.label} stat={stat} />
+                                {STATS.map((stat, index) => (
+                                    <StatCard key={stat.label} stat={stat} index={index} />
                                 ))}
                             </div>
                             <EducationCard />
                         </div>
                     </div>
+                    </ScrollReveal>
                 </div>
             </section>
         </>
