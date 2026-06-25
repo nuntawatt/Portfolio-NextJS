@@ -2,10 +2,22 @@
 
 import React from 'react';
 import { Download } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Button } from '@/shared/ui';
 import { ProfileImage } from './ProfileImage';
 import { siteConfig } from '@/shared/config/site';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+
+// Animation variants for staggered fade-up entrance
+const fadeUpVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const } },
+};
+
+const fadeUpScaleVariant = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const } },
+};
 
 // HeroSection: คอมโพเนนต์หน้าแรก (Hero Section) แสดงการทักทาย ชื่อตำแหน่งประวัติย่อ และปุ่มเปิด CV
 export function HeroSection() {
@@ -15,6 +27,10 @@ export function HeroSection() {
   const roles = t('hero.roles');
   const rolesText = Array.isArray(roles) ? roles.join(' / ') : roles;
 
+  // Accessibility: skip animations if user prefers reduced motion
+  const prefersReducedMotion = useReducedMotion();
+  const initialState = prefersReducedMotion ? 'visible' : 'hidden';
+
   return (
     <section id="home" className="pt-28 md:pt-36 pb-16 md:pb-24 lg:pb-28 overflow-hidden relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative">
@@ -23,29 +39,59 @@ export function HeroSection() {
           {/* Left Column - Text */}
           <div className="z-10 order-2 lg:order-1 px-4 md:px-12 lg:px-0">
             <div className="text-center lg:text-left mb-8 lg:mb-10">
-              <p className="text-orange-500 font-semibold tracking-widest uppercase text-xs sm:text-sm flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4">
+              <motion.p
+                variants={fadeUpVariant}
+                initial={initialState}
+                animate="visible"
+                transition={{ delay: 0.1 }}
+                className="text-orange-500 font-semibold tracking-widest uppercase text-xs sm:text-sm flex items-center justify-center lg:justify-start gap-3 lg:gap-4 mb-4"
+              >
                 <span className="w-8 lg:w-12 h-[2px] bg-orange-500 inline-block drop-shadow-sm"></span>
                 {t('hero.greeting')}
-              </p>
+              </motion.p>
 
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-tight transition-colors mb-5">
+              <motion.h1
+                variants={fadeUpVariant}
+                initial={initialState}
+                animate="visible"
+                transition={{ delay: 0.2 }}
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-tight transition-colors mb-5"
+              >
                 {t('hero.name')}
-              </h1>
+              </motion.h1>
 
-              <h2 className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-wide transition-colors mb-8">
+              <motion.h2
+                variants={fadeUpVariant}
+                initial={initialState}
+                animate="visible"
+                transition={{ delay: 0.35 }}
+                className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light tracking-wide transition-colors mb-8"
+              >
                 {rolesText}
-              </h2>
+              </motion.h2>
 
-              <p className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-foreground/80 text-base md:text-lg lg:text-[1.125rem] font-normal leading-relaxed transition-colors">
+              <motion.p
+                variants={fadeUpVariant}
+                initial={initialState}
+                animate="visible"
+                transition={{ delay: 0.45 }}
+                className="max-w-lg lg:max-w-xl mx-auto lg:mx-0 text-foreground/80 text-base md:text-lg lg:text-[1.125rem] font-normal leading-relaxed transition-colors"
+              >
                 {t('hero.description')}
-              </p>
+              </motion.p>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mb-8 lg:mb-10">
+            <motion.div
+              variants={fadeUpScaleVariant}
+              initial={initialState}
+              animate="visible"
+              transition={{ delay: 0.55 }}
+              className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mb-8 lg:mb-10"
+            >
               <Button variant="outline" className="w-full sm:w-auto text-base lg:text-lg px-8 py-3.5 lg:py-4" onClick={() => window.open(siteConfig.links.cv, "_blank")}>
                 {t('hero.cta.cv')} <Download className="w-4 h-4 ml-2" />
               </Button>
-            </div>
+            </motion.div>
 
           </div>
           <ProfileImage />
