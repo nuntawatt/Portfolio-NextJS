@@ -3,6 +3,7 @@
 import { Suspense } from 'react';
 import { useAuthCallback } from '../hooks/useAuthCallback';
 import { LoadingCard } from '@/shared/ui';
+import { routes } from '@/shared/config/routes';
 
 // คอมโพเนนต์ภายในสำหรับจัดการสถานะและแสดงผลการตรวจสอบสิทธิ์ความถูกต้องหลังจากเข้าสู่ระบบ
 function AuthCallbackContent() {
@@ -14,7 +15,7 @@ function AuthCallbackContent() {
       <div className="text-center space-y-4">
         <p className="text-red-500 font-medium">{error}</p>
         <button
-          onClick={() => router.push('/auth/signin')}
+          onClick={() => router.push(routes.auth.signin)}
           className="text-orange-500 hover:text-orange-600 transition-colors"
         >
           Return to sign in

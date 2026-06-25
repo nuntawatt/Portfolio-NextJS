@@ -5,6 +5,7 @@ import { Send, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import Link from 'next/link';
+import { routes } from '@/shared/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useClipboard, useSpotlight } from '@/shared/lib';
 import { useContactForm } from '../hooks/useContactForm';
@@ -133,7 +134,7 @@ export function ContactForm() {
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
             <Link
-              href="/auth/signin"
+              href={routes.auth.signin}
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl shadow-md hover:shadow-orange-500/10 transition-all duration-200 cursor-pointer"
             >
               {t('nav.signin')}

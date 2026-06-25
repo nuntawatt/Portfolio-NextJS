@@ -7,6 +7,7 @@ import { SignInData } from '../types';
 import { AuthInput, CustomEyeOff } from '@/shared/auth/AuthInput';
 import Link from 'next/link';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
+import { routes } from '@/shared/config/routes';
 
 // กำหนด Props สำหรับคอมโพเนนต์ฟอร์มเข้าสู่ระบบ (SignInForm)
 interface SignInFormProps {
@@ -61,7 +62,7 @@ export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
                         <span className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors font-medium">{t('auth.remember_me')}</span>
                     </label>
                     <Link
-                        href="/auth/forgot-password"
+                        href={routes.auth.forgotPassword}
                         className="text-xs font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300 transition-colors"
                     >
                         {t('auth.forgot_password_link')}
