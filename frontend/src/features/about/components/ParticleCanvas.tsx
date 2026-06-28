@@ -110,12 +110,16 @@ export function ParticleCanvas() {
                 const p = particles[i];
                 const { px, py, scale } = projections[i];
 
-                // draw connection lines
+                // draw connection lines (optimized: check squared distance first to avoid expensive Math.sqrt/Math.hypot)
                 for (let j = i + 1; j < particles.length; j++) {
                     const { px: qx, py: qy } = projections[j];
-                    const dist = Math.hypot(px - qx, py - qy);
+                    const dx = px - qx;
+                    const dy = py - qy;
+                    const distSq = dx * dx + dy * dy;
+                    const limitSq = LINK_DIST * LINK_DIST;
 
-                    if (dist < LINK_DIST) {
+                    if (distSq < limitSq) {
+                        const dist = Math.sqrt(distSq);
                         ctx.beginPath();
                         ctx.moveTo(px, py);
                         ctx.lineTo(qx, qy);
