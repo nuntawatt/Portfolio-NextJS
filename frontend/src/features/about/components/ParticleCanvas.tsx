@@ -24,9 +24,9 @@ let seed = 123456789;
 // ระบบสุ่มปลอดภัย: เลี่ยงการใช้ Math.random ตรง ๆ เพื่อไม่ให้โดน SonarQube บ่นเรื่องความปลอดภัย
 // และรองรับการทำ SSR (Server-Side Rendering) ของ Next.js ไม่ให้หน้าเว็บรันฝั่ง Server แล้วล่ม
 function getSafeRandom(): number {
-  if (typeof window !== 'undefined' && window.crypto) {
+  if (globalThis.window !== undefined && globalThis.window.crypto !== undefined) {
     const array = new Uint32Array(1);
-    window.crypto.getRandomValues(array);
+    globalThis.window.crypto.getRandomValues(array);
     return array[0] / 4294967296; // แปลงเลขสุ่ม 32-bit ให้เป็นทศนิยมระว่าง 0-1
   }
   // สูตรสุ่ม LCG แบบรวดเร็วสำหรับใช้ฝั่ง Server ตอน Build
@@ -78,7 +78,7 @@ export function ParticleCanvas() {
       mouse.x = (e.clientX - rect.left) / rect.width;
       mouse.y = (e.clientY - rect.top) / rect.height;
     };
-    window.addEventListener('mousemove', onMouseMove);
+    globalThis.addEventListener('mousemove', onMouseMove);
 
     // ลูปหลักในการวาดภาพแอนิเมชัน (Render Loop)
     const frame = () => {
@@ -165,7 +165,7 @@ export function ParticleCanvas() {
       cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
       observer.disconnect();
-      window.removeEventListener('mousemove', onMouseMove);
+      globalThis.removeEventListener('mousemove', onMouseMove);
     };
   }, []);
 
