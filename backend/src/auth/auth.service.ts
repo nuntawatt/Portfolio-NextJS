@@ -206,12 +206,14 @@ export class AuthService {
         emailHtml,
       )
       .catch((error: unknown) => {
-        const message =
-          error instanceof Error
-            ? error.message
-            : typeof error === 'string'
-              ? error
-              : JSON.stringify(error);
+        let message: string;
+        if (error instanceof Error) {
+          message = error.message;
+        } else if (typeof error === 'string') {
+          message = error;
+        } else {
+          message = JSON.stringify(error);
+        }
         this.logger.error('Failed to send verification email', {
           email,
           message,
@@ -425,12 +427,14 @@ export class AuthService {
         resetHtml,
       )
       .catch((error: unknown) => {
-        const message =
-          error instanceof Error
-            ? error.message
-            : typeof error === 'string'
-              ? error
-              : JSON.stringify(error);
+        let message: string;
+        if (error instanceof Error) {
+          message = error.message;
+        } else if (typeof error === 'string') {
+          message = error;
+        } else {
+          message = JSON.stringify(error);
+        }
         this.logger.error('Failed to send reset password email', {
           email: normalizedEmail,
           message,
