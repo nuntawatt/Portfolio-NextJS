@@ -27,7 +27,7 @@ export function AudioProvider({ children }: Readonly<{ children: React.ReactNode
   const [ready, setReady] = useState(false);
   // volume: สถานะระดับเสียง ดึงค่าล่าสุดจาก localStorage หรือใช้ค่าเริ่มต้น
   const [volumeValue, setVolumeValue] = useState(() => {
-    if (typeof globalThis.window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       const savedVolume = localStorage.getItem('audio_volume');
       return savedVolume ? Number.parseFloat(savedVolume) : DEFAULT_VOLUME;
     }
@@ -37,7 +37,7 @@ export function AudioProvider({ children }: Readonly<{ children: React.ReactNode
   // getOrInitAudio: ฟังก์ชันสร้างหรือดึงออบเจกต์ Audio ในแบบ Lazy loading เพื่อหลีกเลี่ยงการสร้างทรัพยากรที่ไม่จำเป็น
   const getOrInitAudio = useCallback((initialVol = volumeValue) => {
     if (audioRef.current) return audioRef.current;
-    if (typeof globalThis.window === 'undefined') return null;
+    if (globalThis.window === undefined) return null;
 
     const audio = new Audio(AUDIO_SRC);
     audio.preload = 'none'; // ป้องกันการแอบโหลดไฟล์เสียงขนาด 5.1MB ในเบื้องหลัง เพื่อปรับปรุงคะแนนประสิทธิภาพ Lighthouse
@@ -78,7 +78,7 @@ export function AudioProvider({ children }: Readonly<{ children: React.ReactNode
 
   // toggle: ฟังก์ชันสลับสถานะการเล่นและหยุดเล่นเสียงเพลง
   const toggle = useCallback(() => {
-    if (typeof globalThis.window === 'undefined') return;
+    if (globalThis.window === undefined) return;
     
     let audio = audioRef.current;
     if (!audio) {
