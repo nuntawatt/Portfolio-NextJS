@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useRef, useState, useMemo } from 'react';
 
 // AudioContextType: โครงสร้างชนิดข้อมูลสำหรับการควบคุมระบบเสียง
 interface AudioContextType {
@@ -18,7 +18,7 @@ const AUDIO_SRC = '/audio/music.mp3';
 const DEFAULT_VOLUME = 0.35;
 
 // AudioProvider: คอมโพเนนต์ครอบเพื่อให้บริการจัดการและควบคุมระบบเสียง
-export function AudioProvider({ children }: { children: React.ReactNode }) {
+export function AudioProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   // audioRef: อ้างอิงถึงออบเจกต์ Audio ในระดับเบราว์เซอร์เพื่อหลีกเลี่ยงการสร้างใหม่ทุกครั้งที่เรนเดอร์
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // playing: สถานะการเล่นเสียงเพลง (จริง/เท็จ)
@@ -26,18 +26,18 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   // ready: สถานะความพร้อมใช้งานของออบเจกต์ Audio
   const [ready, setReady] = useState(false);
   // volume: สถานะระดับเสียง ดึงค่าล่าสุดจาก localStorage หรือใช้ค่าเริ่มต้น
-  const [volume, setVolumeState] = useState(() => {
-    if (typeof window !== 'undefined') {
+  const [volumeValue, setVolumeValue] = useState(() => {
+    if (typeof globalThis.window !== 'undefined') {
       const savedVolume = localStorage.getItem('audio_volume');
-      return savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
+      return savedVolume ? Number.parseFloat(savedVolume) : DEFAULT_VOLUME;
     }
     return DEFAULT_VOLUME;
   });
 
   // getOrInitAudio: ฟังก์ชันสร้างหรือดึงออบเจกต์ Audio ในแบบ Lazy loading เพื่อหลีกเลี่ยงการสร้างทรัพยากรที่ไม่จำเป็น
-  const getOrInitAudio = useCallback((initialVol = volume) => {
+  const getOrInitAudio = useCallback((initialVol = volumeValue) => {
     if (audioRef.current) return audioRef.current;
-    if (typeof window === 'undefined') return null;
+    if (typeof globalThis.window === 'undefined') return null;
 
     const audio = new Audio(AUDIO_SRC);
     audio.preload = 'none'; // ป้องกันการแอบโหลดไฟล์เสียงขนาด 5.1MB ในเบื้องหลัง เพื่อปรับปรุงคะแนนประสิทธิภาพ Lighthouse
@@ -46,13 +46,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     
     audioRef.current = audio;
     return audio;
-  }, [volume]);
+  }, [volumeValue]);
 
   // คืนค่าสถานะการเล่นและการตั้งค่าระดับเสียงเมื่อโหลดคอมโพเนนต์ครั้งแรก
   useEffect(() => {
     const savedPlaying = localStorage.getItem('audio_playing') === 'true';
     const savedVolume = localStorage.getItem('audio_volume');
-    const initialVolume = savedVolume ? parseFloat(savedVolume) : DEFAULT_VOLUME;
+    const initialVolume = savedVolume ? Number.parseFloat(savedVolume) : DEFAULT_VOLUME;
 
     if (savedPlaying) {
       const audio = getOrInitAudio(initialVolume);
@@ -77,12 +77,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   }, [getOrInitAudio]);
 
   // toggle: ฟังก์ชันสลับสถานะการเล่นและหยุดเล่นเสียงเพลง
-  const toggle = () => {
-    if (typeof window === 'undefined') return;
+  const toggle = useCallback(() => {
+    if (typeof globalThis.window === 'undefined') return;
     
     let audio = audioRef.current;
     if (!audio) {
-      audio = getOrInitAudio(volume);
+      audio = getOrInitAudio(volumeValue);
       setReady(true);
     }
     if (!audio) return;
@@ -100,23 +100,32 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('audio_playing', 'false');
       });
     }
-  };
+  }, [playing, volumeValue, getOrInitAudio]);
 
   // setVolume: ฟังก์ชันปรับระดับความดังของเสียง (0.0 ถึง 1.0)
-  const setVolume = (v: number) => {
-    let audio = audioRef.current;
-    if (!audio) {
-      audio = getOrInitAudio(v);
-      setReady(true);
-    } else {
+  const setVolume = useCallback((v: number) => {
+    const audio = audioRef.current;
+    if (audio) {
       audio.volume = v;
+    } else {
+      getOrInitAudio(v);
+      setReady(true);
     }
-    setVolumeState(v);
+    setVolumeValue(v);
     localStorage.setItem('audio_volume', v.toString());
-  };
+  }, [getOrInitAudio]);
+
+  // Memoize context value to prevent unnecessary re-renders of consumers
+  const contextValue = useMemo(() => ({
+    playing,
+    ready,
+    volume: volumeValue,
+    toggle,
+    setVolume
+  }), [playing, ready, volumeValue, toggle, setVolume]);
 
   return (
-    <AudioContext.Provider value={{ playing, ready, volume, toggle, setVolume }}>
+    <AudioContext.Provider value={contextValue}>
       {children}
     </AudioContext.Provider>
   );
