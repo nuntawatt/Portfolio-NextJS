@@ -28,12 +28,13 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   /** Find user by email. */
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string) {
     return this.prisma.user.findFirst({
       where: {
         email: email.toLowerCase().trim(),
         deletedAt: null,
       },
+      select: USER_PUBLIC_SELECT,
     });
   }
 
