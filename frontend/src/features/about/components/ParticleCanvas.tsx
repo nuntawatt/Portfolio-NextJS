@@ -25,18 +25,28 @@ function project(
     };
 }
 
+// getSafeRandom: ฟังก์ชันสุ่มตัวเลขแบบปลอดภัยโดยใช้ Web Crypto API เพื่อแก้คำเตือนของ SonarQube
+function getSafeRandom(): number {
+    if (typeof window !== 'undefined' && window.crypto) {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        return array[0] / 4294967296; // 2^32
+    }
+    return Math.random();
+}
+
 // createParticles: ฟังก์ชันสร้างข้อมูลของอนุภาค (Particles) พร้อมคุณสมบัติเริ่มต้นแบบสุ่ม
 function createParticles(): ParticleData[] {
     return Array.from({ length: COUNT }, () => ({
-        x: Math.random(),
-        y: Math.random(),
-        z: Math.random() * 900 + 100,
-        vx: (Math.random() - 0.5) * 0.0003,
-        vy: (Math.random() - 0.5) * 0.0003,
-        vz: (Math.random() - 0.5) * 1.1,
-        size: Math.random() * 2.5 + 0.8,
-        opacity: Math.random() * 0.7 + 0.2,
-        colorIdx: Math.floor(Math.random() * PARTICLE_COLORS.length),
+        x: getSafeRandom(),
+        y: getSafeRandom(),
+        z: getSafeRandom() * 900 + 100,
+        vx: (getSafeRandom() - 0.5) * 0.0003,
+        vy: (getSafeRandom() - 0.5) * 0.0003,
+        vz: (getSafeRandom() - 0.5) * 1.1,
+        size: getSafeRandom() * 2.5 + 0.8,
+        opacity: getSafeRandom() * 0.7 + 0.2,
+        colorIdx: Math.floor(getSafeRandom() * PARTICLE_COLORS.length),
     }));
 }
 

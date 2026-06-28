@@ -36,6 +36,12 @@ RUN pnpm run prisma:generate
 # Copy compiled JS outputs only, keeping raw TS source code out of the production image
 COPY --from=development /usr/src/app/dist ./dist
 
+# Change ownership of all files to node user to prevent runtime permission issues
+RUN chown -R node:node /usr/src/app
+
+# Switch to non-root "node" user
+USER node
+
 EXPOSE 3001
 
 CMD ["node", "dist/src/main"]
