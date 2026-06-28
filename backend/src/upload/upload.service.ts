@@ -11,7 +11,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 
 export interface UploadedFileDto {
   fieldname: string;
@@ -25,13 +25,13 @@ export interface UploadedFileDto {
 @Injectable()
 export class UploadService implements OnModuleInit {
   private readonly logger = new Logger(UploadService.name);
-  private s3Client: S3Client;
-  private defaultBucket: string;
+  private readonly s3Client: S3Client;
+  private readonly defaultBucket: string;
 
   constructor() {
     // ดึงค่าคอนฟิกของ S3/Supabase Storage จาก .env
     const endpoint = process.env.MINIO_ENDPOINT;
-    const port = parseInt(process.env.MINIO_PORT, 10);
+    const port = Number.parseInt(process.env.MINIO_PORT, 10);
     const useSsl = process.env.MINIO_USE_SSL === 'true';
     const accessKey = process.env.MINIO_ACCESS_KEY;
     const secretKey = process.env.MINIO_SECRET_KEY;
@@ -103,7 +103,8 @@ export class UploadService implements OnModuleInit {
       const url = this.constructFileUrl(bucketName, objectKey);
       return { url, key: objectKey };
     } catch (error) {
-      this.logger.error(`เกิดข้อผิดพลาดในการอัพโหลด: ${error}`);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      this.logger.error(`เกิดข้อผิดพลาดในการอัพโหลด: ${errorMsg}`);
       throw new InternalServerErrorException('ไม่สามารถอัพโหลดไฟล์ได้');
     }
   }
@@ -125,7 +126,8 @@ export class UploadService implements OnModuleInit {
       );
       this.logger.log(`ลบไฟล์สำเร็จ: ${objectKey}`);
     } catch (error) {
-      this.logger.error(`เกิดข้อผิดพลาดในการลบไฟล์: ${error}`);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      this.logger.error(`เกิดข้อผิดพลาดในการลบไฟล์: ${errorMsg}`);
       throw new InternalServerErrorException('ไม่สามารถลบไฟล์ได้');
     }
   }
@@ -147,7 +149,7 @@ export class UploadService implements OnModuleInit {
     }
 
     // ถ้าใส่มาแค่ชื่อโดเมน/IP
-    const port = parseInt(process.env.MINIO_PORT, 10);
+    const port = Number.parseInt(process.env.MINIO_PORT, 10);
     const useSsl = process.env.MINIO_USE_SSL === 'true';
     const protocol = useSsl ? 'https' : 'http';
     const host = port === 80 || port === 443 ? endpoint : `${endpoint}:${port}`;
