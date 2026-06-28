@@ -80,7 +80,7 @@ export function ParticleCanvas() {
             mouse.x = (e.clientX - r.left) / r.width;
             mouse.y = (e.clientY - r.top) / r.height;
         };
-        window.addEventListener('mousemove', onMouseMove);
+        globalThis.addEventListener('mousemove', onMouseMove);
 
         const frame = () => {
             if (!isIntersecting) return;
@@ -149,7 +149,7 @@ export function ParticleCanvas() {
             cancelAnimationFrame(rafId);
             ro.disconnect();
             observer.disconnect();
-            window.removeEventListener('mousemove', onMouseMove);
+            globalThis.removeEventListener('mousemove', onMouseMove);
         };
     }, []);
 
@@ -158,6 +158,7 @@ export function ParticleCanvas() {
             ref={canvasRef}
             className="absolute inset-0 w-full h-full pointer-events-none"
             aria-hidden="true"
+            tabIndex={-1}
         />
     );
 }
