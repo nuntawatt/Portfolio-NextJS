@@ -11,8 +11,13 @@ import { useTranslation } from '@/shared/providers/LanguageProvider';
 // Stepped/Pixelated clip-path for retro border styling
 const PIXEL_CLIP_PATH = "polygon(0px 4px, 4px 4px, 4px 0px, calc(100% - 4px) 0px, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0px calc(100% - 4px))";
 
+interface AuthButtonProps {
+  className?: string;
+  onClose?: () => void;
+}
+
 // คอมโพเนนต์ปุ่มยืนยันตัวตน (Authentication Button) และเมนูโปรไฟล์ของผู้ใช้งาน
-export function AuthButton({ className = "" }: { className?: string }) {
+export function AuthButton({ className = "", onClose }: Readonly<AuthButtonProps>) {
   // ดึงข้อมูลเซสชันการเข้าสู่ระบบและสถานะ
   const { data: session, status: nextAuthStatus } = useSession();
   // สถานะเปิด/ปิดเมนู Dropdown โปรไฟล์ของผู้ใช้งาน
@@ -61,6 +66,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
           className="w-full bg-orange-500 p-[3px] shadow-lg transition-all duration-200"
           style={{ clipPath: PIXEL_CLIP_PATH }}
           onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
         >
           <div
             className="bg-card text-card-foreground p-4 flex flex-col space-y-3.5"
@@ -161,6 +167,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
       {/* Sign In Button: Sleek primary gradient (Swapped) */}
       <Link
         href={routes.auth.signin}
+        onClick={onClose}
         className="flex-1 lg:flex-none transition-all duration-200 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border border-transparent rounded-xl shadow-md hover:shadow-orange-500/10 whitespace-nowrap"
       >
         {t('nav.signin')}
@@ -169,6 +176,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
       {/* Sign Up Button: Premium Dark Solid to match theme */}
       <Link
         href={routes.auth.signup}
+        onClick={onClose}
         className="flex-1 lg:flex-none transition-all duration-200 ease-out flex items-center justify-center px-4 lg:px-5 py-2.5 text-sm font-semibold text-white dark:text-gray-900 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white rounded-xl shadow-md shadow-gray-900/10 dark:shadow-white/10 whitespace-nowrap"
       >
         {t('nav.signup')}
