@@ -65,8 +65,6 @@ export function AuthButton({ className = "", onClose }: Readonly<AuthButtonProps
         <div 
           className="w-full bg-orange-500 p-[3px] shadow-lg transition-all duration-200"
           style={{ clipPath: PIXEL_CLIP_PATH }}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => e.stopPropagation()}
         >
           <div
             className="bg-card text-card-foreground p-4 flex flex-col space-y-3.5"
