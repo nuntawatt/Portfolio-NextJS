@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { JwtPayload } from '../types/auth-type';
+import { AccessTokenPayload } from '../types/auth-type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   // JWT is already verified and active
-  validate(payload: JwtPayload) {
+  validate(payload: AccessTokenPayload) {
     return {
       userId: payload.userId,
       email: payload.email,
