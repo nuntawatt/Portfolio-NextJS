@@ -3,10 +3,9 @@ import {
   Logger,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const MAX_RETRIES = 2;
 const RETRY_DELAY_MS = 500;
 
@@ -58,12 +57,13 @@ export class MailService {
 
       throw new Error('No email id returned from Resend');
     } catch (error: unknown) {
-      const err =
-        error instanceof Error
-          ? error
-          : new Error(
-              typeof error === 'string' ? error : JSON.stringify(error),
-            );
+      let err: Error;
+      if (error instanceof Error) {
+        err = error;
+      } else {
+        const errMsg = typeof error === 'string' ? error : JSON.stringify(error);
+        err = new Error(errMsg);
+      }
       this.logger.warn(
         `Email attempt ${attempt}/${MAX_RETRIES + 1} failed: ${err.message}`,
       );
