@@ -39,7 +39,7 @@ export default function Providers({ children }: Readonly<{ children: ReactNode }
   // คืนค่าเซสชันการใช้งาน (Restore User Session) เมื่อ Component ถูก Mount หากยังมี Token บันทึกอยู่ใน localStorage
   useEffect(() => {
     const restoreSession = async () => {
-      if (typeof globalThis.window === "undefined") return;
+      if (globalThis.window === undefined) return;
       
       const token = localStorage.getItem("auth_token");
       if (!token) return;
