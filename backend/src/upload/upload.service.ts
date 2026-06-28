@@ -103,12 +103,14 @@ export class UploadService implements OnModuleInit {
       const url = this.constructFileUrl(bucketName, objectKey);
       return { url, key: objectKey };
     } catch (error) {
-      const errorMsg =
-        error instanceof Error
-          ? error.message
-          : typeof error === 'string'
-            ? error
-            : JSON.stringify(error);
+      let errorMsg: string;
+      if (error instanceof Error) {
+        errorMsg = error.message;
+      } else if (typeof error === 'string') {
+        errorMsg = error;
+      } else {
+        errorMsg = JSON.stringify(error);
+      }
       this.logger.error(`เกิดข้อผิดพลาดในการอัพโหลด: ${errorMsg}`);
       throw new InternalServerErrorException('ไม่สามารถอัพโหลดไฟล์ได้');
     }
@@ -131,12 +133,14 @@ export class UploadService implements OnModuleInit {
       );
       this.logger.log(`ลบไฟล์สำเร็จ: ${objectKey}`);
     } catch (error) {
-      const errorMsg =
-        error instanceof Error
-          ? error.message
-          : typeof error === 'string'
-            ? error
-            : JSON.stringify(error);
+      let errorMsg: string;
+      if (error instanceof Error) {
+        errorMsg = error.message;
+      } else if (typeof error === 'string') {
+        errorMsg = error;
+      } else {
+        errorMsg = JSON.stringify(error);
+      }
       this.logger.error(`เกิดข้อผิดพลาดในการลบไฟล์: ${errorMsg}`);
       throw new InternalServerErrorException('ไม่สามารถลบไฟล์ได้');
     }
