@@ -5,7 +5,8 @@ export function generateSlug(title: string): string {
     .trim()
     .replace(/[^a-z0-9\s-]/g, '') // Remove non-alphanumeric except spaces/hyphens
     .replace(/[\s-]+/g, '-') // Replace spaces/hyphens with single hyphen
-    .replace(/^-+|-+$/g, ''); // Trim hyphens from edges
+    .replace(/^-+/, '') // Trim leading hyphens
+    .replace(/-+$/, ''); // Trim trailing hyphens
 }
 
 /** Generates a unique slug by appending a numeric suffix if needed. */
