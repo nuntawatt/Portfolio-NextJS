@@ -18,7 +18,7 @@ interface MobileMenuProps {
 }
 
 // คอมโพเนนต์เมนูดึงสไลด์สำหรับหน้าจอมือถือ
-export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick, t }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick, t }: Readonly<MobileMenuProps>) {
   return (
     <>
       {/* ม่านดาร์กฉากหลังเมื่อกดเปิดเมนูมือถือ */}
@@ -28,6 +28,9 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={onClose}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') onClose();
+        }}
         aria-hidden="true"
       />
 
@@ -98,8 +101,8 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
               <ThemeToggle />
             </div>
 
-            <div className="mt-2" onClick={onClose}>
-              <AuthButton className="flex-col" />
+            <div className="mt-2">
+              <AuthButton className="flex-col" onClose={onClose} />
             </div>
           </div>
         </div>
