@@ -10,7 +10,6 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -184,16 +183,15 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Login with Google (redirect)' })
   @ApiResponse({ status: 302, description: 'Redirect to Google OAuth' })
-  async googleAuth() {}
+  googleAuth(): void {
+    // Guard redirects to Google OAuth
+  }
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   @ApiExcludeEndpoint()
   async googleCallback(@Req() req: Request, @Res() res: Response) {
-    const data = await this.authService.oauthLogin(req.user as OAuthUser);
-    const frontendUrl = process.env.FRONTEND_URL;
-    const params = new URLSearchParams({ data: JSON.stringify(data) });
-    res.redirect(`${frontendUrl}/auth/callback?${params}`);
+    await this.handleOAuthCallback(req, res);
   }
 
   // OAuth GitHub
@@ -202,12 +200,18 @@ export class AuthController {
   @UseGuards(AuthGuard('github'))
   @ApiOperation({ summary: 'Login with GitHub (redirect)' })
   @ApiResponse({ status: 302, description: 'Redirect to GitHub OAuth' })
-  async githubAuth() {}
+  githubAuth(): void {
+    // Guard redirects to GitHub OAuth
+  }
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
   @ApiExcludeEndpoint()
   async githubCallback(@Req() req: Request, @Res() res: Response) {
+    await this.handleOAuthCallback(req, res);
+  }
+  
+  private async handleOAuthCallback(req: Request, res: Response) {
     const data = await this.authService.oauthLogin(req.user as OAuthUser);
     const frontendUrl = process.env.FRONTEND_URL;
     const params = new URLSearchParams({ data: JSON.stringify(data) });
