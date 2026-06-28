@@ -16,5 +16,4 @@ export type AccessTokenPayload = {
   role: string;
   isEmailVerified: boolean;
 };
-
-export type JwtPayload = AccessTokenPayload;
+// JWT Payload holds authenticated user details
