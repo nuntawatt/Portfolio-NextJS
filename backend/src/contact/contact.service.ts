@@ -20,7 +20,7 @@ export class ContactService {
       <p><strong>Subject:</strong> ${subject}</p>
       <p><strong>Message Details:</strong></p>
       <blockquote style="background: #f4f4f4; padding: 10px 15px; border-left: 3px solid #f97316; margin: 10px 0;">
-        ${message.replace(/\n/g, '<br />')}
+        ${message.replaceAll('\n', '<br />')}
       </blockquote>
     `;
 
