@@ -2,7 +2,7 @@ import { registerAs } from '@nestjs/config';
 
 /** App config. */
 export const appConfig = registerAs('app', () => ({
-  port: parseInt(process.env.PORT, 10),
+  port: Number.parseInt(process.env.PORT, 10),
   nodeEnv: process.env.NODE_ENV,
   frontendUrl: process.env.FRONTEND_URL,
   apiUrl: process.env.API_URL,
@@ -21,7 +21,7 @@ export const databaseConfig = registerAs('database', () => {
   return {
     url,
     host,
-    port: parseInt(port, 10),
+    port: Number.parseInt(port, 10),
     username,
     password,
     database,
@@ -59,7 +59,7 @@ export const oauthConfig = registerAs('oauth', () => ({
 /** MinIO config. */
 export const minioConfig = registerAs('minio', () => ({
   endpoint: process.env.MINIO_ENDPOINT,
-  port: parseInt(process.env.MINIO_PORT, 10),
+  port: Number.parseInt(process.env.MINIO_PORT, 10),
   useSsl: process.env.MINIO_USE_SSL === 'true',
   accessKey: process.env.MINIO_ACCESS_KEY,
   secretKey: process.env.MINIO_SECRET_KEY,
@@ -70,5 +70,5 @@ export const minioConfig = registerAs('minio', () => ({
 /** Redis config. */
 export const redisConfig = registerAs('redis', () => ({
   host: process.env.REDIS_HOST,
-  port: parseInt(process.env.REDIS_PORT, 10),
+  port: Number.parseInt(process.env.REDIS_PORT, 10),
 }));
