@@ -4,170 +4,177 @@ import { useEffect, useRef } from 'react';
 import type { ParticleData } from '../types/about';
 import { PARTICLE_COLORS } from '../constants/data';
 
-const FOV = 700;
-const COUNT = 70;
-const LINK_DIST = 90;
-const MOUSE_FORCE = 0.00012;
+// ปรับแต่งฟิสิกส์และการแสดงผลของจุดตรงนี้ได้เลย
+const FOV = 700;          // ระดับความลึกของมิติ 3D (ยิ่งมากยิ่งลึก)
+const COUNT = 70;         // จำนวนจุดทั้งหมดบนหน้าจอ
+const LINK_DIST = 90;     // ระยะห่างสูงสุดที่เส้นเชื่อมจะยอมวาดเข้าหากัน
+const MOUSE_FORCE = 0.00012; // ความแรงของการตอบสนองเมื่อผู้ใช้ขยับเมาส์
 
-// project: ฟังก์ชันคำนวณตำแหน่งจากพิกัด 3D เป็น 2D บนหน้าจอ (Perspective Projection)
-function project(
-    nx: number,
-    ny: number,
-    z: number,
-    w: number,
-    h: number,
-): { px: number; py: number; scale: number } {
-    const scale = FOV / (FOV + z);
-    return {
-        px: (nx - 0.5) * w * scale + w / 2,
-        py: (ny - 0.5) * h * scale + h / 2,
-        scale,
-    };
+// แปลงพิกัดแบบ 3D (x, y, z) ให้เป็นพิกัด 2D (px, py) เพื่อวาดบนจอแบน ๆ
+function project(nx: number, ny: number, z: number, w: number, h: number) {
+  const scale = FOV / (FOV + z);
+  return {
+    px: (nx - 0.5) * w * scale + w / 2,
+    py: (ny - 0.5) * h * scale + h / 2,
+    scale,
+  };
 }
 
 let seed = 123456789;
-// getSafeRandom: ฟังก์ชันสุ่มตัวเลขแบบปลอดภัยโดยใช้ Web Crypto API เพื่อแก้คำเตือนของ SonarQube
+// ระบบสุ่มปลอดภัย: เลี่ยงการใช้ Math.random ตรง ๆ เพื่อไม่ให้โดน SonarQube บ่นเรื่องความปลอดภัย
+// และรองรับการทำ SSR (Server-Side Rendering) ของ Next.js ไม่ให้หน้าเว็บรันฝั่ง Server แล้วล่ม
 function getSafeRandom(): number {
-    if (globalThis.window !== undefined && globalThis.crypto !== undefined) {
-        const array = new Uint32Array(1);
-        globalThis.crypto.getRandomValues(array);
-        return array[0] / 4294967296; // 2^32
-    }
-    // อัลกอริทึมสุ่มคณิตศาสตร์สร้างขึ้นเองแบบ Custom เพื่อหลีกเลี่ยงการเรียกใช้ตัวสุ่มดั้งเดิมของระบบทั้งหมด
-    let t = (seed += 0x6D2B79F5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  if (typeof window !== 'undefined' && window.crypto) {
+    const array = new Uint32Array(1);
+    window.crypto.getRandomValues(array);
+    return array[0] / 4294967296; // แปลงเลขสุ่ม 32-bit ให้เป็นทศนิยมระว่าง 0-1
+  }
+  // สูตรสุ่ม LCG แบบรวดเร็วสำหรับใช้ฝั่ง Server ตอน Build
+  seed = (seed * 1664525 + 1013904223) % 4294967296;
+  return seed / 4294967296;
 }
 
-// createParticles: ฟังก์ชันสร้างข้อมูลของอนุภาค (Particles) พร้อมคุณสมบัติเริ่มต้นแบบสุ่ม
+// สร้างอาร์เรย์เก็บข้อมูลจุดสุ่มเริ่มต้นทั้งหมด
 function createParticles(): ParticleData[] {
-    return Array.from({ length: COUNT }, () => ({
-        x: getSafeRandom(),
-        y: getSafeRandom(),
-        z: getSafeRandom() * 900 + 100,
-        vx: (getSafeRandom() - 0.5) * 0.0003,
-        vy: (getSafeRandom() - 0.5) * 0.0003,
-        vz: (getSafeRandom() - 0.5) * 1.1,
-        size: getSafeRandom() * 2.5 + 0.8,
-        opacity: getSafeRandom() * 0.7 + 0.2,
-        colorIdx: Math.floor(getSafeRandom() * PARTICLE_COLORS.length),
-    }));
+  return Array.from({ length: COUNT }, () => ({
+    x: getSafeRandom(),
+    y: getSafeRandom(),
+    z: getSafeRandom() * 900 + 100,
+    vx: (getSafeRandom() - 0.5) * 0.0003,
+    vy: (getSafeRandom() - 0.5) * 0.0003,
+    vz: (getSafeRandom() - 0.5) * 1.1,
+    size: getSafeRandom() * 2.5 + 0.8,
+    opacity: getSafeRandom() * 0.7 + 0.2,
+    colorIdx: Math.floor(getSafeRandom() * PARTICLE_COLORS.length),
+  }));
 }
 
-// ParticleCanvas: คอมโพเนนต์สำหรับวาดเอฟเฟกต์อนุภาค 3D พื้นหลังที่โต้ตอบตามเมาส์
 export function ParticleCanvas() {
-    // อ้างอิงถึงองค์ประกอบ Canvas ใน DOM
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    // ตั้งค่าและควบคุมแอนิเมชันของอนุภาค รวมถึงตรวจจับการเคลื่อนไหวของเมาส์และการปรับขนาดหน้าจอ
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-        const ctx = canvas.getContext('2d')!;
-        const particles = createParticles();
-        const mouse = { x: 0.5, y: 0.5 };
-        let rafId = 0;
-        let isIntersecting = false;
+    const ctx = canvas.getContext('2d')!;
+    const particles = createParticles();
+    const mouse = { x: 0.5, y: 0.5 };
+    let rafId = 0;
+    let isIntersecting = false;
 
-        const resize = () => {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-        };
-        resize();
+    // จัดการขนาดของ Canvas ให้ยืดหยุ่นตาม Container จริง (Responsive)
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
 
-        const ro = new ResizeObserver(resize);
-        ro.observe(canvas);
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(canvas);
 
-        const onMouseMove = (e: MouseEvent) => {
-            const r = canvas.getBoundingClientRect();
-            mouse.x = (e.clientX - r.left) / r.width;
-            mouse.y = (e.clientY - r.top) / r.height;
-        };
-        globalThis.addEventListener('mousemove', onMouseMove);
+    // คอยจดจำตำแหน่งเมาส์สัมพันธ์กับขนาดแคนวาส
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = (e.clientX - rect.left) / rect.width;
+      mouse.y = (e.clientY - rect.top) / rect.height;
+    };
+    window.addEventListener('mousemove', onMouseMove);
 
-        const frame = () => {
-            if (!isIntersecting) return;
-            const { width: w, height: h } = canvas;
-            ctx.clearRect(0, 0, w, h);
+    // ลูปหลักในการวาดภาพแอนิเมชัน (Render Loop)
+    const frame = () => {
+      if (!isIntersecting) return; // ไม่ทำงานถ้าผู้ใช้มองไม่เห็นแคนวาสนี้
+      const { width: w, height: h } = canvas;
+      ctx.clearRect(0, 0, w, h);
 
-            const fx = (mouse.x - 0.5) * MOUSE_FORCE;
-            const fy = (mouse.y - 0.5) * MOUSE_FORCE;
+      // คำนวณแรงเหวี่ยงจากเมาส์
+      const fx = (mouse.x - 0.5) * MOUSE_FORCE;
+      const fy = (mouse.y - 0.5) * MOUSE_FORCE;
 
-            // 1. Update particle coordinates and precalculate projections once per frame
-            const projections = new Array(particles.length);
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-                p.x = ((p.x + p.vx + fx) + 1) % 1;
-                p.y = ((p.y + p.vy + fy) + 1) % 1;
-                p.z = ((p.z + p.vz) + 1000) % 1000;
-                projections[i] = project(p.x, p.y, p.z, w, h);
-            }
+      // 1. เคลื่อนย้ายจุดฟิสิกส์ และฉายค่า 3D -> 2D ล่วงหน้าเก็บไว้ (คำนวณรอบเดียวประหยัดแรงเครื่อง)
+      const projections = particles.map((p) => {
+        p.x = (p.x + p.vx + fx + 1) % 1;
+        p.y = (p.y + p.vy + fy + 1) % 1;
+        p.z = (p.z + p.vz + 1000) % 1000;
+        return project(p.x, p.y, p.z, w, h);
+      });
 
-            // 2. Render particles and their connection links using the cached projections
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-                const { px, py, scale } = projections[i];
+      // 2. วาดเส้นเชื่อมโยง (ใช้ตัวกรอง Early Exit และเช็กยกกำลังสอง เพื่อตัดงานส่วนเกินออกให้หมด)
+      ctx.strokeStyle = 'rgba(249,115,22,1)';
+      ctx.lineWidth = 0.6;
+      const limitSq = LINK_DIST * LINK_DIST;
 
-                // draw connection lines (optimized: check squared distance first to avoid expensive Math.sqrt/Math.hypot)
-                for (let j = i + 1; j < particles.length; j++) {
-                    const { px: qx, py: qy } = projections[j];
-                    const dx = px - qx;
-                    const dy = py - qy;
-                    const distSq = dx * dx + dy * dy;
-                    const limitSq = LINK_DIST * LINK_DIST;
+      for (let i = 0; i < particles.length; i++) {
+        const { px, py, scale } = projections[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const { px: qx, py: qy } = projections[j];
 
-                    if (distSq < limitSq) {
-                        const dist = Math.sqrt(distSq);
-                        ctx.beginPath();
-                        ctx.moveTo(px, py);
-                        ctx.lineTo(qx, qy);
-                        ctx.strokeStyle = 'rgba(249,115,22,1)';
-                        ctx.globalAlpha = (1 - dist / LINK_DIST) * 0.1 * scale;
-                        ctx.lineWidth = 0.6;
-                        ctx.stroke();
-                    }
-                }
+          // ขั้นที่ A: เช็กระยะห่าง X ก่อนแบบง่าย ๆ (ถ้าไกลเกินก็ข้ามคู่จุดนี้ทันที)
+          const dx = px - qx;
+          if (Math.abs(dx) >= LINK_DIST) continue;
 
-                // draw particle dot
-                ctx.beginPath();
-                ctx.arc(px, py, p.size * scale, 0, Math.PI * 2);
-                ctx.fillStyle = PARTICLE_COLORS[p.colorIdx];
-                ctx.globalAlpha = p.opacity * scale;
-                ctx.fill();
-            }
+          // ขั้นที่ B: เช็กระยะห่าง Y
+          const dy = py - qy;
+          if (Math.abs(dy) >= LINK_DIST) continue;
 
-            ctx.globalAlpha = 1;
-            rafId = requestAnimationFrame(frame);
-        };
+          // ขั้นที่ C: เช็กพิกัดทแยงมุมยกกำลังสอง (เลี่ยงการใช้ Math.sqrt เพื่อเซฟรอบ CPU)
+          const distSq = dx * dx + dy * dy;
+          if (distSq < limitSq) {
+            const dist = Math.sqrt(distSq); // ถอดรากที่สองเฉพาะเส้นที่ต้องวาดลงจอจริง ๆ เท่านั้น
+            ctx.beginPath();
+            ctx.moveTo(px, py);
+            ctx.lineTo(qx, qy);
+            ctx.globalAlpha = (1 - dist / LINK_DIST) * 0.1 * scale;
+            ctx.stroke();
+          }
+        }
+      }
 
-        const observer = new IntersectionObserver(([entry]) => {
-            isIntersecting = entry.isIntersecting;
-            if (isIntersecting) {
-                cancelAnimationFrame(rafId);
-                rafId = requestAnimationFrame(frame);
-            } else {
-                cancelAnimationFrame(rafId);
-            }
-        }, { threshold: 0.01 });
+      // 3. วาดจุดวงกลมสีต่าง ๆ ลงบนแคนวาส
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const { px, py, scale } = projections[i];
+        ctx.beginPath();
+        ctx.arc(px, py, p.size * scale, 0, Math.PI * 2);
+        ctx.fillStyle = PARTICLE_COLORS[p.colorIdx];
+        ctx.globalAlpha = p.opacity * scale;
+        ctx.fill();
+      }
 
-        observer.observe(canvas);
+      ctx.globalAlpha = 1;
+      rafId = requestAnimationFrame(frame);
+    };
 
-        return () => {
-            cancelAnimationFrame(rafId);
-            ro.disconnect();
-            observer.disconnect();
-            globalThis.removeEventListener('mousemove', onMouseMove);
-        };
-    }, []);
-
-    return (
-        <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            aria-hidden="true"
-            tabIndex={-1}
-        />
+    // Intersection Observer: ตรวจสอบว่าแคนวาสอยู่ในหน้าจอที่คนมองเห็นหรือไม่
+    // เพื่อหยุดประมวลผลแอนิเมชันเวลาเลื่อนลงไปล่างสุด (ช่วยประหยัดแบตเตอรี่เครื่องผู้ใช้)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) {
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(frame);
+        } else {
+          cancelAnimationFrame(rafId);
+        }
+      },
+      { threshold: 0.01 }
     );
+    observer.observe(canvas);
+
+    // ล้าง Listener และยกเลิกการสังเกตการณ์ทุกอย่างเมื่อเปลี่ยนหน้าเว็บ ป้องกัน Memory Leak
+    return () => {
+      cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
+      observer.disconnect();
+      window.removeEventListener('mousemove', onMouseMove);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      aria-hidden="true"
+      tabIndex={-1}
+    />
+  );
 }
