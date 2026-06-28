@@ -77,11 +77,14 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     // Unique constraint fields
     if (exception.code === 'P2002' && meta?.target) {
       const target = meta.target;
-      const fields = Array.isArray(target)
-        ? target.map((t) => String(t)).join(', ')
-        : typeof target === 'string'
-          ? target
-          : JSON.stringify(target);
+      let fields: string;
+      if (Array.isArray(target)) {
+        fields = target.map(String).join(', ');
+      } else if (typeof target === 'string') {
+        fields = target;
+      } else {
+        fields = JSON.stringify(target);
+      }
       return `${baseMessage}: [${fields}]`;
     }
 
