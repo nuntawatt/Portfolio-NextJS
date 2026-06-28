@@ -40,6 +40,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (typeof window === 'undefined') return null;
 
     const audio = new Audio(AUDIO_SRC);
+    audio.preload = 'none'; // ป้องกันการแอบโหลดไฟล์เสียงขนาด 5.1MB ในเบื้องหลัง เพื่อปรับปรุงคะแนนประสิทธิภาพ Lighthouse
     audio.loop = true;
     audio.volume = initialVol;
     
