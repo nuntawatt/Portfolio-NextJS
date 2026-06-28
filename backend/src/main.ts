@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
@@ -14,7 +13,7 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
 
-  const port = parseInt(process.env.PORT, 10);
+  const port = Number.parseInt(process.env.PORT, 10);
   const frontendUrl = process.env.FRONTEND_URL;
   const nodeEnv = process.env.NODE_ENV;
 
