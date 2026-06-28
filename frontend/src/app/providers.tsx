@@ -18,7 +18,7 @@ const ReactQueryDevtools = process.env.NODE_ENV === "development"
   : () => null;
 
 // Root Provider Component ของแอปพลิเคชัน ทำหน้าที่ห่อหุ้มคอมโพเนนต์ลูกด้วย Context Providers ต่างๆ (Theme, Language, React Query, Auth, Audio)
-export default function Providers({ children }: { children: ReactNode }) {
+export default function Providers({ children }: Readonly<{ children: ReactNode }>) {
   // สร้าง QueryClient สำหรับการจัดการ Cache และสถานะการดึงข้อมูลด้วย React Query
   const [queryClient] = useState(
     () =>
@@ -39,7 +39,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   // คืนค่าเซสชันการใช้งาน (Restore User Session) เมื่อ Component ถูก Mount หากยังมี Token บันทึกอยู่ใน localStorage
   useEffect(() => {
     const restoreSession = async () => {
-      if (typeof window === "undefined") return;
+      if (typeof globalThis.window === "undefined") return;
       
       const token = localStorage.getItem("auth_token");
       if (!token) return;
