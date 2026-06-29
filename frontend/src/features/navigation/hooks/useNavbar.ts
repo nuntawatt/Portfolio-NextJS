@@ -14,6 +14,7 @@ export function useTimeoutCleanup(timeoutRef: RefObject<NodeJS.Timeout | null>) 
 // จัดการล็อกสกรอลล์หน้าจอหลักขณะเปิดเมนูมือถือ
 export function useBodyScrollLock(isOpen: boolean) {
   useEffect(() => {
+    if (typeof document === 'undefined') return;
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
@@ -28,8 +29,8 @@ export function useEscapeKey(onEscape: () => void, enabled: boolean) {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onEscape();
     };
-    document.addEventListener('keydown', handleEsc);
-    return () => document.removeEventListener('keydown', handleEsc);
+    globalThis.addEventListener('keydown', handleEsc);
+    return () => globalThis.removeEventListener('keydown', handleEsc);
   }, [onEscape, enabled]);
 }
 
@@ -43,12 +44,19 @@ export function useActiveSectionObserver(
   useEffect(() => {
     if (pathname === '/contact') return;
 
-    // บังคับลิงก์ Active เป็น Home เมื่ออยู่ใกล้จุดสูงสุดของหน้าจอ
+    let rafId: number | null = null;
+
+    // บังคับลิงก์ Active เป็น Home เมื่ออยู่ใกล้จุดสูงสุดของหน้าจอ (พร้อมทำ Throttling ป้องกันการรันถี่เกิน)
     const checkScrollTop = () => {
       if (isClickScrollingRef.current) return;
-      if (globalThis.window !== undefined && globalThis.window.scrollY < 120) {
-        setActiveHash('/#home');
-      }
+      if (rafId !== null) return;
+
+      rafId = globalThis.requestAnimationFrame(() => {
+        rafId = null;
+        if (globalThis.window !== undefined && globalThis.window.scrollY < 120) {
+          setActiveHash('/#home');
+        }
+      });
     };
 
     const observer = new IntersectionObserver(
@@ -85,6 +93,9 @@ export function useActiveSectionObserver(
     return () => {
       observer.disconnect();
       globalThis.window?.removeEventListener('scroll', checkScrollTop);
+      if (rafId !== null) {
+        globalThis.cancelAnimationFrame(rafId);
+      }
     };
   }, [pathname, sections, isClickScrollingRef, setActiveHash]);
 }
