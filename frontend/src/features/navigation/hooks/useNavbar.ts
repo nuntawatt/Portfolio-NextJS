@@ -34,7 +34,7 @@ export function useEscapeKey(onEscape: () => void, enabled: boolean) {
   }, [onEscape, enabled]);
 }
 
-// ตรวจจับตำแหน่งสกรอลล์เพื่ออัปเดตสถานะเมนูที่กำลัง Active ด้วย IntersectionObserver
+// ตรวจจับตำแหน่งสกรอลล์เพื่ออัปเดตสถานะเมนูที่กำลัง Active (จูนสปีดด้วย requestAnimationFrame และจุดเช็ก 35% Viewport)
 export function useActiveSectionObserver(
   sections: string[],
   pathname: string,
@@ -46,53 +46,57 @@ export function useActiveSectionObserver(
 
     let rafId: number | null = null;
 
-    // บังคับลิงก์ Active เป็น Home เมื่ออยู่ใกล้จุดสูงสุดของหน้าจอ (พร้อมทำ Throttling ป้องกันการรันถี่เกิน)
-    const checkScrollTop = () => {
+    const handleScroll = () => {
       if (isClickScrollingRef.current) return;
       if (rafId !== null) return;
 
       rafId = globalThis.requestAnimationFrame(() => {
         rafId = null;
-        if (globalThis.window !== undefined && globalThis.window.scrollY < 120) {
-          setActiveHash('/#home');
-        }
-      });
-    };
+        if (globalThis.window === undefined) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (isClickScrollingRef.current) return;
-
-        // หากอยู่ชิดด้านบนของหน้าจอ ให้คงสถานะเป็น Home เสมอ
-        if (globalThis.window !== undefined && globalThis.window.scrollY < 120) {
+        const scrollY = globalThis.window.scrollY;
+        
+        // 1. เช็กขอบบนสุดของหน้าจอ ให้คงสถานะเมนูตัวแรก (Home) เสมอ
+        if (scrollY < 100) {
           setActiveHash('/#home');
           return;
         }
 
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveHash(`/#${entry.target.id}`);
+        const innerHeight = globalThis.window.innerHeight;
+        const scrollHeight = document.documentElement.scrollHeight;
+
+        // 2. เช็กขอบล่างสุดของหน้าจอ เพื่อให้แสดงเมนูตัวสุดท้าย (เช่น Skills หรือ Contact) เสมอเมื่อสกรอลล์ลงสุด
+        if (scrollY + innerHeight >= scrollHeight - 50) {
+          setActiveHash(`/#${sections[sections.length - 1]}`);
+          return;
+        }
+
+        // 3. คำนวณหา Section ที่ข้ามจุดกึ่งกลางระดับสายตา (35% จากขอบบนของจอ)
+        const triggerLine = innerHeight * 0.35;
+        let currentActive = '/#home';
+
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            // เช็กขอบเขตตำแหน่งสัมพัทธ์ของ Element ใน Viewport
+            if (rect.top <= triggerLine && rect.bottom > triggerLine) {
+              currentActive = `/#${id}`;
+              break;
+            }
           }
-        });
-      },
-      {
-        rootMargin: '-30% 0px -65% 0px',
-        threshold: 0,
-      }
-    );
+        }
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+        setActiveHash(currentActive);
+      });
+    };
 
-    // ลงทะเบียนดักจับเหตุการณ์สกรอลล์เพื่อคำนวณตำแหน่งด้านบน
-    globalThis.window?.addEventListener('scroll', checkScrollTop, { passive: true });
-    checkScrollTop();
+    // ติดตามการสกรอลล์ของหน้าจอ
+    globalThis.window?.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
     return () => {
-      observer.disconnect();
-      globalThis.window?.removeEventListener('scroll', checkScrollTop);
+      globalThis.window?.removeEventListener('scroll', handleScroll);
       if (rafId !== null) {
         globalThis.cancelAnimationFrame(rafId);
       }
