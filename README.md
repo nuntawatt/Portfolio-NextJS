@@ -13,46 +13,84 @@ A modern, production-ready, highly optimized full-stack portfolio ecosystem. Bui
 
 ## 🏛️ System Architecture
 
-The ecosystem splits responsibilities cleanly between the interactive presentation layer (frontend) and the secure data/computation layer (backend):
+The ecosystem separates responsibilities cleanly between the interactive presentation layer (frontend), the secure data/computation layer (backend), and third-party utility integrations:
 
 ```mermaid
 graph TD
-    subgraph Client ["Client Layer (Next.js 16)"]
-        UI["React 19 Server/Client Components"]
-        Zustand["Zustand (Global State)"]
-        Query["TanStack Query (Async Server State)"]
-        Motion["motion/react (Optimized GPU Animations)"]
-    end
+    classDef client fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px;
+    classDef server fill:#f0fdf4,stroke:#10b981,stroke-width:2px;
+    classDef external fill:#f8fafc,stroke:#64748b,stroke-width:2px;
+    classDef legend fill:#ffffff,stroke:#cccccc,stroke-width:1px;
 
-    subgraph API ["Server Layer (NestJS 11)"]
-        Auth["Auth Module (JWT & OAuth)"]
-        Upload["S3 Upload Service"]
-        Contact["Contact & Mail Service"]
-        Throttler["Rate Limiter (Throttler)"]
+    subgraph Client ["Client Layer (Next.js 16 • React 19)"]
+        React["React 19<br/>(Server/Client Components)"]
+        Zustand["Zustand<br/>(Global State)"]
+        TanStack["TanStack Query<br/>(Async Server State)"]
+        Motion["motion/react<br/>(GPU Animations)"]
+    end
+    class Client,React,Zustand,TanStack,Motion client;
+
+    subgraph Server ["Server Layer (NestJS 11)"]
+        Throttler["Rate Limiter<br/>(Throttler)"]
+        
+        Auth["Auth Module<br/>(JWT • OAuth)"]
+        Upload["Upload Service<br/>(S3 Multipart)"]
+        Contact["Contact & Mail<br/>(SMTP Dispatch)"]
+        
         Prisma["Prisma ORM"]
     end
+    class Server,Throttler,Auth,Upload,Contact,Prisma server;
 
-    subgraph External ["Data & Third-Party Services"]
-        DB[("PostgreSQL Database")]
-        Redis[("Redis Caching & Queue")]
-        MinIO[("MinIO / Supabase S3")]
-        Resend["Resend API (Emails)"]
+    subgraph External ["External Services (Data & Third-Party)"]
+        Postgres[("PostgreSQL<br/>(Primary Database)")]
+        Redis[("Redis<br/>(Cache • Queue)")]
+        S3[("MinIO / S3<br/>(Object Storage)")]
+        Resend["Resend API<br/>(Email Delivery)"]
+        OAuthProviders["Google / GitHub<br/>(OAuth Provider)"]
     end
+    class External,Postgres,Redis,S3,Resend,OAuthProviders external;
 
-    %% Flow lines
-    UI -->|HTTPS Request| Throttler
+    %% Network & Flow Connections
+    Client -->|HTTPS| Throttler
+    
     Throttler --> Auth
     Throttler --> Upload
     Throttler --> Contact
     
-    Auth -->|OAuth Verification| GoogleGitHub["Google & GitHub OAuth"]
-    Upload -->|Multipart Upload| MinIO
-    Contact -->|SMTP Dispatch| Resend
+    Auth -.->|OAuth| OAuthProviders
+    Auth -.->|Token Cache| Redis
+    Upload -.->|S3 Multipart| S3
+    Contact -.->|Email SMTP| Resend
     
-    Auth & Upload & Contact --> Prisma
-    Prisma -->|Queries| DB
-    Auth -->|Token Expiry check| Redis
+    Auth --> Prisma
+    Upload --> Prisma
+    Contact --> Prisma
+    
+    Prisma --> Postgres
 ```
+
+### 📦 1. Client Layer (Next.js 16 • React 19)
+The client-side application is built using the Next.js App Router paradigm, serving as a highly interactive, responsive single-page application.
+* **React 19:** Combines Server Components (for fast initial page render and SEO efficiency) with Client Components (for interactive elements).
+* **Zustand:** Light-weight state container used for global client-side states (e.g., UI theme states, media toggles, and auth session caches).
+* **TanStack Query (v5):** Handles asynchronous server state queries, providing clean caching, request deduplication, and loading/error states.
+* **motion/react:** Implements premium, GPU-accelerated micro-animations with safe frame disposal and automatic reduced-motion detection.
+
+### ⚙️ 2. Server Layer (NestJS 11)
+A secure monolithic NestJS REST API that encapsulates the core business logic, validation guards, and data mappings.
+* **Rate Limiter (Throttler):** Acts as a security firewall at the entry point of the server, guarding sensitive authentication and email dispatch routes against brute-force attacks.
+* **Auth Module:** Manages session payloads, JWT token generation, local credentials verification, and OAuth2 callback mappings.
+* **Upload Service:** Coordinates S3 multipart uploads to safely pipe asset streams directly to S3-compatible endpoints.
+* **Contact & Mail:** Validates incoming message payloads and dispatches SMTP alerts.
+* **Prisma ORM:** The data access layer, executing type-safe queries to the persistent database.
+
+### 🌐 3. External Services (Data & Third-Party)
+Infrastructure services and cloud APIs integrated to handle persistent storage and external utility dispatches:
+* **PostgreSQL:** The primary relational database containing tables for users, user credentials, profiles, and contact submissions.
+* **Redis:** High-speed in-memory database used for JWT blacklists, token session checks, and message queue caches.
+* **MinIO / S3:** Object storage hosting profile pictures, files, and other assets.
+* **Resend API:** Third-party cloud mail carrier dispatching emails via secure SMTP.
+* **Google & GitHub OAuth:** Relies on OAuth2 providers to delegate federated client sign-ins safely.
 
 ---
 
@@ -69,7 +107,7 @@ graph TD
 ## ✨ Key Features
 
 ### 💻 Client Side (Next.js)
-* **High-Performance Animations**: Reusable `<ScrollReveal>` component implementing `whileInView`, auto GPU-cleanup (`will-change: auto`), and `prefers-reduced-motion` compliance for accessibility.
+* **High-Performance Animations**: Reusable `<ScrollReveal>` component implementing `whileInView`, auto GPU-cleanup (`will-change: auto`), and `prefers-reduced-motion` compliance.
 * **Premium UX/UI**: Dynamic glassmorphism effects, active nav section observers, responsive layouts, client-side audio toggle, and custom profile image zoom.
 * **Secure Auth Flow**: Seamless integration of sign-in, sign-up, email verification, and password recovery with correct routes casing.
 * **Multilingual Localization**: Complete context-based English (EN) and Thai (TH) translation setups.
