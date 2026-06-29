@@ -17,9 +17,9 @@ The ecosystem separates responsibilities cleanly between the interactive present
 
 ```mermaid
 graph TD
-    classDef client fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px;
-    classDef server fill:#f0fdf4,stroke:#10b981,stroke-width:2px;
-    classDef external fill:#f8fafc,stroke:#64748b,stroke-width:2px;
+    classDef client fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#1e1b4b;
+    classDef server fill:#f0fdf4,stroke:#10b981,stroke-width:2px,color:#064e3b;
+    classDef external fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#0f172a;
     classDef legend fill:#ffffff,stroke:#cccccc,stroke-width:1px;
 
     subgraph Client ["Client Layer (Next.js 16 • React 19)"]
