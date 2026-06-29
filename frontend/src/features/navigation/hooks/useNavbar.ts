@@ -43,10 +43,24 @@ export function useActiveSectionObserver(
   useEffect(() => {
     if (pathname === '/contact') return;
 
+    // บังคับลิงก์ Active เป็น Home เมื่ออยู่ใกล้จุดสูงสุดของหน้าจอ
+    const checkScrollTop = () => {
+      if (isClickScrollingRef.current) return;
+      if (globalThis.window !== undefined && globalThis.window.scrollY < 120) {
+        setActiveHash('/#home');
+      }
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        // บล็อกไม่ให้ Observer ทำงานชั่วขณะหากผู้ใช้คลิกเลื่อนหน้าจอเอง
         if (isClickScrollingRef.current) return;
+
+        // หากอยู่ชิดด้านบนของหน้าจอ ให้คงสถานะเป็น Home เสมอ
+        if (globalThis.window !== undefined && globalThis.window.scrollY < 120) {
+          setActiveHash('/#home');
+          return;
+        }
+
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveHash(`/#${entry.target.id}`);
@@ -64,6 +78,13 @@ export function useActiveSectionObserver(
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    // ลงทะเบียนดักจับเหตุการณ์สกรอลล์เพื่อคำนวณตำแหน่งด้านบน
+    globalThis.window?.addEventListener('scroll', checkScrollTop, { passive: true });
+    checkScrollTop();
+
+    return () => {
+      observer.disconnect();
+      globalThis.window?.removeEventListener('scroll', checkScrollTop);
+    };
   }, [pathname, sections, isClickScrollingRef, setActiveHash]);
 }
