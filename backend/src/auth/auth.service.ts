@@ -249,7 +249,7 @@ export class AuthService {
       user = oauthAccount.user;
     } else {
       // Check user by email
-      const existingUser = await this.usersService.findByEmail(email);
+      const existingUser = await this.usersService.findByEmailWithPassword(email);
 
       if (existingUser) {
         user = existingUser;
