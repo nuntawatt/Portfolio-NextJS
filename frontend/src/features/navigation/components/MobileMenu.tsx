@@ -39,7 +39,7 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
         id="mobile-menu-drawer"
         open={isOpen}
         className={cn(
-          "fixed top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "fixed top-0 right-0 h-full w-[280px] bg-card border-y-0 border-r-0 border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] m-0 p-0 max-w-none max-h-none",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
         aria-modal="true"
