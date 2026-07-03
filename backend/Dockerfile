@@ -12,8 +12,7 @@ RUN pnpm install
 COPY . .
 
 # Generate engine binaries inside dev node_modules before compiling code
-RUN pnpm run prisma:generate
-RUN pnpm run build
+RUN pnpm run prisma:generate && pnpm run build
 
 
 # --- Stage 2: Production ---
@@ -28,10 +27,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY prisma ./prisma
 
 # Install production dependencies only (strips development test frameworks/compilers)
-RUN npm install -g pnpm && pnpm install --prod
-
-# Regenerate client mapping for the production node_modules directory
-RUN pnpm run prisma:generate
+# and regenerate client mapping for the production node_modules directory
+RUN npm install -g pnpm && pnpm install --prod && pnpm run prisma:generate
 
 # Copy compiled JS outputs only, keeping raw TS source code out of the production image
 COPY --from=development /usr/src/app/dist ./dist

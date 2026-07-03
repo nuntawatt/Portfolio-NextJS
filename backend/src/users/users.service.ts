@@ -82,7 +82,7 @@ export class UsersService {
       ) {
         throw new ConflictException('Email already in use');
       }
-      const message = error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : JSON.stringify(error);
       this.logger.error(`Error creating user: ${message}`);
       throw new InternalServerErrorException('Failed to create user');
     }
@@ -126,7 +126,7 @@ export class UsersService {
         },
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : JSON.stringify(error);
       this.logger.error(
         `Error creating OAuth account (${provider}:${providerId}): ${message}`,
       );
