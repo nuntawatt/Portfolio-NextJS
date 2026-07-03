@@ -21,22 +21,11 @@ Full-stack portfolio website built with **Next.js 16** and **NestJS 11**.
 
 ## 🏛️ System Architecture
 
-```
-┌─────────────────────────────────────────────────────┐
-│              Client Layer (Next.js 16)              │
-│   React 19 · Zustand · TanStack Query · motion/react│
-└──────────────────────┬──────────────────────────────┘
-                       │ HTTPS
-┌──────────────────────▼──────────────────────────────┐
-│              Server Layer (NestJS 11)               │
-│   Auth Module · Upload Service · Contact & Mail     │
-│                   Prisma ORM                        │
-└──┬──────────┬──────────┬──────────┬─────────────────┘
-   │          │          │          │
-   ▼          ▼          ▼          ▼
-PostgreSQL   Redis   S3 Storage   Resend API
-                                  Google / GitHub OAuth
-```
+**Client** → Next.js 16 (React 19, Zustand, TanStack Query, motion/react)
+
+**Server** → NestJS 11 (Auth, Upload, Contact, Prisma ORM)
+
+**External** → PostgreSQL · Redis · S3 Storage · Resend API · Google/GitHub OAuth
 
 ---
 
