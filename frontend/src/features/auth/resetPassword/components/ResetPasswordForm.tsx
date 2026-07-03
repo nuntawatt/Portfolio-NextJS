@@ -14,7 +14,7 @@ interface ResetPasswordFormProps {
 }
 
 // คอมโพเนนต์ฟอร์มสำหรับตั้งรหัสผ่านใหม่ (Reset Password Form)
-export function ResetPasswordForm({ form, onSubmit, isLoading }: ResetPasswordFormProps) {
+export function ResetPasswordForm({ form, onSubmit, isLoading }: Readonly<ResetPasswordFormProps>) {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

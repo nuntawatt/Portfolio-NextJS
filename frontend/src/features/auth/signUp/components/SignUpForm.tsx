@@ -15,7 +15,7 @@ interface SignUpFormProps {
 }
 
 // คอมโพเนนต์สำหรับแสดงความแข็งแกร่งของรหัสผ่าน (Password Strength Indicator)
-function PasswordStrength({ password }: { password: string }) {
+function PasswordStrength({ password }: Readonly<{ password: string }>) {
     const { t } = useTranslation();
     // คำนวณระดับความแข็งแกร่งของรหัสผ่านโดยอิงตามเกณฑ์ความปลอดภัยต่างๆ
     const strength = useMemo(() => {
@@ -24,7 +24,7 @@ function PasswordStrength({ password }: { password: string }) {
         if (password.length >= 6) score++;
         if (password.length >= 10) score++;
         if (/[A-Z]/.test(password)) score++;
-        if (/[0-9]/.test(password)) score++;
+        if (/\d/.test(password)) score++;
         if (/[^A-Za-z0-9]/.test(password)) score++;
 
         if (score <= 1) return { score: 1, label: t('auth.password_strength_weak') as string, color: 'bg-red-500' };
@@ -48,20 +48,22 @@ function PasswordStrength({ password }: { password: string }) {
                     />
                 ))}
             </div>
-            <p className={`text-xs font-medium transition-colors ${
-                strength.score <= 1 ? 'text-red-500' :
-                strength.score <= 2 ? 'text-orange-500' :
-                strength.score <= 3 ? 'text-yellow-600 dark:text-yellow-500' :
-                'text-green-600 dark:text-green-500'
-            }`}>
+            <p className={`text-xs font-medium transition-colors ${getStrengthTextColor(strength.score)}`}>
                 {strength.label}
             </p>
         </div>
     );
 }
 
+function getStrengthTextColor(score: number): string {
+    if (score <= 1) return 'text-red-500';
+    if (score <= 2) return 'text-orange-500';
+    if (score <= 3) return 'text-yellow-600 dark:text-yellow-500';
+    return 'text-green-600 dark:text-green-500';
+}
+
 // คอมโพเนนต์ฟอร์มลงทะเบียน (Sign Up) สำหรับสร้างบัญชีผู้ใช้งานใหม่
-export function SignUpForm({ form, onSubmit, isLoading }: SignUpFormProps) {
+export function SignUpForm({ form, onSubmit, isLoading }: Readonly<SignUpFormProps>) {
     // สถานะสำหรับควบคุมการแสดงผลรหัสผ่านและยืนยันรหัสผ่าน (เปิด/ปิดตา)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);

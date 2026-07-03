@@ -14,7 +14,7 @@ interface ForgotPasswordFormProps {
 }
 
 // คอมโพเนนต์แสดงผลฟอร์มขอลืมรหัสผ่าน (Forgot Password Form)
-export function ForgotPasswordForm({ form, onSubmit, isLoading }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ form, onSubmit, isLoading }: Readonly<ForgotPasswordFormProps>) {
   const { t } = useTranslation();
   const { register, formState: { errors }, handleSubmit } = form;
 

@@ -13,7 +13,7 @@ interface AuthPageLayoutProps {
 
 // คอมโพเนนต์เลย์เอาต์หลักของหน้าระบบเข้าสู่ระบบ / สมัครสมาชิก (Authentication Layout)
 // แสดงข้อมูลแบรนดิ้งที่ฝั่งซ้าย (เฉพาะหน้าจอขนาดใหญ่) และแสดงฟอร์มกรอกข้อมูลที่ฝั่งขวา
-export function AuthPageLayout({ children }: AuthPageLayoutProps) {
+export function AuthPageLayout({ children }: Readonly<AuthPageLayoutProps>) {
   // ดึงฟังก์ชันสำหรับจัดการแปลภาษา
   const { t } = useTranslation();
 

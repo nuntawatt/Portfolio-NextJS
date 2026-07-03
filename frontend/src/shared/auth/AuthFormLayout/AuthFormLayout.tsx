@@ -25,7 +25,7 @@ export function AuthFormLayout({
   onFooterAction,
   error,
   successMsg,
-}: AuthFormLayoutProps) {
+}: Readonly<AuthFormLayoutProps>) {
   return (
     <div className="w-full max-w-[480px] mx-auto relative">
       {/* Main card */}

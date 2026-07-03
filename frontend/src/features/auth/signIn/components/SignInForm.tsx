@@ -17,7 +17,7 @@ interface SignInFormProps {
 }
 
 // คอมโพเนนต์ฟอร์มเข้าสู่ระบบ (Sign In) ที่รองรับการป้อนอีเมล รหัสผ่าน และการล็อกอินผ่านผู้ให้บริการบุคคลที่สาม (OAuth)
-export function SignInForm({ form, onSubmit, isLoading }: SignInFormProps) {
+export function SignInForm({ form, onSubmit, isLoading }: Readonly<SignInFormProps>) {
     // สถานะสำหรับควบคุมการแสดงหรือซ่อนรหัสผ่าน (Show/Hide Password)
     const [showPassword, setShowPassword] = useState(false);
     // ดึงฟังก์ชันและสถานะของฟอร์มจาก React Hook Form

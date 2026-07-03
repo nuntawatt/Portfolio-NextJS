@@ -12,7 +12,7 @@ interface VerifyEmailCardProps {
 }
 
 // คอมโพเนนต์แสดงผลการยืนยันอีเมล (Verify Email Card) ตามสถานะที่ได้รับ
-export function VerifyEmailCard({ status, message }: VerifyEmailCardProps) {
+export function VerifyEmailCard({ status, message }: Readonly<VerifyEmailCardProps>) {
   return (
     <div className="w-full max-w-[480px] p-8 bg-white dark:bg-[#1a1a1a] rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-100 dark:border-white/10 text-center relative overflow-hidden">
       {/* Glow effect */}

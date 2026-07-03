@@ -4,7 +4,7 @@ import React from 'react';
 import { useSignOut } from '../hooks/useSignOut';
 
 // ไอคอนปุ่ม Sign Out สไตล์ Pixel Art
-function PixelSignOutIcon({ className }: { className?: string }) {
+function PixelSignOutIcon({ className }: Readonly<{ className?: string }>) {
   const width = 12;
   const height = 11;
   const grid = [
@@ -58,7 +58,7 @@ interface SignOutButtonProps {
 }
 
 // คอมโพเนนต์ปุ่มออกจากระบบ (Sign Out Button)
-export function SignOutButton({ variant = 'desktop', onSignOut }: SignOutButtonProps) {
+export function SignOutButton({ variant = 'desktop', onSignOut }: Readonly<SignOutButtonProps>) {
   const { signOut, isLoading } = useSignOut();
 
   const handleSignOutClick = async () => {
