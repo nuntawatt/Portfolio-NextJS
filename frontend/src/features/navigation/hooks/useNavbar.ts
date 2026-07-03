@@ -67,7 +67,7 @@ export function useActiveSectionObserver(
 
         // 2. เช็กขอบล่างสุดของหน้าจอ เพื่อให้แสดงเมนูตัวสุดท้าย (เช่น Skills หรือ Contact) เสมอเมื่อสกรอลล์ลงสุด
         if (scrollY + innerHeight >= scrollHeight - 50) {
-          setActiveHash(`/#${sections[sections.length - 1]}`);
+          setActiveHash(`/#${sections.at(-1)}`);
           return;
         }
 
