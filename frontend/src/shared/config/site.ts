@@ -6,7 +6,7 @@ export const siteConfig = {
   ogImage: "/og.png",
   links: {
     github: "https://github.com/nuntawatt?tab=repositories",
-    linkedin: "https://www.linkedin.com/in/nanthawat-seahuam-9375803b9",
+    linkedin: "https://www.linkedin.com/in/nuntawat-saehuam-91a88341a",
     facebook: "https://www.facebook.com/nuntawat.morgorn",
     cv: "https://nuntawatt.github.io/my-cv",
     project: "https://nanthawat-github-io.vercel.app"
