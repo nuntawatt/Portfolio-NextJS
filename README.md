@@ -17,21 +17,11 @@ Full-stack portfolio website built with **Next.js 16** and **NestJS 11**.
 - **Responsive & Accessible** - รองรับทุกขนาดจอ, dark/light mode, และ `prefers-reduced-motion`
 - **Multilingual** - รองรับภาษาไทย (TH) และอังกฤษ (EN)
 
-## 🏛️ System Architecture
+## ⚡ Tech Stack & Architecture
 
-**Client** → Next.js 16 (React 19, Zustand, TanStack Query, motion/react)
-
-**Server** → NestJS 11 (Auth, Upload, Contact, Prisma ORM)
-
-**External** → PostgreSQL · Redis · S3 Storage · Resend API · Google/GitHub OAuth
-
-## ⚡ Tech Stack
-
-| Layer        | Technologies                                                                                     |
-| :----------- | :----------------------------------------------------------------------------------------------- |
-| **Frontend** | Next.js 16, React 19, Tailwind CSS 4, motion/react, Zustand, TanStack Query, Axios, Lucide Icons |
-| **Backend**  | NestJS 11, Prisma ORM, Passport.js, JWT, Bcrypt, Resend API, S3 Storage, Redis                   |
-| **Infra**    | PostgreSQL, Docker, pnpm workspace, TypeScript                                                   |
+- **Client Layer (Next.js 16)** — React 19, Tailwind CSS 4, motion/react, Zustand, TanStack Query, Axios, Lucide Icons
+- **Server Layer (NestJS 11)** — Prisma ORM, Passport.js, JWT, Bcrypt, Resend API, S3 Object Storage, Redis
+- **Infrastructure** — PostgreSQL, Redis, Docker, pnpm workspace, TypeScript
 ---
 
 ## 🚀 Getting Started
