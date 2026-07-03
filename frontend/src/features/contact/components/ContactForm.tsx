@@ -7,7 +7,7 @@ import { siteConfig } from '@/shared/config/site';
 import Link from 'next/link';
 import { routes } from '@/shared/config/routes';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { useClipboard, useSpotlight } from '@/shared/lib';
+import { useClipboard } from '@/shared/lib';
 import { useContactForm } from '../hooks/useContactForm';
 import { LoadingCard } from '@/shared/ui';
 
@@ -27,8 +27,7 @@ export function ContactForm() {
 
   // เรียกใช้งาน hook สำหรับการคัดลอกข้อมูลลงคลิปบอร์ด (Clipboard)
   const { copied, copyToClipboard } = useClipboard();
-  // เรียกใช้งาน hook สำหรับจำลองแสงไฟส่อง (Spotlight Effect) ตามตำแหน่งเคอร์เซอร์เมาส์
-  const { coords, hovered, spotlightHandlers } = useSpotlight();
+
 
   // ฟังก์ชันสำหรับคัดลอกอีเมลติดต่อที่กำหนดไว้ในไฟล์ตั้งค่าลงคลิปบอร์ด
   const handleCopy = () => copyToClipboard(siteConfig.contact.email);
@@ -51,19 +50,10 @@ export function ContactForm() {
     return (
       <div
         className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none"
-        {...spotlightHandlers}
       >
-        {/* spotlight cursor glow */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-0"
-          style={{
-            opacity: hovered ? 1 : 0,
-            background: `radial-gradient(400px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.06), transparent 80%)`,
-          }}
-        />
 
         {/* Eyebrow Header */}
-        <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border select-none">
+        <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border">
           <span className="font-mono text-xs text-muted-foreground tracking-wider uppercase font-semibold">
             {t('contact.eyebrow')}
           </span>
@@ -79,7 +69,7 @@ export function ContactForm() {
               unoptimized
             />
           </div>
-          <div className="select-none max-w-md">
+          <div className="max-w-md">
             <h1 className="text-3xl font-black text-foreground tracking-tight font-heading">
               {t('contact.success_title')}
             </h1>
@@ -103,19 +93,10 @@ export function ContactForm() {
     return (
       <div
         className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none"
-        {...spotlightHandlers}
       >
-        {/* spotlight cursor glow */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-0"
-          style={{
-            opacity: hovered ? 1 : 0,
-            background: `radial-gradient(400px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.06), transparent 80%)`,
-          }}
-        />
 
         {/* Eyebrow Header */}
-        <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border select-none">
+        <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border">
           <span className="font-mono text-xs text-muted-foreground tracking-wider uppercase font-semibold">
             {t('contact.eyebrow')}
           </span>
@@ -123,7 +104,7 @@ export function ContactForm() {
 
         {/* Window Body Form */}
         <div className="relative z-10 space-y-6 py-8 text-center flex flex-col items-center justify-center">
-          <div className="select-none max-w-md">
+          <div className="max-w-md">
             <h1 className="text-3xl font-black text-foreground tracking-tight font-heading">
               {t('contact.title')}
             </h1>
@@ -179,19 +160,10 @@ export function ContactForm() {
   return (
     <div
       className="relative w-full max-w-2xl bg-card/80 border border-border backdrop-blur-2xl rounded-[24px] p-6 sm:p-8 md:p-10 overflow-hidden transition-all duration-300 shadow-xl dark:shadow-none"
-      {...spotlightHandlers}
     >
-      {/* spotlight cursor glow */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-0"
-        style={{
-          opacity: hovered ? 1 : 0,
-          background: `radial-gradient(400px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.06), transparent 80%)`,
-        }}
-      />
 
       {/* Eyebrow Header */}
-      <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border select-none">
+      <div className="relative z-10 flex items-center justify-between pb-3 mb-6 border-b border-border">
         <span className="font-mono text-xs text-muted-foreground tracking-wider uppercase font-semibold">
           {t('contact.eyebrow')}
         </span>
@@ -199,7 +171,7 @@ export function ContactForm() {
 
       {/* Window Body Form */}
       <div className="relative z-10 space-y-6">
-        <div className="text-left select-none">
+        <div className="text-left">
           <h1 className="text-3xl font-black text-foreground tracking-tight font-heading">
             {t('contact.title')}
           </h1>
@@ -212,7 +184,7 @@ export function ContactForm() {
           {/* Row: Name and Subject */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 {t('contact.name')}
               </label>
               <input
@@ -226,7 +198,7 @@ export function ContactForm() {
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 {t('contact.subject')}
               </label>
               <input
@@ -243,7 +215,7 @@ export function ContactForm() {
 
           {/* Message Body */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               {t('contact.message')}
             </label>
             <textarea
@@ -265,7 +237,7 @@ export function ContactForm() {
           )}
 
           {/* Form actions row */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-3 select-none">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-3">
             {/* Submit Pill */}
             <button
               type="submit"
