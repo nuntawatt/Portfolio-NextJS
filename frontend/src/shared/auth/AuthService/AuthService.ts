@@ -34,14 +34,14 @@ export const getErrorMessage = (error: unknown): string => {
 
 // จัดเก็บ Auth Token ลงใน LocalStorage
 export const setAuthToken = (token: string): void => {
-  if (typeof globalThis.window !== 'undefined') {
+  if (globalThis.window !== undefined) {
     localStorage.setItem(AUTH_KEYS.TOKEN_KEY, token);
   }
 };
 
 // ลบ Auth Token ออกจาก LocalStorage
 export const removeAuthToken = (): void => {
-  if (typeof globalThis.window !== 'undefined') {
+  if (globalThis.window !== undefined) {
     localStorage.removeItem(AUTH_KEYS.TOKEN_KEY);
   }
 };

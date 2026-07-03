@@ -8,7 +8,7 @@ type Theme = 'light' | 'dark';
 export function useTheme() {
   // สถานะเก็บธีมปัจจุบัน โดยตรวจสอบค่าเริ่มต้นจาก localStorage หรือการตั้งค่าของระบบปฏิบัติการ
   const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof globalThis.window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       const stored = localStorage.getItem('theme') as Theme | null;
       if (stored) return stored;
       const systemPrefersDark = globalThis.window.matchMedia('(prefers-color-scheme: dark)').matches;
