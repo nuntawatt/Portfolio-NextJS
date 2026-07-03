@@ -17,12 +17,7 @@ export function useContactForm() {
   const [sendSuccess, setSendSuccess] = useState<boolean | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
 
-  // ตรวจสอบข้อมูลเซสชัน หากล็อกอินแล้วจะกรอกชื่อจริงลงในฟิลด์ชื่อให้โดยอัตโนมัติ
-  useEffect(() => {
-    if (session?.user?.name && !name) {
-      setName(session.user.name);
-    }
-  }, [session, name]);
+
 
   // ฟังก์ชันส่งข้อมูลผ่าน API เมื่อกดยื่นฟอร์ม
   const handleSubmit = async (e: React.FormEvent) => {
