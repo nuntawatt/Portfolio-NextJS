@@ -45,7 +45,7 @@ const SLEEPY_GRID = [
 ];
 
 // คอมโพเนนต์แสดงมาสคอตสไตล์ Pixel-art จากตารางกริดที่กำหนด
-function PixelMascot({ grid }: { grid: string[] }) {
+function PixelMascot({ grid }: Readonly<{ grid: string[] }>) {
   const width = 14;
   const height = 12;
 
@@ -86,7 +86,7 @@ function PixelMascot({ grid }: { grid: string[] }) {
 }
 
 // คอมโพเนนต์แสดงก้อนเมฆสไตล์ Pixel-art สำหรับพื้นหลังปุ่มตอนกลางวัน (Light Mode)
-function PixelCloud({ className }: { className?: string }) {
+function PixelCloud({ className }: Readonly<{ className?: string }>) {
   const grid = [
     "...www....",
     "..wwwww...",
@@ -121,7 +121,7 @@ function PixelCloud({ className }: { className?: string }) {
 }
 
 // คอมโพเนนต์แสดงดาวสไตล์ Pixel-art สำหรับพื้นหลังปุ่มตอนกลางคืน (Dark Mode)
-function PixelStar({ className }: { className?: string }) {
+function PixelStar({ className }: Readonly<{ className?: string }>) {
   const grid = [
     ".y.",
     "yyy",
@@ -227,14 +227,7 @@ export function ThemeToggle() {
           }`}
       >
         {/* Track decorations (Clouds / Stars) */}
-        {!isDark ? (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-            {/* Cloud 1 */}
-            <PixelCloud className="absolute top-[4px] left-[6px] w-[14px] h-[7px] text-white animate-float-slow" />
-            {/* Cloud 2 */}
-            <PixelCloud className="absolute bottom-[4px] right-[8px] w-[16px] h-[8px] text-white animate-float-fast" />
-          </div>
-        ) : (
+        {isDark ? (
           <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
             {/* Star 1 */}
             <PixelStar className="absolute top-[5px] left-[10px] w-[5px] h-[5px] text-yellow-400 animate-twinkle-1" />
@@ -242,6 +235,13 @@ export function ThemeToggle() {
             <PixelStar className="absolute bottom-[6px] left-[26px] w-[4px] h-[4px] text-yellow-400 animate-twinkle-2" />
             {/* Star 3 */}
             <PixelStar className="absolute top-[6px] right-[10px] w-[5px] h-[5px] text-yellow-400 animate-twinkle-3" />
+          </div>
+        ) : (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+            {/* Cloud 1 */}
+            <PixelCloud className="absolute top-[4px] left-[6px] w-[14px] h-[7px] text-white animate-float-slow" />
+            {/* Cloud 2 */}
+            <PixelCloud className="absolute bottom-[4px] right-[8px] w-[16px] h-[8px] text-white animate-float-fast" />
           </div>
         )}
 

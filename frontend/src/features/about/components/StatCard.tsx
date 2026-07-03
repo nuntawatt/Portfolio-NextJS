@@ -13,7 +13,7 @@ interface StatCardProps {
 }
 
 // StatCard: คอมโพเนนต์การ์ดแสดงตัวเลขค่าสถิติที่จะนับเลขอัพแบบแอนิเมชันเมื่อเลื่อนมาเห็นการ์ด
-export function StatCard({ stat, index = 0 }: StatCardProps) {
+export function StatCard({ stat, index = 0 }: Readonly<StatCardProps>) {
     // ดึงฟังก์ชันแปลภาษา
     const { t } = useTranslation();
     // ใช้สปายตรวจสอบว่าการ์ดอยู่ในมุมมองหน้าจอหรือไม่ (Threshold: 0.4)

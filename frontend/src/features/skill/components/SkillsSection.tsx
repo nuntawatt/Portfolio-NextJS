@@ -8,7 +8,7 @@ import { useSpotlight } from '@/shared/lib';
 import { ScrollReveal } from '@/shared/ui';
 
 // SkillCard: คอมโพเนนต์การ์ดแสดงแต่ละกลุ่มทักษะความสามารถ พร้อมเอฟเฟกต์แสงไฟ Spotlight ตามเมาส์
-function SkillCard({ children, title, subtitle, icon }: { children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }) {
+function SkillCard({ children, title, subtitle, icon }: Readonly<{ children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }>) {
   // ดึงข้อมูลการเลื่อนเมาส์และพิกัดสำหรับเอฟเฟกต์ Spotlight
   const { coords, hovered, spotlightHandlers } = useSpotlight();
 
@@ -53,7 +53,7 @@ function SkillCard({ children, title, subtitle, icon }: { children: React.ReactN
 }
 
 // TagRow: คอมโพเนนต์ย่อยสำหรับแสดงป้ายกำกับ (Tags) ของทักษะแต่ละหัวข้อ
-function TagRow({ items }: { items: string[] }) {
+function TagRow({ items }: Readonly<{ items: string[] }>) {
   return (
     <div className="flex flex-wrap gap-1.5">
       {items.map((item) => (

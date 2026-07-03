@@ -35,13 +35,13 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
       />
 
       {/* ลิ้นชักเลย์เอาต์เมนูมือถือ */}
-      <div
+      <dialog
         id="mobile-menu-drawer"
+        open={isOpen}
         className={cn(
           "fixed top-0 right-0 h-full w-[280px] bg-card border-l border-border shadow-2xl z-50 lg:hidden transform flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
-        role="dialog"
         aria-modal="true"
         aria-label={t('nav.drawer_label') as string}
       >
@@ -106,7 +106,7 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
             </div>
           </div>
         </div>
-      </div>
+      </dialog>
     </>
   );
 }

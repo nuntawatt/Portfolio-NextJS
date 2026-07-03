@@ -11,7 +11,7 @@ interface NavLinkProps {
 }
 
 // คอมโพเนนต์ลิงก์เดี่ยวของแถบนำทาง พร้อมเส้นใต้เคลื่อนไหว
-export function NavLink({ name, href, isActive, onClick }: NavLinkProps) {
+export function NavLink({ name, href, isActive, onClick }: Readonly<NavLinkProps>) {
   return (
     <a
       href={href}
