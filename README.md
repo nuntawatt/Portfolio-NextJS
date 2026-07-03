@@ -7,6 +7,8 @@
 
 Full-stack portfolio website built with **Next.js 16** and **NestJS 11**.
 
+---
+
 ## 🎨 Design Approach
 
 - **Feature-Sliced Architecture** - แยกโค้ดตาม domain (auth, contact, hero, skill ฯลฯ) ให้แต่ละ feature มี components, hooks, types ของตัวเอง
@@ -30,6 +32,7 @@ Full-stack portfolio website built with **Next.js 16** and **NestJS 11**.
 | **Frontend** | Next.js 16, React 19, Tailwind CSS 4, motion/react, Zustand, TanStack Query, Axios, Lucide Icons |
 | **Backend**  | NestJS 11, Prisma ORM, Passport.js, JWT, Bcrypt, Resend API, S3 Storage, Redis                   |
 | **Infra**    | PostgreSQL, Docker, pnpm workspace, TypeScript                                                   |
+---
 
 ## 🚀 Getting Started
 
