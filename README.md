@@ -21,43 +21,21 @@ Full-stack portfolio website built with **Next.js 16** and **NestJS 11**.
 
 ## 🏛️ System Architecture
 
-```mermaid
-graph TD
-    classDef client fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#1e1b4b;
-    classDef server fill:#f0fdf4,stroke:#10b981,stroke-width:2px,color:#064e3b;
-    classDef external fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#0f172a;
-
-    subgraph Client ["Client Layer (Next.js 16 • React 19)"]
-        React["React 19"]
-        Zustand["Zustand"]
-        TanStack["TanStack Query"]
-        Motion["motion/react"]
-    end
-    class Client,React,Zustand,TanStack,Motion client;
-
-    subgraph Server ["Server Layer (NestJS 11)"]
-        Auth["Auth Module"]
-        Upload["Upload Service"]
-        Contact["Contact & Mail"]
-        Prisma["Prisma ORM"]
-    end
-    class Server,Auth,Upload,Contact,Prisma server;
-
-    subgraph External ["External Services"]
-        Postgres[("PostgreSQL")]
-        Redis[("Redis")]
-        S3[("S3 Storage")]
-        Resend["Resend API"]
-        OAuth["Google / GitHub"]
-    end
-    class External,Postgres,Redis,S3,Resend,OAuth external;
-
-    Client -->|HTTPS| Server
-    Auth -.-> OAuth
-    Auth -.-> Redis
-    Upload -.-> S3
-    Contact -.-> Resend
-    Prisma --> Postgres
+```
+┌─────────────────────────────────────────────────────┐
+│              Client Layer (Next.js 16)              │
+│   React 19 · Zustand · TanStack Query · motion/react│
+└──────────────────────┬──────────────────────────────┘
+                       │ HTTPS
+┌──────────────────────▼──────────────────────────────┐
+│              Server Layer (NestJS 11)               │
+│   Auth Module · Upload Service · Contact & Mail     │
+│                   Prisma ORM                        │
+└──┬──────────┬──────────┬──────────┬─────────────────┘
+   │          │          │          │
+   ▼          ▼          ▼          ▼
+PostgreSQL   Redis   S3 Storage   Resend API
+                                  Google / GitHub OAuth
 ```
 
 ---
