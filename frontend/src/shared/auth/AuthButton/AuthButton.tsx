@@ -107,8 +107,8 @@ export function AuthButton({ className = "", onClose }: Readonly<AuthButtonProps
           aria-expanded={isProfileOpen}
           className={`relative w-10 h-10 rounded-full border transition-all duration-200 focus:outline-none overflow-hidden bg-white dark:bg-neutral-800 disabled:opacity-50 cursor-pointer flex items-center justify-center ${
             isProfileOpen 
-              ? 'ring-2 ring-orange-500 border-transparent scale-105 shadow-md shadow-orange-500/20' 
-              : 'border-gray-200 dark:border-white/10 hover:border-orange-500/50 hover:scale-105'
+              ? 'ring-2 ring-foreground/20 border-transparent scale-105 shadow-md' 
+              : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:scale-105'
           }`}
         >
           {userImage ? (
