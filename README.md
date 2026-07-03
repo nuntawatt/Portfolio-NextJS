@@ -11,11 +11,11 @@ Full-stack portfolio website built with **Next.js 16** and **NestJS 11**.
 
 ## 🎨 Design Approach
 
-- **Feature-Sliced Architecture** — แยกโค้ดตาม domain (auth, contact, hero, skill ฯลฯ) ให้แต่ละ feature มี components, hooks, types ของตัวเอง
-- **Server & Client Components** — ใช้ Server Components สำหรับ SEO และ Client Components สำหรับ interactive UI
-- **GPU-Accelerated Animations** — ใช้ `motion/react` กับ `will-change: auto` cleanup เพื่อ performance ที่ดีที่สุด
-- **Responsive & Accessible** — รองรับทุกขนาดจอ, dark/light mode, และ `prefers-reduced-motion`
-- **Multilingual** — รองรับภาษาไทย (TH) และอังกฤษ (EN)
+- **Feature-Sliced Architecture** - แยกโค้ดตาม domain (auth, contact, hero, skill ฯลฯ) ให้แต่ละ feature มี components, hooks, types ของตัวเอง
+- **Server & Client Components** - ใช้ Server Components สำหรับ SEO และ Client Components สำหรับ interactive UI
+- **GPU-Accelerated Animations** - ใช้ `motion/react` กับ `will-change: auto` cleanup เพื่อ performance ที่ดีที่สุด
+- **Responsive & Accessible** - รองรับทุกขนาดจอ, dark/light mode, และ `prefers-reduced-motion`
+- **Multilingual** - รองรับภาษาไทย (TH) และอังกฤษ (EN)
 
 ---
 
