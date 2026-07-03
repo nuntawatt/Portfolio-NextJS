@@ -1,7 +1,7 @@
 import { Navbar, Footer } from '@/features/navigation';
 
 // คอมโพเนนต์เอฟเฟกต์ Shimmer (การเคลื่อนไหวสว่างวูบวาบ) เพื่อสื่อถึงการกำลังโหลดข้อมูล
-export function Shimmer({ className }: { className?: string }) {
+export function Shimmer({ className }: Readonly<{ className?: string }>) {
   return (
     <div className={`animate-gradient bg-gray-200 dark:bg-white/5 ${className}`} />
   );

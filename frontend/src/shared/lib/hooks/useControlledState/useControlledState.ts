@@ -16,7 +16,7 @@ export function useControlledState<T, Rest extends unknown[] = []>(
 
   // กำหนดสถานะภายในเริ่มต้น โดยเลือกใช้ค่าควบคุมจากภายนอกหากถูกส่งเข้ามา
   const [state, setInternalState] = React.useState<T>(
-    value !== undefined ? value : (defaultValue as T),
+    (value ?? defaultValue) as T,
   );
 
   // คอยอัปเดตสถานะภายในเมื่อค่าจากภายนอก (value) มีการเปลี่ยนแปลง

@@ -18,7 +18,7 @@ export function LoadingCard({
   subtitle = "Connecting to Morgorn",
   className = "",
   flat = false
-}: LoadingCardProps) {
+}: Readonly<LoadingCardProps>) {
   return (
     <div 
       className={`relative flex flex-col items-center justify-center text-center space-y-6 ${
@@ -53,7 +53,9 @@ export function LoadingCard({
 }
 
 // อินเตอร์เฟซสำหรับ Props ของคอมโพเนนต์ LoadingScreen
-interface LoadingScreenProps extends LoadingCardProps {
+interface LoadingScreenProps {
+  title?: string;
+  subtitle?: string;
   fullScreen?: boolean;
 }
 
@@ -62,7 +64,7 @@ export function LoadingScreen({
   title,
   subtitle,
   fullScreen = true
-}: LoadingScreenProps) {
+}: Readonly<LoadingScreenProps>) {
   const card = <LoadingCard title={title} subtitle={subtitle} />;
 
   if (fullScreen) {

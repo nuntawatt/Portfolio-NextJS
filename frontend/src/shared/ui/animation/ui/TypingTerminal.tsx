@@ -13,7 +13,7 @@ export function TypingTerminal({
   lines,
   speed = 40,
   className = "",
-}: TypingTerminalProps) {
+}: Readonly<TypingTerminalProps>) {
   const [completedLines, setCompletedLines] = useState<string[]>([]);
   const [currentText, setCurrentText] = useState("");
   const [lineIndex, setLineIndex] = useState(0);
@@ -25,18 +25,20 @@ export function TypingTerminal({
 
     const currentLine = lines[lineIndex];
 
+    const advanceToNextLine = () => {
+      setCompletedLines((prev) => [...prev, currentLine]);
+      setCurrentText("");
+      setCharIndex(0);
+      setLineIndex((prev) => prev + 1);
+    };
+
     const handleTyping = () => {
       if (charIndex < currentLine.length) {
         setCurrentText((prev) => prev + currentLine.charAt(charIndex));
         setCharIndex((prev) => prev + 1);
       } else {
         // Line finished typing
-        setTimeout(() => {
-          setCompletedLines((prev) => [...prev, currentLine]);
-          setCurrentText("");
-          setCharIndex(0);
-          setLineIndex((prev) => prev + 1);
-        }, 1000);
+        setTimeout(advanceToNextLine, 1000);
       }
     };
 
@@ -74,7 +76,7 @@ export function TypingTerminal({
         <div className="space-y-1.5 flex flex-col items-start min-h-full">
           {/* Completed Lines History */}
           {completedLines.map((line, idx) => (
-            <div key={idx} className="flex items-start text-[11px] sm:text-[13px] font-medium font-mono w-full group/line">
+            <div key={`${idx}-${line}`} className="flex items-start text-[11px] sm:text-[13px] font-medium font-mono w-full group/line">
               <span className="text-gray-600 mr-3 select-none opacity-30 min-w-[1.2rem] text-right group-hover/line:opacity-60 transition-opacity">{idx + 1}</span>
               <span className="text-gray-200 break-words leading-relaxed flex-1">
                 {formatCode(line)}

@@ -15,7 +15,7 @@ export const apiClient = axios.create({
 // Request Interceptor: ตรวจสอบและแนบ JWT Token ไปกับ Authorization Header ก่อนส่ง Request เสมอ
 apiClient.interceptors.request.use(
   (config) => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis.window !== 'undefined') {
       const token = localStorage.getItem('auth_token');
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -39,7 +39,7 @@ apiClient.interceptors.response.use(
 
     if (status === 401) {
       // จัดการเมื่อ Token หมดอายุหรือไม่ได้รับอนุญาต (Unauthorized) โดยการลบ Token ออก
-      if (typeof window !== 'undefined') {
+      if (typeof globalThis.window !== 'undefined') {
         localStorage.removeItem('auth_token');
         // Optional: Trigger logout or redirect to login page if we have a state store
       }

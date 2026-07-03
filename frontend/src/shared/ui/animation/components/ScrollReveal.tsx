@@ -56,7 +56,7 @@ export function ScrollReveal({
   amount = 0.15,
   className,
   as = 'div',
-}: ScrollRevealProps) {
+}: Readonly<ScrollRevealProps>) {
   const shouldReduceMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
 

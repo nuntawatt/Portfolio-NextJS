@@ -9,7 +9,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // คอมโพเนนต์ปุ่มอเนกประสงค์ (Button Component) ที่รองรับหลากหลายดีไซน์ (variant)
-export function Button({ variant = 'primary', className = '', children, ...props }: ButtonProps) {
+export function Button({ variant = 'primary', className = '', children, ...props }: Readonly<ButtonProps>) {
   // สไตล์พื้นฐานของปุ่ม ทุกแบบจะใช้ร่วมกัน
   const baseStyles = 'inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 shadow-sm cursor-pointer';
   
