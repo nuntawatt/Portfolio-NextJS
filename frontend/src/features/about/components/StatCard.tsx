@@ -5,7 +5,7 @@ import { useInView } from '../hooks/useInView';
 import { useCountUp } from '../hooks/useCountUp';
 import type { StatItem } from '../types/about';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
-import { ScrollReveal } from '@/shared/ui';
+
 
 interface StatCardProps {
     stat: StatItem;
@@ -24,9 +24,8 @@ export function StatCard({ stat, index = 0 }: Readonly<StatCardProps>) {
     const Icon = ICON_MAP[stat.iconKey];
 
     return (
-        <ScrollReveal direction="up" delay={0.08 * index}>
         <div
-            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-card/60 border border-border backdrop-blur-xl transition-colors duration-300"
+            className="relative rounded-2xl p-6 flex flex-col items-center gap-3 overflow-hidden bg-card/95 border border-border transition-colors duration-300"
         >
             {/* icon badge */}
             {Icon && (
@@ -48,6 +47,5 @@ export function StatCard({ stat, index = 0 }: Readonly<StatCardProps>) {
                 </p>
             </div>
         </div>
-        </ScrollReveal>
     );
 }

@@ -4,28 +4,25 @@ import React from 'react';
 import { GraduationCap } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useSpotlight } from '@/shared/lib';
-import { ScrollReveal } from '@/shared/ui';
+
 
 // EducationCard: คอมโพเนนต์การ์ดแสดงข้อมูลประวัติการศึกษา พร้อมเอฟเฟกต์ Spotlight เมื่อเมาส์ชี้ผ่าน
 export function EducationCard() {
     // ดึงฟังก์ชันแปลภาษา
     const { t } = useTranslation();
     // ดึงข้อมูลพิกัดการเคลื่อนที่ของเมาส์สำหรับเอฟเฟกต์ Spotlight
-    const { coords, hovered, spotlightHandlers } = useSpotlight();
+    const { spotlightRef, spotlightHandlers } = useSpotlight();
 
     return (
-        <ScrollReveal direction="up" delay={0.2}>
         <div
-            className="relative rounded-[20px] p-5 overflow-hidden bg-card/60 border border-border backdrop-blur-xl transition-all duration-300 group cursor-pointer"
+            className="relative rounded-[20px] p-5 overflow-hidden bg-card/95 border border-border transition-colors duration-300 group cursor-pointer"
             {...spotlightHandlers}
         >
             {/* spotlight overlay */}
             <div
+                ref={spotlightRef}
                 className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out"
-                style={{
-                    opacity: hovered ? 1 : 0,
-                    background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.08), transparent 80%)`,
-                }}
+                style={{ opacity: 0 }}
             />
 
             <div className="relative z-10 flex items-center gap-4">
@@ -48,6 +45,5 @@ export function EducationCard() {
                 </div>
             </div>
         </div>
-        </ScrollReveal>
     );
 }

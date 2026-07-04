@@ -3,7 +3,7 @@
 import { GitHub, MapPin, Phone } from '../icons/icon';
 import { useTranslation } from '@/shared/providers/LanguageProvider';
 import { useSpotlight } from '@/shared/lib';
-import { ScrollReveal } from '@/shared/ui';
+
 
 const CONTACT_LINKS = [
     { href: 'https://github.com/nuntawatt', icon: <GitHub />, label: 'GitHub', variant: 'primary' as const },
@@ -14,7 +14,7 @@ export function BioCard() {
     // ดึงฟังก์ชันแปลภาษา
     const { t } = useTranslation();
     // ดึงข้อมูลพิกัดและการเลื่อนเมาส์สำหรับเอฟเฟกต์ Spotlight
-    const { coords, hovered, spotlightHandlers } = useSpotlight();
+    const { spotlightRef, spotlightHandlers } = useSpotlight();
 
     const PROFILE_META = [
         { icon: <MapPin />, text: t('about.location') },
@@ -22,18 +22,15 @@ export function BioCard() {
     ] as const;
 
     return (
-        <ScrollReveal direction="up" delay={0.1}>
         <div
-            className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-card/80 border border-border backdrop-blur-2xl transition-all duration-300 group cursor-pointer"
+            className="relative rounded-[24px] p-6 sm:p-8 overflow-hidden bg-card/95 border border-border transition-colors duration-300 group cursor-pointer"
             {...spotlightHandlers}
         >
             {/* spotlight overlay */}
             <div
+                ref={spotlightRef}
                 className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out"
-                style={{
-                    opacity: hovered ? 1 : 0,
-                    background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.08), transparent 80%)`,
-                }}
+                style={{ opacity: 0 }}
             />
 
             {/* corner glow */}
@@ -95,7 +92,7 @@ export function BioCard() {
                         href={href}
                         target={href.startsWith('http') ? '_blank' : undefined}
                         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${variant === 'primary'
+                        className={`inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 ${variant === 'primary'
                             ? 'border border-border text-foreground hover:bg-secondary bg-transparent hover:shadow-sm'
                             : 'text-muted-foreground hover:text-foreground hover:bg-secondary bg-transparent'
                             }`}
@@ -106,6 +103,5 @@ export function BioCard() {
                 ))}
             </div>
         </div>
-        </ScrollReveal>
     );
 }
