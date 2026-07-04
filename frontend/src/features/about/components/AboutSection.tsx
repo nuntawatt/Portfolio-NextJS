@@ -14,35 +14,6 @@ export function AboutSection() {
 
     return (
         <>
-            <style>{`
-        /* Static grain texture — replaces the animated floating orbs.
-           A single fixed noise layer keeps the section calm and tactile
-           instead of "alive", matching the rest of the page's quiet motion budget. */
-        .about-grain {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.5;
-            mix-blend-mode: multiply;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-        @media (prefers-color-scheme: dark) {
-            .about-grain { mix-blend-mode: screen; opacity: 0.35; }
-        }
-
-        /* One quiet, fixed wash of brand color in the corner — not animated,
-           not multiplied. Reads as a deliberate accent, not ambient decoration. */
-        .about-wash {
-            position: absolute;
-            top: -120px;
-            right: -160px;
-            width: 560px;
-            height: 560px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(249,115,22,0.10), transparent 70%);
-            pointer-events: none;
-        }
-        `}</style>
 
             <section
                 id="about"
@@ -51,7 +22,7 @@ export function AboutSection() {
                 {/* ── Background: static texture, no motion ── */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
                     <div className="about-wash" />
-                    <div className="about-grain" />
+
                 </div>
 
                 {/* ── Content ── */}
