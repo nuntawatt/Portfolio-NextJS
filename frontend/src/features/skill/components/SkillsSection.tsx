@@ -10,7 +10,7 @@ import { ScrollReveal } from '@/shared/ui';
 // SkillCard: คอมโพเนนต์การ์ดแสดงแต่ละกลุ่มทักษะความสามารถ พร้อมเอฟเฟกต์แสงไฟ Spotlight ตามเมาส์
 function SkillCard({ children, title, subtitle, icon }: Readonly<{ children: React.ReactNode; title: string; subtitle: string; icon: React.ReactNode }>) {
   // ดึงข้อมูลการเลื่อนเมาส์และพิกัดสำหรับเอฟเฟกต์ Spotlight
-  const { coords, hovered, spotlightHandlers } = useSpotlight();
+  const { spotlightRef, spotlightHandlers } = useSpotlight();
 
   return (
     <div
@@ -19,11 +19,9 @@ function SkillCard({ children, title, subtitle, icon }: Readonly<{ children: Rea
     >
       {/* spotlight cursor glow */}
       <div
+        ref={spotlightRef}
         className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-0"
-        style={{
-          opacity: hovered ? 1 : 0,
-          background: `radial-gradient(300px circle at ${coords.x}px ${coords.y}px, rgba(249,115,22,0.07), transparent 85%)`,
-        }}
+        style={{ opacity: 0 }}
       />
 
       {/* Eyebrow Header */}
