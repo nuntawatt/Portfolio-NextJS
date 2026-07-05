@@ -3,7 +3,7 @@ export type OAuthUser = {
   firstName?: string;
   lastName?: string;
   username?: string;
-  provider: 'google' | 'github' | 'facebook';
+  provider: 'google' | 'github';
   providerId: string;
   avatar?: string;
   accessToken?: string;

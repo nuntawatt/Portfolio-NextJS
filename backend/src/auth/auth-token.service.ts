@@ -41,22 +41,6 @@ export class AuthTokenService {
     });
   }
 
-  /** Find a valid token by hash and type. */
-  async findValidToken(
-    tokenHash: string,
-    type: AuthTokenType,
-  ): Promise<AuthTokenWithUser | null> {
-    return this.prisma.authToken.findFirst({
-      where: {
-        tokenHash,
-        type,
-        usedAt: null,
-        expiresAt: { gt: new Date() },
-      },
-      include: { user: true },
-    }) as Promise<AuthTokenWithUser | null>;
-  }
-
   /** Find a valid refresh token. */
   async findValidRefreshToken(
     userId: string,

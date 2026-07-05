@@ -39,30 +39,4 @@ export class PrismaService
     await this.$disconnect();
     this.logger.log('Prisma disconnected from database');
   }
-
-  // Clean the database by deleting all records from all models.
-  async cleanDatabase(): Promise<void> {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('cleanDatabase is not allowed in production');
-    }
-
-    const models = Reflect.ownKeys(this).filter(
-      (key) =>
-        typeof key === 'string' && !key.startsWith('_') && !key.startsWith('$'),
-    );
-
-    for (const model of models) {
-      try {
-        const delegate = (
-          this as unknown as Record<
-            string,
-            { deleteMany?: () => Promise<unknown> }
-          >
-        )[model as string];
-        await delegate?.deleteMany?.();
-      } catch {
-        // Skip non-model properties
-      }
-    }
-  }
 }

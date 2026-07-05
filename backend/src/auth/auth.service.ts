@@ -13,7 +13,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { OAuthUser } from './types/auth-type';
 import { generateRandomToken, sha256 } from './utils/token.util';
-import { MailService } from './mail/mail.service';
+import { MailService } from '../mail/mail.service';
 import { AuthTokenService } from './auth-token.service';
 import { AuthTokenType, User } from '@prisma/client';
 

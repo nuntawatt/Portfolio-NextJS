@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MailService } from '../auth/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class ContactService {
@@ -11,7 +11,7 @@ export class ContactService {
     subject: string,
     message: string,
   ) {
-    const developerEmail = 'morgorn.wk@gmail.com';
+    const developerEmail = process.env.CONTACT_EMAIL ?? 'morgorn.wk@gmail.com';
 
     const emailHtml = `
       <h2>New Contact Message from Portfolio</h2>
