@@ -28,8 +28,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 # Install production dependencies only (strips development test frameworks/compilers/CLI)
 RUN npm install -g pnpm && pnpm install --prod
 
-# Copy generated Prisma engine client directly from development build stage
-# to avoid installing heavy devDependencies (like the Prisma CLI) in production
+# Copy Prisma engine binaries and client from development stage to production stage
 COPY --from=development /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=development /usr/src/app/node_modules/@prisma/client ./node_modules/@prisma/client
 
