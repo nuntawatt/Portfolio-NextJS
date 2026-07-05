@@ -8,7 +8,7 @@ import {
   ParseFilePipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { UploadedFileDto, UploadService } from './upload.service';
 import {
   ApiTags,

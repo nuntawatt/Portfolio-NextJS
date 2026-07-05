@@ -6,7 +6,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { UsersService } from './users.service';
 import {
   ApiTags,
@@ -14,7 +14,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CurrentUser } from '../shared/decorators/current-user.decorator';
 
 @ApiTags('Users')
 @ApiBearerAuth('access-token')

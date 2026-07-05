@@ -1,5 +1,5 @@
 import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { ContactService } from './contact.service';
 import {
   ApiTags,

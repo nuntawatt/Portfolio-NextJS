@@ -9,11 +9,11 @@ import { UsersModule } from './users/users.module';
 import { UploadModule } from './upload/upload.module';
 import { ContactModule } from './contact/contact.module';
 
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
-import { validationSchema } from './common/config/validation.schema';
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
+import { PrismaExceptionFilter } from './shared/filters/prisma-exception.filter';
+import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
+import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
+import { validationSchema } from './shared/config/validation.schema';
 import { AppController } from './app.controller';
 
 import {
@@ -24,7 +24,7 @@ import {
   oauthConfig,
   minioConfig,
   redisConfig,
-} from './common/config/app.config';
+} from './shared/config/app.config';
 
 @Module({
   imports: [
