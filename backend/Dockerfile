@@ -24,11 +24,14 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY prisma ./prisma
 
-# Install production dependencies only (strips development test frameworks/compilers)
-# and regenerate client mapping for the production node_modules directory
-RUN npm install -g pnpm && pnpm install --prod && pnpm run prisma:generate
+# Install production dependencies only (strips development test frameworks/compilers/CLI)
+RUN npm install -g pnpm && pnpm install --prod
+
+# Copy generated Prisma engine client directly from development build stage
+# to avoid installing heavy devDependencies (like the Prisma CLI) in production
+COPY --from=development /usr/src/app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=development /usr/src/app/node_modules/@prisma/client ./node_modules/@prisma/client
 
 # Copy compiled JS outputs only, keeping raw TS source code out of the production image
 COPY --from=development /usr/src/app/dist ./dist
