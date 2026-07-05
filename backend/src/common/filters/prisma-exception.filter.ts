@@ -8,7 +8,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 
-// Maps Prisma error codes to HTTP statuses and messages.
+// Global filter to catch Prisma errors and return structured errors.
 const PRISMA_ERROR_MAP: Record<
   string,
   { status: HttpStatus; message: string }

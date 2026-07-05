@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
 
-/** Interceptor to log incoming requests and outgoing responses with timing. */
+// Interceptor สำหรับ Logging Request และ Response ของ HTTP Request
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger(LoggingInterceptor.name);

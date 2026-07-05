@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-// Global filter to catch HttpExceptions and return structured errors.
+// สร้าง Filter สำหรับจัดการข้อผิดพลาดที่เกิดขึ้นใน HTTP Request
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
@@ -19,7 +19,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const statusCode = exception.getStatus();
     const exceptionResponse = exception.getResponse();
 
-    // Extract exception message
+    // ตรวจสอบประเภทของ exceptionResponse เพื่อดึงข้อความและชื่อข้อผิดพลาด
     const message =
       typeof exceptionResponse === 'string'
         ? exceptionResponse

@@ -10,10 +10,10 @@ export type OAuthUser = {
   refreshToken?: string;
 };
 
+
 export type AccessTokenPayload = {
   userId: string;
   email: string;
   role: string;
   isEmailVerified: boolean;
 };
-// JWT Payload holds authenticated user details
