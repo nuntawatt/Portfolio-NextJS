@@ -5,7 +5,7 @@ import { useEffect, RefObject } from 'react';
 // ป้องกันอาการ "หน่วง" จาก native smooth scroll ที่ใช้เวลานานเกินไปสำหรับระยะไกล
 export function smoothScrollToElement(element: HTMLElement, duration = 500): void {
   const start = window.scrollY;
-  const scrollMarginTop = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
+  const scrollMarginTop = Number.parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
   const target = element.getBoundingClientRect().top + start - scrollMarginTop;
   const distance = target - start;
 
