@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { ThemeToggle } from '@/features/theme';
@@ -12,11 +12,15 @@ import { routes } from '@/shared/config/routes';
 import { NavLink } from './NavLink';
 import { MobileMenu } from './MobileMenu';
 import {
+  smoothScrollToElement,
   useTimeoutCleanup,
   useBodyScrollLock,
   useEscapeKey,
   useActiveSectionObserver,
 } from '../hooks/useNavbar';
+
+// Stable reference — ป้องกัน useEffect teardown/setup ซ้ำทุก render
+const OBSERVED_SECTIONS = ['home', 'about', 'skills'];
 
 // --- Main Navbar Component ---
 
@@ -30,32 +34,55 @@ export function Navbar() {
   const { t } = useTranslation();
   const activeLink = pathname === '/contact' ? routes.contact : activeHash;
 
-  const navLinks = [
+  const navLinks = useMemo(() => [
     { name: t('nav.home') as string, href: routes.home },
     { name: t('nav.about') as string, href: routes.about },
     { name: t('nav.skills') as string, href: routes.skills },
     { name: t('nav.contact') as string, href: routes.contact },
-  ];
+  ], [t]);
 
   // เรียกใช้งาน Custom Hooks จากโฟลเดอร์ hook
   useTimeoutCleanup(clickScrollTimeout);
   useBodyScrollLock(isOpen);
-  useEscapeKey(() => setIsOpen(false), isOpen);
-  useActiveSectionObserver(['home', 'about', 'skills'], pathname, isClickScrolling, setActiveHash);
 
-  // ควบคุมการคลิกข้าม Section ป้องกันการเลื่อนสมูทแย่งสถานะ Active ระหว่างทาง
-  const handleLinkClick = (href: string) => {
-    setActiveHash(href);
-    setIsOpen(false);
-    isClickScrolling.current = true;
-    
-    if (clickScrollTimeout.current) {
-      clearTimeout(clickScrollTimeout.current);
+  const handleClose = useCallback(() => setIsOpen(false), []);
+  const handleOpen = useCallback(() => setIsOpen(true), []);
+
+  useEscapeKey(handleClose, isOpen);
+  useActiveSectionObserver(OBSERVED_SECTIONS, pathname, isClickScrolling, setActiveHash);
+
+  // [FIX] ดัก e.preventDefault() สำหรับ hash link เพื่อ bypass Next.js Router
+  // แล้วสั่ง scrollIntoView เอง + อัปเดต URL ด้วย history.pushState
+  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const isHashLink = href.startsWith('/#');
+
+    if (isHashLink && pathname === '/') {
+      e.preventDefault();
+
+      setActiveHash(href);
+      setIsOpen(false);
+      isClickScrolling.current = true;
+
+      const targetId = href.replace('/#', '');
+      const el = document.getElementById(targetId);
+      if (el) {
+        smoothScrollToElement(el);
+      }
+
+      // อัปเดต URL โดยไม่ trigger Next.js Router
+      window.history.pushState(null, '', href);
+
+      if (clickScrollTimeout.current) {
+        clearTimeout(clickScrollTimeout.current);
+      }
+      clickScrollTimeout.current = setTimeout(() => {
+        isClickScrolling.current = false;
+      }, 600);
+    } else {
+      // ลิงก์ข้ามหน้า (เช่น /contact) ปล่อยให้ทำงานปกติ
+      setIsOpen(false);
     }
-    clickScrollTimeout.current = setTimeout(() => {
-      isClickScrolling.current = false;
-    }, 1000);
-  };
+  }, [pathname]);
 
   return (
     <>
@@ -79,7 +106,7 @@ export function Navbar() {
                     name={link.name}
                     href={link.href}
                     isActive={activeLink === link.href}
-                    onClick={() => handleLinkClick(link.href)}
+                    onClick={handleLinkClick}
                   />
                 ))}
               </div>
@@ -96,7 +123,7 @@ export function Navbar() {
 
                <div className="-mr-2 flex items-center lg:hidden">
                 <button
-                  onClick={() => setIsOpen(true)}
+                  onClick={handleOpen}
                   className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none transition-all duration-200 active:scale-95"
                   aria-expanded={isOpen}
                   aria-controls="mobile-menu-drawer"
@@ -115,7 +142,7 @@ export function Navbar() {
       {/* เลย์เอาต์เมนูบนหน้าจอมือถือ */}
       <MobileMenu
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={handleClose}
         navLinks={navLinks}
         activeLink={activeLink}
         onLinkClick={handleLinkClick}
