@@ -13,12 +13,12 @@ interface MobileMenuProps {
   onClose: () => void;
   navLinks: Array<{ name: string; href: string }>;
   activeLink: string;
-  onLinkClick: (href: string) => void;
+  onLinkClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
   t: (key: string) => string | string[];
 }
 
 // คอมโพเนนต์เมนูดึงสไลด์สำหรับหน้าจอมือถือ
-export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick, t }: Readonly<MobileMenuProps>) {
+export const MobileMenu = React.memo(function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick, t }: Readonly<MobileMenuProps>) {
   return (
     <>
       {/* ม่านดาร์กฉากหลังเมื่อกดเปิดเมนูมือถือ */}
@@ -77,7 +77,7 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
                       ? "bg-orange-500/10 text-orange-600 dark:text-orange-400 font-semibold"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   )}
-                  onClick={() => onLinkClick(link.href)}
+                  onClick={(e) => onLinkClick(e, link.href)}
                 >
                   {link.name}
                 </a>
@@ -109,4 +109,4 @@ export function MobileMenu({ isOpen, onClose, navLinks, activeLink, onLinkClick,
       </dialog>
     </>
   );
-}
+});
