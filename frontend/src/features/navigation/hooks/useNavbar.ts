@@ -1,5 +1,43 @@
 import { useEffect, RefObject } from 'react';
 
+// Custom smooth scroll ที่ bypass CSS scroll-behavior: smooth ของ <html>
+// ใช้ requestAnimationFrame + ease-out cubic สำหรับความลื่นไหลและรวดเร็ว
+// ป้องกันอาการ "หน่วง" จาก native smooth scroll ที่ใช้เวลานานเกินไปสำหรับระยะไกล
+export function smoothScrollToElement(element: HTMLElement, duration = 500): void {
+  const start = window.scrollY;
+  const scrollMarginTop = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
+  const target = element.getBoundingClientRect().top + start - scrollMarginTop;
+  const distance = target - start;
+
+  if (Math.abs(distance) < 1) return;
+
+  const startTime = performance.now();
+
+  // ปิด CSS scroll-behavior ชั่วคราวเพื่อไม่ให้ browser ใส่ smooth ซ้อนทับ window.scrollTo ของเรา
+  const htmlEl = document.documentElement;
+  const prevBehavior = htmlEl.style.scrollBehavior;
+  htmlEl.style.scrollBehavior = 'auto';
+
+  function easeOutCubic(t: number): number {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function step(currentTime: number) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, start + distance * easeOutCubic(progress));
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      // คืนค่า scroll-behavior กลับ
+      htmlEl.style.scrollBehavior = prevBehavior;
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
 // คอยล้างค่า Timeout เมื่อปิด Component ป้องกันปัญหา Memory Leak
 export function useTimeoutCleanup(timeoutRef: RefObject<NodeJS.Timeout | null>) {
   useEffect(() => {
