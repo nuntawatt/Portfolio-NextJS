@@ -21,7 +21,7 @@ export class AuthTokenService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  /** Create a new auth token. */
+  // Create a new auth token. 
   async createToken(
     userId: string,
     type: AuthTokenType,
@@ -41,7 +41,7 @@ export class AuthTokenService {
     });
   }
 
-  /** Find a valid refresh token. */
+  // Find a valid refresh token.
   async findValidRefreshToken(
     userId: string,
     tokenHash: string,
@@ -58,7 +58,7 @@ export class AuthTokenService {
     }) as Promise<AuthTokenWithUser | null>;
   }
 
-  /** Consume a token (mark as used). */
+  // Consume a token (mark as used).
   async consumeToken(
     tokenHash: string,
     type: AuthTokenType,
@@ -90,7 +90,7 @@ export class AuthTokenService {
     }) as Promise<AuthTokenWithUser | null>;
   }
 
-  /** Mark token as used. */
+  // Mark token as used.
   async markTokenUsed(tokenId: string): Promise<void> {
     await this.prisma.authToken.update({
       where: { id: tokenId },
@@ -98,7 +98,7 @@ export class AuthTokenService {
     });
   }
 
-  /** Revoke tokens of type for user. */
+  // Revoke tokens of type for user.
   async revokeUserTokens(userId: string, type: AuthTokenType): Promise<void> {
     await this.prisma.authToken.updateMany({
       where: {
@@ -110,7 +110,7 @@ export class AuthTokenService {
     });
   }
 
-  /** Revoke all tokens for user. */
+  // Revoke all tokens for user.
   async revokeAllUserTokens(userId: string): Promise<void> {
     await this.prisma.authToken.updateMany({
       where: {
