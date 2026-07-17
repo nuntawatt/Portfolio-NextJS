@@ -19,7 +19,7 @@ import {
   useActiveSectionObserver,
 } from '../hooks/useNavbar';
 
-// Stable reference — ป้องกัน useEffect teardown/setup ซ้ำทุก render
+// Stable reference - ป้องกัน useEffect teardown/setup ซ้ำทุก render
 const OBSERVED_SECTIONS = ['home', 'about', 'skills'];
 
 // --- Main Navbar Component ---
